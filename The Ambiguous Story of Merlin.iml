@@ -8,5 +8,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="lwjgl" level="application" />
+    <orderEntry type="library" exported="" name="lwjgl" level="project" />
+    <orderEntry type="library" exported="" name="slick-util" level="project" />
   </component>
 </module>
+

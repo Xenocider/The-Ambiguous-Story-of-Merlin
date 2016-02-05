@@ -1,8 +1,6 @@
 package workexpIT.merlin.data;
 
-import workexpIT.merlin.Merlin;
 import workexpIT.merlin.Output;
-import workexpIT.merlin.WorldData;
 import workexpIT.merlin.tiles.Tile;
 
 import java.io.*;
@@ -28,20 +26,28 @@ public class DataReader {
             while((value = BReader.read()) != -1) {
                 // converts int to character
                 char c = (char)value;
-                System.out.println(value + ":" + c);
+                Output.write(value + ":" + c);
 
                 //If it's a new line
                 if (value == 10) {
-                    Tile tile = new Tile(data.toString());
+                    String id = data.toString().substring(1, data.toString().length()-1);
+                    id = id.substring(0, id.length()-3);
+                    Output.write(id);
+                    int i = Integer.parseInt(id);
+                    Tile tile = new Tile(i);
                     WorldData.tiles[x][y] = tile;
+                    Output.write("Adding tile to " + x + " " + y);
                     x=0;
                     y=y+1;
                     data.clear();
                 }
                 //If it's a comma
                 else if (c == ',') {
-                    Tile tile = new Tile(data.toString());
+                    String id = data.toString().substring(1, data.toString().length()-1);
+                    int i = Integer.parseInt(id);
+                    Tile tile = new Tile(i);
                     WorldData.tiles[x][y] = tile;
+                    Output.write("Adding tile to " + x + " " + y);
                     x=x+1;
                     data.clear();
                 }
@@ -51,10 +57,10 @@ public class DataReader {
                 }
             }
         } catch (FileNotFoundException e) {
-            Output.write("Could not find the specified map file: " + mapid);
+            Output.error("Could not find the specified map file: " + mapid);
             e.printStackTrace();
         } catch (IOException e) {
-            Output.write("IO Exception while attempting to read the map file: " + mapid);
+            Output.error("IO Exception while attempting to read the map file: " + mapid);
             e.printStackTrace();
         }
     }
@@ -64,7 +70,7 @@ public class DataReader {
         try {
             file.createNewFile();
         } catch (IOException e) {
-            Output.write("IO Exception while attempting to create the map file: " + mapid);
+            Output.error("IO Exception while attempting to create the map file: " + mapid);
             e.printStackTrace();
         }
         FileWriter writer;
@@ -74,7 +80,7 @@ public class DataReader {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            Output.write("IO Exception while attempting to write to the map file: " + mapid);
+            Output.error("IO Exception while attempting to write to the map file: " + mapid);
             e.printStackTrace();
         }
 

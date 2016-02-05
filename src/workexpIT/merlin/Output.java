@@ -13,4 +13,7 @@ public class Output {
         Timestamp time = new Timestamp(date.getTime());
         System.out.println("[" + time + "] " +string);
     }
+    public static void error(String string) {
+        write("[ERROR]   " + string);
+    }
 }

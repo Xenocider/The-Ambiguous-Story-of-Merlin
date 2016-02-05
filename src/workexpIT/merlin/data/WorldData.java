@@ -1,5 +1,6 @@
-package workexpIT.merlin;
+package workexpIT.merlin.data;
 
+import workexpIT.merlin.Reference;
 import workexpIT.merlin.tiles.Tile;
 
 import java.util.ArrayList;

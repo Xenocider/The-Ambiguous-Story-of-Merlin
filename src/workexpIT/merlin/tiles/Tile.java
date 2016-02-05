@@ -6,13 +6,13 @@ package workexpIT.merlin.tiles;
  */
 public class Tile {
 
-    public Tile(String s) {
-        id = s;
+    public Tile(int i) {
+        id = i;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    String id;
+    protected int id;
 }
