@@ -292,11 +292,16 @@ public class Drawer implements Runnable {
     private void drawEntities() {
         //for (int x = 0; x < Reference.characters.length; x++) {
             for (int i = 0; i < WorldData.entities.size(); i++) {
-                //if (WorldData.entities.get(i).getName() == Reference.characters[x]) {
+                Output.write("Drawing: " + WorldData.entities.get(i).getName());
 
                     //Set Texture
                     //TARGET, MIPMAP LEVEL, INTERNAL FORMAT, WIDTH, HEIGHT, FORMAT, TYPE OF DATA, IMAGE
+                if (WorldData.entities.get(i).spriteId == -1) {
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[0]);
+                }
+                else {
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId]);
+                }
 
                     //Enable Alpha (Transparency)
                     glEnable(GL_BLEND);

@@ -8,10 +8,12 @@ import java.util.List;
 
 public class Entity {
 
-    public Entity(int x, int y, String name, ByteBuffer[] sprites) {
+    public Entity(int x, int y, String name, int state, int level, ByteBuffer[] sprites) {
         this.x=x;
         this.y=y;
         this.name = name;
+        this.level = level;
+        this.state = state;
         this.sprites = sprites;
     }
 
@@ -39,10 +41,22 @@ public class Entity {
         return sprites;
     }
 
+    public int getLevel() {return level;}
+    public int getState() {return state;}
+
+    protected int state;
+    protected int level;
     protected int x;
     protected int y;
     protected String name;
     public ByteBuffer[] sprites;
     public static int numOfSprites;
+
+    public static final int STATE_NEUTRAL = 0;
+    public static final int STATE_FRIENDLY = 1;
+    public static final int STATE_AGGRESSIVE = 2;
+
+    public int spriteId;
+
 
 }

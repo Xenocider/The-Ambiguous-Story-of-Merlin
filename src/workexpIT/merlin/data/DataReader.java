@@ -2,6 +2,7 @@ package workexpIT.merlin.data;
 
 import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
+import workexpIT.merlin.entities.Bob;
 import workexpIT.merlin.tiles.*;
 
 import java.io.*;
@@ -65,6 +66,7 @@ public class DataReader {
             e.printStackTrace();
         }
         loadMiscData(mapid);
+        loadEntityData(mapid);
     }
 
     private static void loadTile(int id, int x, int y) {
@@ -87,11 +89,6 @@ public class DataReader {
         }
     }
 
-    private final static int partX1 = 0;
-    private final static int partY1 = 1;
-    private final static int partMap = 2;
-    private final static int partX2 = 3;
-    private final static int partY2 = 4;
 
     public static void loadMiscData(String mapid) {
         Output.write("Loading Misc Data...");
@@ -141,6 +138,56 @@ public class DataReader {
         }
 
     }
+
+    public static void loadEntityData(String mapid) {
+        Output.write("Loading Entity Data...");
+        FileReader FReader = null;
+        try {
+            FReader = new FileReader("resources/worlddata/default/"+mapid+"/entitydata.txt");
+            BufferedReader BReader = new BufferedReader(FReader);
+
+            String line = null;
+
+            while ((line = BReader.readLine()) != null) {
+                Output.write(line);
+
+                    int part = 0;
+
+                    String entityId = null;
+                    String state = null;
+                    String level = null;
+                    String x = null;
+                    String y = null;
+
+
+                    Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(line);
+                    m.find();
+                    entityId = m.group(1);
+                    m.find();
+                    state = m.group(1);
+                    m.find();
+                    level = m.group(1);
+                    m.find();
+                    x = m.group(1);
+                    m.find();
+                    y = m.group(1);
+
+                    Output.write("[Entity data] ID: " + entityId + " state: " + state + " level: " + level + " x: " + x + " y: " + y);
+                //if (entityId == "bob") {
+                    //Output.write("good");
+                    WorldData.entities.add(new Bob(Integer.parseInt(x),Integer.parseInt(y),Integer.parseInt(state),Integer.parseInt(level)));
+                //}
+                //else {Output.write(entityId);}
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     /*public static void saveMap(String mapid) {
         File file = new File(mapid);
         try {
