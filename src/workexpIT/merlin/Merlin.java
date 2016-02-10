@@ -18,8 +18,11 @@ public class Merlin implements Runnable{
     public static void main(String[] args) {
         DataReader.loadMap("field");
         Thread drawer = new Thread(new Drawer(), "Drawer");
-        drawer.start();
+        //drawer.start();
         WorldData.entities.add(new Player(1,1));
+
+        drawer.run();
+
 
         //Drawer d = new Drawer();
         //d.init2();
@@ -45,6 +48,9 @@ public class Merlin implements Runnable{
                         catch (ArrayIndexOutOfBoundsException e) {
                             Output.write("Player at edge of map!");
                         }
+                        catch (NullPointerException e) {
+                            Output.write("Player at edge of map!");
+                        }
                         break;
                     case RIGHT:
                         try {
@@ -53,6 +59,9 @@ public class Merlin implements Runnable{
                         }
                         }
                         catch (ArrayIndexOutOfBoundsException e) {
+                            Output.write("Player at edge of map!");
+                        }
+                        catch (NullPointerException e) {
                             Output.write("Player at edge of map!");
                         }
                         break;
@@ -65,6 +74,9 @@ public class Merlin implements Runnable{
                         catch (ArrayIndexOutOfBoundsException e) {
                             Output.write("Player at edge of map!");
                         }
+                        catch (NullPointerException e) {
+                            Output.write("Player at edge of map!");
+                        }
                         break;
                     case LEFT:
                         try {
@@ -73,6 +85,9 @@ public class Merlin implements Runnable{
                         }
                         }
                         catch (ArrayIndexOutOfBoundsException e) {
+                            Output.write("Player at edge of map!");
+                        }
+                        catch (NullPointerException e) {
                             Output.write("Player at edge of map!");
                         }
                         break;

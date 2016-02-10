@@ -17,6 +17,7 @@ public class DataReader {
 
     public static void loadMap(String mapid) {
         try {
+            Output.write("Reading map data: " + mapid);
             FileReader FReader = new FileReader("resources/worlddata/default/"+mapid+"/tiledata.txt");
             BufferedReader BReader = new BufferedReader(FReader);
 
@@ -33,7 +34,8 @@ public class DataReader {
                 //If it's a new line
                 if (value == 10) {
                     String id = data.toString().substring(1, data.toString().length()-1);
-                    id = id.substring(0, id.length()-3);
+                    //id = id.substring(0, id.length()-3);
+                    Output.write(id+"");
                     int i = Integer.parseInt(id);
                     loadTile(i,x,y);
                     Output.write("Adding tile to " + x + " " + y);
