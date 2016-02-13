@@ -6,6 +6,6 @@ import workexpIT.merlin.graphics.Drawer;
 public class Grass extends Tile {
 
     public Grass() {
-        super(Reference.grass, Drawer.loadTexture("resources/graphics/materials/"+Reference.grass+".png"));
+        super(Drawer.loadTexture("resources/graphics/materials/Grass.png"));
     }
 }

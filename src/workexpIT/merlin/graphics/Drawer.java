@@ -4,35 +4,33 @@ package workexpIT.merlin.graphics;
  * Created by ict11 on 2016-02-03.
  */
 
-import com.sun.prism.Texture;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.libffi.Closure;
+import workexpIT.merlin.GameLoop;
 import workexpIT.merlin.Merlin;
-import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
 import static org.lwjgl.glfw.GLFW.*; // allows us to create windows
 import static org.lwjgl.opengl.GL11.*; // gives us access to things like "GL_TRUE" which we'll need
 import static org.lwjgl.system.MemoryUtil.*; // allows us to use 'NULL' in our code, note this is slightly different from java's 'null'
 
 import java.awt.image.*;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer; // Used for getting the primary monitor later on.
 import org.lwjgl.glfw.*;
 import workexpIT.merlin.data.WorldData;
 import org.lwjgl.BufferUtils;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import static org.lwjgl.stb.STBImage.*;
 import static workexpIT.merlin.data.IOUtil.*;
 
 import org.lwjgl.opengl.GLUtil;
-import workexpIT.merlin.entities.Player;
-
-import javax.imageio.ImageIO;
+import workexpIT.merlin.entities.Entity;
 
 import static java.lang.Math.*;
 import static org.lwjgl.glfw.Callbacks.*;
@@ -40,8 +38,11 @@ import static org.lwjgl.glfw.Callbacks.*;
 
 public class Drawer implements Runnable {
 
-    private int w;
-    private int h;
+    public static int offsetX = 0;
+    public static int offsetY = 0;
+
+    public static int w;
+    public static int h;
     private int comp;
 
     private GLFWErrorCallback errorfun;
@@ -51,8 +52,8 @@ public class Drawer implements Runnable {
     private GLFWScrollCallback scrollfun;
 
     private long window;
-    private int ww = 800;
-    private int wh = 600;
+    public static int ww = 800;
+    public static int wh = 600;
 
     private boolean ctrlDown;
 
@@ -113,16 +114,16 @@ public class Drawer implements Runnable {
                             setScale(0);
                         break;
                     case GLFW_KEY_UP:
-                        Merlin.movePlayer(Merlin.UP);
+                        WorldData.getPlayer().move(Entity.MOVE_UP);
                         break;
                     case GLFW_KEY_RIGHT:
-                        Merlin.movePlayer(Merlin.RIGHT);
+                        WorldData.getPlayer().move(Entity.MOVE_RIGHT);
                         break;
                     case GLFW_KEY_LEFT:
-                        Merlin.movePlayer(Merlin.LEFT);
+                        WorldData.getPlayer().move(Entity.MOVE_LEFT);
                         break;
                     case GLFW_KEY_DOWN:
-                        Merlin.movePlayer(Merlin.DOWN);
+                        WorldData.getPlayer().move(Entity.MOVE_DOWN);
                         break;
                 }
             }
@@ -183,7 +184,7 @@ public class Drawer implements Runnable {
     }
 
     private void loadScale() {
-        String file = "resources/graphics/materials/0.png";
+        String file = "resources/graphics/materials/"+Reference.tileIds[0]+".png";
 
         //LOADS material 0 as reference for scale;
         ByteBuffer imageBuffer;
@@ -261,6 +262,7 @@ public class Drawer implements Runnable {
 
         //While window is open
         while (glfwWindowShouldClose(window) == GLFW_FALSE) {
+
             glfwPollEvents();
 
             glClear(GL_COLOR_BUFFER_BIT);
@@ -292,16 +294,16 @@ public class Drawer implements Runnable {
     private void drawEntities() {
         //for (int x = 0; x < Reference.characters.length; x++) {
             for (int i = 0; i < WorldData.entities.size(); i++) {
-                Output.write("Drawing: " + WorldData.entities.get(i).getName());
+                //Output.write("Drawing: " + WorldData.entities.get(i).getName());
 
                     //Set Texture
                     //TARGET, MIPMAP LEVEL, INTERNAL FORMAT, WIDTH, HEIGHT, FORMAT, TYPE OF DATA, IMAGE
-                if (WorldData.entities.get(i).spriteId == -1) {
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[0]);
-                }
-                else {
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId]);
-                }
+                if (!(WorldData.entities.get(i) == WorldData.getPlayer())) {
+                    if (WorldData.entities.get(i).spriteId == -1) {
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[0]);
+                    } else {
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId]);
+                    }
 
                     //Enable Alpha (Transparency)
                     glEnable(GL_BLEND);
@@ -311,20 +313,52 @@ public class Drawer implements Runnable {
                     glBegin(GL_QUADS);
 
                     glTexCoord2f(0.0f, 0.0f);
-                    glVertex2f(WorldData.entities.get(i).getX() * w, WorldData.entities.get(i).getY() * h);
+                    glVertex2f(WorldData.entities.get(i).getX() * w + offsetX, WorldData.entities.get(i).getY() * h + offsetY);
 
                     glTexCoord2f(1.0f, 0.0f);
-                    glVertex2f(WorldData.entities.get(i).getX() * w + w, WorldData.entities.get(i).getY() * h);
+                    glVertex2f(WorldData.entities.get(i).getX() * w + w + offsetX, WorldData.entities.get(i).getY() * h + offsetY);
 
                     glTexCoord2f(1.0f, 1.0f);
-                    glVertex2f(WorldData.entities.get(i).getX() * w + w, WorldData.entities.get(i).getY() * h + h);
+                    glVertex2f(WorldData.entities.get(i).getX() * w + w + offsetX, WorldData.entities.get(i).getY() * h + h + offsetY);
 
                     glTexCoord2f(0.0f, 1.0f);
-                    glVertex2f(WorldData.entities.get(i).getX() * w, WorldData.entities.get(i).getY() * h + h);
+                    glVertex2f(WorldData.entities.get(i).getX() * w + offsetX, WorldData.entities.get(i).getY() * h + h + offsetY);
 
                     //End Drawing
                     glEnd();
-                //}
+                    //}
+                }
+                else {
+                    int newOffsetX = (-WorldData.getPlayer().getX()+Drawer.ww/2/Drawer.w)*Drawer.w;
+                    int newOffsetY = (-WorldData.getPlayer().getY()+Drawer.wh/2/Drawer.h)*Drawer.h;
+                    if (WorldData.entities.get(i).spriteId == -1) {
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[0]);
+                    } else {
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId]);
+                    }
+
+                    //Enable Alpha (Transparency)
+                    glEnable(GL_BLEND);
+                    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+                    //Start drawing
+                    glBegin(GL_QUADS);
+
+                    glTexCoord2f(0.0f, 0.0f);
+                    glVertex2f(WorldData.entities.get(i).getX() * w + newOffsetX, WorldData.entities.get(i).getY() * h + newOffsetY);
+
+                    glTexCoord2f(1.0f, 0.0f);
+                    glVertex2f(WorldData.entities.get(i).getX() * w + w + newOffsetX, WorldData.entities.get(i).getY() * h + newOffsetY);
+
+                    glTexCoord2f(1.0f, 1.0f);
+                    glVertex2f(WorldData.entities.get(i).getX() * w + w + newOffsetX, WorldData.entities.get(i).getY() * h + h + newOffsetY);
+
+                    glTexCoord2f(0.0f, 1.0f);
+                    glVertex2f(WorldData.entities.get(i).getX() * w + newOffsetX, WorldData.entities.get(i).getY() * h + h + newOffsetY);
+
+                    //End Drawing
+                    glEnd();
+                }
             }
         //}
     }
@@ -340,16 +374,16 @@ public class Drawer implements Runnable {
                     glBegin(GL_QUADS);
 
                     glTexCoord2f(0.0f, 0.0f);
-                    glVertex2f(a * w, b * h);
+                    glVertex2f(a * w + offsetX, b * h + offsetY);
 
                     glTexCoord2f(1.0f, 0.0f);
-                    glVertex2f(a * w + w, b * h);
+                    glVertex2f(a * w + w + offsetX, b * h+ offsetY);
 
                     glTexCoord2f(1.0f, 1.0f);
-                    glVertex2f(a * w + w, b * h + h);
+                    glVertex2f(a * w + w + offsetX, b * h + h+ offsetY);
 
                     glTexCoord2f(0.0f, 1.0f);
-                    glVertex2f(a * w, b * h + h);
+                    glVertex2f(a * w+ offsetX, b * h + h+ offsetY);
                     glEnd();
                 }
             }
@@ -358,11 +392,24 @@ public class Drawer implements Runnable {
 
     @Override
     public void run() {
+        ScheduledFuture gameLoop = null;
+        ScheduledFuture animator = null;
         try {
             init();
 
+            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+
+            gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 500, TimeUnit.MILLISECONDS);
+
+            ScheduledExecutorService executor2 = Executors.newScheduledThreadPool(1);
+
+            animator = executor.scheduleWithFixedDelay(new Animator(), 0, 10, TimeUnit.MILLISECONDS);
+
             loop();
+
         } finally {
+            gameLoop.cancel(true);
+            animator.cancel(true);
             try {
                 destroy();
             } catch (Exception e) {
@@ -372,6 +419,7 @@ public class Drawer implements Runnable {
     }
 
     private void destroy() {
+
         if (debugProc != null)
             debugProc.release();
         scrollfun.release();

@@ -1,11 +1,16 @@
 package workexpIT.merlin.data;
 
+import workexpIT.merlin.Merlin;
 import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
 import workexpIT.merlin.entities.Bob;
+import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.tiles.*;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -17,6 +22,18 @@ import java.util.regex.Pattern;
 public class DataReader {
 
     public static void loadMap(String mapid) {
+        try {
+            for (int i = 0; i < WorldData.entities.size(); i++) {
+                if (WorldData.entities.get(i).getName().equals("player")) {
+                    //Keep player but delete all other entities
+                } else {
+                    WorldData.entities.remove(i);
+                    i = i-1;
+                    Output.write("Removed an entity");
+                }
+            }
+        }catch (Exception e){}
+        WorldData.tiles=new Tile[Reference.mapSize][Reference.mapSize];
         try {
             Output.write("Reading map data: " + mapid);
             FileReader FReader = new FileReader("resources/worlddata/default/"+mapid+"/tiledata.txt");
@@ -35,7 +52,9 @@ public class DataReader {
                 //If it's a new line
                 if (value == 10) {
                     String id = data.toString().substring(1, data.toString().length()-1);
-                    //id = id.substring(0, id.length()-3);
+                    //PC only v
+                    if (Merlin.platform.equals("pc")) {id = id.substring(0, id.length()-3);}
+                    //PC only ^
                     Output.write(id+"");
                     int i = Integer.parseInt(id);
                     loadTile(i,x,y);
@@ -71,13 +90,15 @@ public class DataReader {
 
     private static void loadTile(int id, int x, int y) {
         Tile tile = null;
-        for (int i=0; i< Reference.numOfMaterials; i++) {
-            if (id == Reference.grass) {
-                tile = new Grass();
-            }
-            if (id == Reference.dirt) {
-                tile = new Dirt();
-            }
+        Constructor c = null;
+        try {
+            tile = (Tile) Class.forName("workexpIT.merlin.tiles."+ Reference.tileIds[id]).newInstance();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
         if (tile == null) {
             Output.error("Could not load a tile with that id: " + id);
@@ -173,16 +194,26 @@ public class DataReader {
                     y = m.group(1);
 
                     Output.write("[Entity data] ID: " + entityId + " state: " + state + " level: " + level + " x: " + x + " y: " + y);
-                //if (entityId == "bob") {
-                    //Output.write("good");
-                    WorldData.entities.add(new Bob(Integer.parseInt(x),Integer.parseInt(y),Integer.parseInt(state),Integer.parseInt(level)));
-                //}
-                //else {Output.write(entityId);}
+
+                    //Create new class from the string: entityId
+                    Constructor c = Class.forName("workexpIT.merlin.entities."+entityId).getConstructor(Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE);
+                    Entity entity = (Entity) c.newInstance(Integer.parseInt(x),Integer.parseInt(y),Integer.parseInt(state),Integer.parseInt(level));
+                    WorldData.entities.add(entity);
             }
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 

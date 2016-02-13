@@ -1,16 +1,17 @@
 package workexpIT.merlin.tiles;
 
-import workexpIT.merlin.Reference;
+import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.graphics.Drawer;
 
 public class Dirt extends Tile {
 
     public Dirt() {
-        super(Reference.dirt, Drawer.loadTexture("resources/graphics/materials/" + Reference.dirt + ".png"));
+        super(Drawer.loadTexture("resources/graphics/materials/Dirt.png"));
     }
 
     @Override
-    public boolean movingOnToTile() {
+    public boolean movingOnToTile(Entity e) {
+        checkForDoor(e);
         return false;
     }
 }

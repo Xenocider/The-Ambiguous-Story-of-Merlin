@@ -9,7 +9,8 @@ public class Reference {
     public static final int mapSize = 20;
 
     //Tile IDs
-    public static final int numOfMaterials = 2;
-    public static final int grass = 0;
-    public static final int dirt = 1;
+    public static final String[] tileIds = {
+            "Grass",//0
+            "Dirt"//1
+    };
 }

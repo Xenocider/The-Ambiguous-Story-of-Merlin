@@ -4,6 +4,8 @@ package workexpIT.merlin.tiles;
 import workexpIT.merlin.Output;
 import workexpIT.merlin.data.DataReader;
 import workexpIT.merlin.data.WorldData;
+import workexpIT.merlin.entities.Entity;
+import workexpIT.merlin.entities.Player;
 
 import java.nio.ByteBuffer;
 
@@ -12,17 +14,9 @@ import java.nio.ByteBuffer;
  */
 public class Tile {
 
-    public Tile(int i, ByteBuffer texture) {
-        id = i;
+    public Tile(ByteBuffer texture) {
         this.texture = texture;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    protected int id;
-    protected String name;
     public ByteBuffer texture;
 
     protected boolean door;
@@ -37,18 +31,25 @@ public class Tile {
         doorY = y;
     }
 
-    public boolean movingOnToTile() {
-        if (door) {
-            Output.write("DOOOOOOOOR");
-            DataReader.loadMap(doorMap);
-            for (int i = 0; i < WorldData.entities.size(); i++) {
-                if (WorldData.entities.get(i).getName()=="player") {
-                    WorldData.entities.get(i).setX(doorX);
-                    WorldData.entities.get(i).setY(doorY);
+    public boolean movingOnToTile(Entity entity) {
+        return checkForDoor(entity);
+    }
+
+    public boolean checkForDoor(Entity entity) {
+        if (entity.getClass().equals(Player.class)) {
+            if (door) {
+                Output.write("DOOOOOOOOR");
+                DataReader.loadMap(doorMap);
+                for (int i = 0; i < WorldData.entities.size(); i++) {
+                    if (WorldData.entities.get(i).getName() == "player") {
+                        WorldData.entities.get(i).setX(doorX);
+                        WorldData.entities.get(i).setY(doorY);
+                    }
                 }
+                return false;
             }
-            return false;
         }
-        else {return true;}
+        return true;
     }
 }
+
