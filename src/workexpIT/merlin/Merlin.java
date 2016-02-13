@@ -4,7 +4,14 @@ import workexpIT.merlin.data.DataReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.entities.Player;
+import workexpIT.merlin.graphics.Animator;
 import workexpIT.merlin.graphics.Drawer;
+import workexpIT.merlin.listeners.KeyListener;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 
 public class Merlin implements Runnable{
@@ -16,16 +23,23 @@ public class Merlin implements Runnable{
 
     public static String platform;
 
+    public static KeyListener keyListener;
+
+    public static ScheduledFuture drawer;
+
 
     public static void main(String[] args) {
+        keyListener = new KeyListener();
+        WorldData.entities.add(new Player(1,1,1));
         try{platform = args[0];}
         catch (Exception e) {e.printStackTrace();}
-        DataReader.loadMap("field");
-        Thread drawer = new Thread(new Drawer(), "Drawer");
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        drawer = executor.scheduleWithFixedDelay(new Drawer(), 0, 100, TimeUnit.MILLISECONDS);
         //drawer.start();
-        WorldData.entities.add(new Player(1,1,1));
 
-        drawer.run();
+        DataReader.loadMap("field");
+
+        //drawer.run();
 
 
         //Drawer d = new Drawer();

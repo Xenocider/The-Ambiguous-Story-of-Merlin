@@ -22,6 +22,8 @@ public class Entity {
     protected String name;
     public ByteBuffer[] sprites;
     public static int numOfSprites;
+    public boolean moving;
+    public int[] lastLoc = new int[2];
 
     public static final int STATE_NEUTRAL = 0;
     public static final int STATE_FRIENDLY = 1;
@@ -81,6 +83,8 @@ public class Entity {
                 case MOVE_UP:
                     try {
                         if (WorldData.tiles[getX()][getY() - 1].movingOnToTile(this)) {
+                            lastLoc[0] = getX();
+                            lastLoc[1] = getY();
                             setY(getY() - 1);
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
@@ -92,6 +96,8 @@ public class Entity {
                 case MOVE_RIGHT:
                     try {
                         if (WorldData.tiles[getX() + 1][getY()].movingOnToTile(this)) {
+                            lastLoc[0] = getX();
+                            lastLoc[1] = getY();
                             setX(getX() + 1);
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
@@ -103,6 +109,8 @@ public class Entity {
                 case MOVE_DOWN:
                     try {
                         if (WorldData.tiles[getX()][getY() + 1].movingOnToTile(this)) {
+                            lastLoc[0] = getX();
+                            lastLoc[1] = getY();
                             setY(getY() + 1);
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
@@ -114,6 +122,8 @@ public class Entity {
                 case MOVE_LEFT:
                     try {
                         if (WorldData.tiles[getX() - 1][getY()].movingOnToTile(this)) {
+                            lastLoc[0] = getX();
+                            lastLoc[1] = getY();
                             setX(getX() - 1);
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {

@@ -5,6 +5,7 @@ import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
 import workexpIT.merlin.entities.Bob;
 import workexpIT.merlin.entities.Entity;
+import workexpIT.merlin.graphics.Drawer;
 import workexpIT.merlin.tiles.*;
 
 import java.io.*;
@@ -33,6 +34,7 @@ public class DataReader {
                 }
             }
         }catch (Exception e){}
+        //Center camera on player
         WorldData.tiles=new Tile[Reference.mapSize][Reference.mapSize];
         try {
             Output.write("Reading map data: " + mapid);
@@ -86,6 +88,9 @@ public class DataReader {
         }
         loadMiscData(mapid);
         loadEntityData(mapid);
+        //Center camera
+        try{Drawer.setCamera((-WorldData.getPlayer().getX()+Drawer.ww/2/Drawer.w)*Drawer.w, (-WorldData.getPlayer().getY()+Drawer.wh/2/Drawer.h)*Drawer.h);}
+        catch (Exception e) {}
     }
 
     private static void loadTile(int id, int x, int y) {

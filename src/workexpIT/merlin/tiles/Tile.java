@@ -39,13 +39,13 @@ public class Tile {
         if (entity.getClass().equals(Player.class)) {
             if (door) {
                 Output.write("DOOOOOOOOR");
-                DataReader.loadMap(doorMap);
                 for (int i = 0; i < WorldData.entities.size(); i++) {
                     if (WorldData.entities.get(i).getName() == "player") {
                         WorldData.entities.get(i).setX(doorX);
                         WorldData.entities.get(i).setY(doorY);
                     }
                 }
+                DataReader.loadMap(doorMap);
                 return false;
             }
         }

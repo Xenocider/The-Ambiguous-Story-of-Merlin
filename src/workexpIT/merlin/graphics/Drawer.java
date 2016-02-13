@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.system.libffi.Closure;
 import workexpIT.merlin.GameLoop;
 import workexpIT.merlin.Merlin;
+import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
 import static org.lwjgl.glfw.GLFW.*; // allows us to create windows
 import static org.lwjgl.opengl.GL11.*; // gives us access to things like "GL_TRUE" which we'll need
@@ -31,12 +32,16 @@ import static workexpIT.merlin.data.IOUtil.*;
 
 import org.lwjgl.opengl.GLUtil;
 import workexpIT.merlin.entities.Entity;
+import workexpIT.merlin.listeners.KeyListener;
 
 import static java.lang.Math.*;
 import static org.lwjgl.glfw.Callbacks.*;
 
 
 public class Drawer implements Runnable {
+
+    public double animationState = 0;
+    public double maxAniState = 20;
 
     public static int offsetX = 0;
     public static int offsetY = 0;
@@ -48,16 +53,15 @@ public class Drawer implements Runnable {
     private GLFWErrorCallback errorfun;
     private GLFWWindowSizeCallback windowSizefun;
     private GLFWFramebufferSizeCallback framebufferSizefun;
-    private GLFWKeyCallback keyfun;
     private GLFWScrollCallback scrollfun;
 
     private long window;
     public static int ww = 800;
     public static int wh = 600;
 
-    private boolean ctrlDown;
 
-    private int scale;
+
+    public int scale;
 
     private Closure debugProc;
 
@@ -88,52 +92,13 @@ public class Drawer implements Runnable {
             }
         };
 
-        //KeyListener
-        keyfun = new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scancode, int action, int mods) {
-                ctrlDown = (mods & GLFW_MOD_CONTROL) != 0;
-                if (action == GLFW_RELEASE)
-                    return;
 
-                switch (key) {
-                    case GLFW_KEY_ESCAPE:
-                        glfwSetWindowShouldClose(window, GLFW_TRUE);
-                        break;
-                    case GLFW_KEY_KP_ADD:
-                    case GLFW_KEY_EQUAL:
-                        setScale(scale + 1);
-                        break;
-                    case GLFW_KEY_KP_SUBTRACT:
-                    case GLFW_KEY_MINUS:
-                        setScale(scale - 1);
-                        break;
-                    case GLFW_KEY_0:
-                    case GLFW_KEY_KP_0:
-                        if (ctrlDown)
-                            setScale(0);
-                        break;
-                    case GLFW_KEY_UP:
-                        WorldData.getPlayer().move(Entity.MOVE_UP);
-                        break;
-                    case GLFW_KEY_RIGHT:
-                        WorldData.getPlayer().move(Entity.MOVE_RIGHT);
-                        break;
-                    case GLFW_KEY_LEFT:
-                        WorldData.getPlayer().move(Entity.MOVE_LEFT);
-                        break;
-                    case GLFW_KEY_DOWN:
-                        WorldData.getPlayer().move(Entity.MOVE_DOWN);
-                        break;
-                }
-            }
-        };
 
         //Scroll Listener
         scrollfun = new GLFWScrollCallback() {
             @Override
             public void invoke(long window, double xoffset, double yoffset) {
-                if (ctrlDown)
+                //if (ctrlDown)
                     setScale(scale + (int) yoffset);
             }
         };
@@ -142,6 +107,10 @@ public class Drawer implements Runnable {
 
         //Create & Configure Window
         createWindow();
+
+        //Center Camera
+        Drawer.setCamera((-WorldData.getPlayer().getX()+Drawer.ww/2/Drawer.w)*Drawer.w, (-WorldData.getPlayer().getY()+Drawer.wh/2/Drawer.h)*Drawer.h);
+
 
     }
 
@@ -161,7 +130,7 @@ public class Drawer implements Runnable {
 
         windowSizefun.set(window);
         framebufferSizefun.set(window);
-        keyfun.set(window);
+        Merlin.keyListener.set(window);
         scrollfun.set(window);
 
         // Center window
@@ -249,7 +218,7 @@ public class Drawer implements Runnable {
         return img;
     }
 
-    private void setScale(int scale) {
+    public void setScale(int scale) {
         this.scale = max(-3, scale);
     }
 
@@ -262,6 +231,16 @@ public class Drawer implements Runnable {
 
         //While window is open
         while (glfwWindowShouldClose(window) == GLFW_FALSE) {
+
+            animationState = animationState + 1;
+            if (animationState > maxAniState) {
+                animationState = 0;
+                for (int i = 0; i < WorldData.entities.size(); i++) {
+                    WorldData.entities.get(i).lastLoc[0] = WorldData.entities.get(i).getX();
+                    WorldData.entities.get(i).lastLoc[1] = WorldData.entities.get(i).getY();
+                }
+                GameLoop.run();
+            }
 
             glfwPollEvents();
 
@@ -280,10 +259,14 @@ public class Drawer implements Runnable {
             drawEntities();
 
 
+
+
             //Send Update
             glPopMatrix();
             //Say Drawing Is Finished
             glfwSwapBuffers(window);
+
+
         }
 
         glDisable(GL_TEXTURE_2D);
@@ -298,7 +281,7 @@ public class Drawer implements Runnable {
 
                     //Set Texture
                     //TARGET, MIPMAP LEVEL, INTERNAL FORMAT, WIDTH, HEIGHT, FORMAT, TYPE OF DATA, IMAGE
-                if (!(WorldData.entities.get(i) == WorldData.getPlayer())) {
+               // if (!(WorldData.entities.get(i) == WorldData.getPlayer())) {
                     if (WorldData.entities.get(i).spriteId == -1) {
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[0]);
                     } else {
@@ -313,21 +296,23 @@ public class Drawer implements Runnable {
                     glBegin(GL_QUADS);
 
                     glTexCoord2f(0.0f, 0.0f);
-                    glVertex2f(WorldData.entities.get(i).getX() * w + offsetX, WorldData.entities.get(i).getY() * h + offsetY);
+                Output.write("Moving from: " + WorldData.entities.get(i).lastLoc[0] + ", " + WorldData.entities.get(i).lastLoc[1] + " to: " + WorldData.entities.get(i).getX() + ", " + WorldData.entities.get(i).getY());
+                Output.write(""+animationState/maxAniState);
+                glVertex2f((int) ((WorldData.entities.get(i).lastLoc[0]+(animationState/maxAniState)*(WorldData.entities.get(i).getX()-WorldData.entities.get(i).lastLoc[0]))* w + offsetX),(int)((WorldData.entities.get(i).lastLoc[1]+(animationState/maxAniState)*(WorldData.entities.get(i).getY()-WorldData.entities.get(i).lastLoc[1])) * h + offsetY));
 
                     glTexCoord2f(1.0f, 0.0f);
-                    glVertex2f(WorldData.entities.get(i).getX() * w + w + offsetX, WorldData.entities.get(i).getY() * h + offsetY);
+                    glVertex2f((int)((WorldData.entities.get(i).lastLoc[0]+(animationState/maxAniState)*(WorldData.entities.get(i).getX()-WorldData.entities.get(i).lastLoc[0])) * w + w + offsetX), (int)((WorldData.entities.get(i).lastLoc[1]+(animationState/maxAniState)*(WorldData.entities.get(i).getY()-WorldData.entities.get(i).lastLoc[1])) * h + offsetY));
 
                     glTexCoord2f(1.0f, 1.0f);
-                    glVertex2f(WorldData.entities.get(i).getX() * w + w + offsetX, WorldData.entities.get(i).getY() * h + h + offsetY);
+                    glVertex2f((int)((WorldData.entities.get(i).lastLoc[0]+(animationState/maxAniState)*(WorldData.entities.get(i).getX()-WorldData.entities.get(i).lastLoc[0])) * w + w + offsetX), (int)((WorldData.entities.get(i).lastLoc[1]+(animationState/maxAniState)*(WorldData.entities.get(i).getY()-WorldData.entities.get(i).lastLoc[1])) * h + h + offsetY));
 
                     glTexCoord2f(0.0f, 1.0f);
-                    glVertex2f(WorldData.entities.get(i).getX() * w + offsetX, WorldData.entities.get(i).getY() * h + h + offsetY);
+                    glVertex2f((int)((WorldData.entities.get(i).lastLoc[0]+(animationState/maxAniState)*(WorldData.entities.get(i).getX()-WorldData.entities.get(i).lastLoc[0])) * w + offsetX), (int)((WorldData.entities.get(i).lastLoc[1]+(animationState/maxAniState)*(WorldData.entities.get(i).getY()-WorldData.entities.get(i).lastLoc[1])) * h + h + offsetY));
 
                     //End Drawing
                     glEnd();
                     //}
-                }
+               /* }
                 else {
                     int newOffsetX = (-WorldData.getPlayer().getX()+Drawer.ww/2/Drawer.w)*Drawer.w;
                     int newOffsetY = (-WorldData.getPlayer().getY()+Drawer.wh/2/Drawer.h)*Drawer.h;
@@ -358,7 +343,7 @@ public class Drawer implements Runnable {
 
                     //End Drawing
                     glEnd();
-                }
+                }*/
             }
         //}
     }
@@ -399,11 +384,9 @@ public class Drawer implements Runnable {
 
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
-            gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 500, TimeUnit.MILLISECONDS);
+            //gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 1000, TimeUnit.MILLISECONDS);
 
-            ScheduledExecutorService executor2 = Executors.newScheduledThreadPool(1);
-
-            animator = executor.scheduleWithFixedDelay(new Animator(), 0, 10, TimeUnit.MILLISECONDS);
+            animator = executor.scheduleWithFixedDelay(new Animator(), 0, 5800, TimeUnit.MICROSECONDS);
 
             loop();
 
@@ -423,7 +406,6 @@ public class Drawer implements Runnable {
         if (debugProc != null)
             debugProc.release();
         scrollfun.release();
-        keyfun.release();
         framebufferSizefun.release();
         windowSizefun.release();
         glfwTerminate();
@@ -453,5 +435,11 @@ public class Drawer implements Runnable {
             throw new IllegalArgumentException("Not implemented for data buffer type: " + dataBuffer.getClass());
         }
         return byteBuffer;
+    }
+
+    public static void setCamera(int x, int y) {
+        Output.write("Setting camera to " + x/w + ", " + y/h);
+        offsetX = x;
+        offsetY = y;
     }
 }
