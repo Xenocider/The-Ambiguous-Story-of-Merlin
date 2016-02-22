@@ -7,6 +7,7 @@ import workexpIT.merlin.entities.Player;
 import workexpIT.merlin.graphics.Animator;
 import workexpIT.merlin.graphics.Drawer;
 import workexpIT.merlin.graphics.JavaDrawer;
+import workexpIT.merlin.listeners.JavaKeyListener;
 import workexpIT.merlin.listeners.KeyListener;
 
 import javax.swing.*;
@@ -25,9 +26,11 @@ public class Merlin implements Runnable{
 
     public static String platform;
 
-    public static KeyListener keyListener;
+    //public static KeyListener keyListener;
+    public static JavaKeyListener keyListener = new JavaKeyListener();
 
     public static ScheduledFuture drawer;
+    public static ScheduledFuture gameLoop;
 
 
     public static void main(String[] args) {
@@ -44,7 +47,8 @@ public class Merlin implements Runnable{
 //        catch (Exception e) {e.printStackTrace();}
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        drawer = executor.scheduleWithFixedDelay(new JavaDrawer(),0,100,TimeUnit.MILLISECONDS);
+        drawer = executor.scheduleWithFixedDelay(new JavaDrawer(),0,12500,TimeUnit.MICROSECONDS);
+        gameLoop = executor.scheduleWithFixedDelay(new GameLoop(),0,250,TimeUnit.MILLISECONDS);
         //drawer = executor.scheduleWithFixedDelay(new Drawer(), 0, 100, TimeUnit.MILLISECONDS);
         //drawer.start();
 

@@ -134,7 +134,7 @@ public class Drawer implements Runnable {
 
         windowSizefun.set(window);
         framebufferSizefun.set(window);
-        Merlin.keyListener.set(window);
+        //Merlin.keyListener.set(window);
         scrollfun.set(window);
 
         // Center window
@@ -244,7 +244,7 @@ public class Drawer implements Runnable {
                     WorldData.entities.get(i).lastLoc[0] = WorldData.entities.get(i).getX();
                     WorldData.entities.get(i).lastLoc[1] = WorldData.entities.get(i).getY();
                 }
-                GameLoop.run();
+                //GameLoop.run();
             }
 
             glfwPollEvents();

@@ -3,8 +3,11 @@ package workexpIT.merlin;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
 
-public class GameLoop {
-    public static void run() {
+public class GameLoop implements Runnable{
+
+    @Override
+    public void run() {
+
 
         movePlayer();
 
@@ -15,21 +18,21 @@ public class GameLoop {
     }
 
     private static void movePlayer() {
-        if (Merlin.keyListener.upPressed || Merlin.keyListener.moveUpTemp) {
+        if (Merlin.keyListener.upPressed || Merlin.keyListener.upTemp) {
             WorldData.getPlayer().move(Entity.MOVE_UP);
-            Merlin.keyListener.moveUpTemp = false;
+            Merlin.keyListener.upTemp = false;
         }
-        if (Merlin.keyListener.leftPressed || Merlin.keyListener.moveLeftTemp) {
+        if (Merlin.keyListener.leftPressed || Merlin.keyListener.leftTemp) {
             WorldData.getPlayer().move(Entity.MOVE_LEFT);
-            Merlin.keyListener.moveLeftTemp = false;
+            Merlin.keyListener.leftTemp = false;
         }
-        if (Merlin.keyListener.downPressed || Merlin.keyListener.moveDownTemp) {
+        if (Merlin.keyListener.downPressed || Merlin.keyListener.downTemp) {
             WorldData.getPlayer().move(Entity.MOVE_DOWN);
-            Merlin.keyListener.moveDownTemp = false;
+            Merlin.keyListener.downTemp = false;
         }
-        if (Merlin.keyListener.rightPressed || Merlin.keyListener.moveRightTemp) {
+        if (Merlin.keyListener.rightPressed || Merlin.keyListener.rightTemp) {
             WorldData.getPlayer().move(Entity.MOVE_RIGHT);
-            Merlin.keyListener.moveRightTemp = false;
+            Merlin.keyListener.rightTemp = false;
         }
     }
 
