@@ -16,9 +16,9 @@ public class Animator implements Runnable {
     private void drawEntities() {
         for (int i = 0; i < WorldData.entities.size(); i++) {
             if (WorldData.entities.get(i).spriteId == -1) {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Drawer.w, Drawer.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[0]);
+                //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Drawer.w, Drawer.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[0]);
             } else {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Drawer.w, Drawer.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId]);
+                //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Drawer.w, Drawer.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId]);
             }
 
             //Enable Alpha (Transparency)

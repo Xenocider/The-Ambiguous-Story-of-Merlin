@@ -1,12 +1,13 @@
 package workexpIT.merlin.tiles;
 
+import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.graphics.Drawer;
 
 public class Dirt extends Tile {
 
     public Dirt() {
-        super(Drawer.loadTexture("resources/graphics/materials/Dirt.png"));
+        super(ImageReader.loadImage("resources/graphics/materials/Dirt.png"));
     }
 
     @Override

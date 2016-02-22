@@ -4,6 +4,7 @@ import workexpIT.merlin.Output;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.graphics.Drawer;
 
+import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class Entity {
     protected int x;
     protected int y;
     protected String name;
-    public ByteBuffer[] sprites;
+    public BufferedImage[] sprites;
     public static int numOfSprites;
     public boolean moving;
     public int[] lastLoc = new int[2];
@@ -32,7 +33,7 @@ public class Entity {
     public int spriteId;
 
 
-    public Entity(int x, int y, String name, int state, int level, ByteBuffer[] sprites) {
+    public Entity(int x, int y, String name, int state, int level, BufferedImage[] sprites) {
         this.x = x;
         this.y = y;
         this.name = name;
@@ -61,7 +62,7 @@ public class Entity {
         this.y = y;
     }
 
-    public ByteBuffer[] getSprites() {
+    public BufferedImage[] getSprites() {
         return sprites;
     }
 

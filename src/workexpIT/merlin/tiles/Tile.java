@@ -7,6 +7,7 @@ import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.entities.Player;
 
+import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
 /**
@@ -14,10 +15,10 @@ import java.nio.ByteBuffer;
  */
 public class Tile {
 
-    public Tile(ByteBuffer texture) {
+    public Tile(BufferedImage texture) {
         this.texture = texture;
     }
-    public ByteBuffer texture;
+    public BufferedImage texture;
 
     protected boolean door;
     protected String doorMap;

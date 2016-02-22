@@ -55,7 +55,7 @@ public class DataReader {
                 if (value == 10) {
                     String id = data.toString().substring(1, data.toString().length()-1);
                     //PC only v
-                    if (Merlin.platform.equals("pc")) {id = id.substring(0, id.length()-3);}
+                    //if (Merlin.platform.equals("pc")) {id = id.substring(0, id.length()-3);}
                     //PC only ^
                     Output.write(id+"");
                     int i = Integer.parseInt(id);

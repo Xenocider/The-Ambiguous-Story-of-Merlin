@@ -107,7 +107,6 @@ public class Drawer implements Runnable {
 
         //Create & Configure Window
         createWindow();
-
         //Center Camera
         Drawer.setCamera((-WorldData.getPlayer().getX()+Drawer.ww/2/Drawer.w)*Drawer.w, (-WorldData.getPlayer().getY()+Drawer.wh/2/Drawer.h)*Drawer.h);
 
@@ -118,13 +117,18 @@ public class Drawer implements Runnable {
         if (glfwInit() != GLFW_TRUE)
             throw new IllegalStateException("Unable to initialize GLFW");
 
-        glfwDefaultWindowHints();
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
-        this.window = glfwCreateWindow(ww, wh, "STB Image Demo", NULL, NULL);
+
+        //glfwDefaultWindowHints();
+        //glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        //glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+        //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+
+
+        Output.write("GO GO GO GO!");
+        this.window = glfwCreateWindow(ww, wh, "STB Image Demo", 0, 0);
+        Output.write("YA YA!");
         if (window == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -150,6 +154,7 @@ public class Drawer implements Runnable {
         glfwSwapInterval(1);
         glfwShowWindow(window);
         glfwInvoke(window, windowSizefun, framebufferSizefun);
+
     }
 
     private void loadScale() {
@@ -283,9 +288,9 @@ public class Drawer implements Runnable {
                     //TARGET, MIPMAP LEVEL, INTERNAL FORMAT, WIDTH, HEIGHT, FORMAT, TYPE OF DATA, IMAGE
                // if (!(WorldData.entities.get(i) == WorldData.getPlayer())) {
                     if (WorldData.entities.get(i).spriteId == -1) {
-                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[0]);
+                        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[0]);
                     } else {
-                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId]);
+                        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId]);
                     }
 
                     //Enable Alpha (Transparency)
@@ -354,7 +359,7 @@ public class Drawer implements Runnable {
                 if (WorldData.tiles[a][b] != null) {
                         if ((w & 3) != 0)
                             glPixelStorei(GL_UNPACK_ALIGNMENT, 2 - (w & 1));
-                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, WorldData.tiles[a][b].texture);
+                        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, WorldData.tiles[a][b].texture);
 
                     glBegin(GL_QUADS);
 

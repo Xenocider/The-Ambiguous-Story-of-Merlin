@@ -1,7 +1,9 @@
 package workexpIT.merlin.entities;
 
+import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.graphics.Drawer;
 
+import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
 /**
@@ -9,8 +11,8 @@ import java.nio.ByteBuffer;
  */
 public class Bob extends Entity {
 
-    public static ByteBuffer[] sprites = {
-            Drawer.loadTexture("resources/graphics/charactersprites/bob/0.png")
+    public static BufferedImage[] sprites = {
+            ImageReader.loadImage("resources/graphics/charactersprites/bob/0.png")
     };
 
     public Bob(int x, int y, int state, int level) {

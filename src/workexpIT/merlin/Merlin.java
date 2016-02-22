@@ -6,8 +6,10 @@ import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.entities.Player;
 import workexpIT.merlin.graphics.Animator;
 import workexpIT.merlin.graphics.Drawer;
+import workexpIT.merlin.graphics.JavaDrawer;
 import workexpIT.merlin.listeners.KeyListener;
 
+import javax.swing.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -29,12 +31,21 @@ public class Merlin implements Runnable{
 
 
     public static void main(String[] args) {
-        keyListener = new KeyListener();
+
+        //JFrame frame = new JFrame("The Ambiguous Story of Merlin");
+        //frame.setSize(300,400);
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frame.setVisible(true);
+        JavaDrawer.init();
+
+//        keyListener = new KeyListener();
         WorldData.entities.add(new Player(1,1,1));
-        try{platform = args[0];}
-        catch (Exception e) {e.printStackTrace();}
+//        try{platform = args[0];}
+//        catch (Exception e) {e.printStackTrace();}
+
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        drawer = executor.scheduleWithFixedDelay(new Drawer(), 0, 100, TimeUnit.MILLISECONDS);
+        drawer = executor.scheduleWithFixedDelay(new JavaDrawer(),0,100,TimeUnit.MILLISECONDS);
+        //drawer = executor.scheduleWithFixedDelay(new Drawer(), 0, 100, TimeUnit.MILLISECONDS);
         //drawer.start();
 
         DataReader.loadMap("field");
@@ -44,6 +55,7 @@ public class Merlin implements Runnable{
 
         //Drawer d = new Drawer();
         //d.init2();
+
     }
 
     @Override
