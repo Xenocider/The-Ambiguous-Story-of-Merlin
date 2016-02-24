@@ -224,6 +224,62 @@ public class DataReader {
 
     }
 
+    public static void editMap(String mapid) {
+        WorldData.tiles=new Tile[Reference.mapSize][Reference.mapSize];
+        try {
+            Output.write("Reading map data: " + mapid);
+            FileReader FReader = new FileReader("resources/worlddata/default/"+mapid+"/tiledata.txt");
+            BufferedReader BReader = new BufferedReader(FReader);
+
+            int x = 0;
+            int y = 0;
+
+            List<Character> data = new ArrayList<Character>();
+
+            int value = 0;
+            while((value = BReader.read()) != -1) {
+                // converts int to character
+                char c = (char)value;
+
+                //If it's a new line
+                if (value == 10) {
+                    String id = data.toString().substring(1, data.toString().length()-1);
+                    //PC only v
+                    //if (Merlin.platform.equals("pc")) {id = id.substring(0, id.length()-3);}
+                    //PC only ^
+                    Output.write(id+"");
+                    int i = Integer.parseInt(id);
+                    loadTile(i,x,y);
+                    Output.write("Adding tile to " + x + " " + y);
+                    x=0;
+                    y=y+1;
+                    data.clear();
+                }
+                //If it's a comma
+                else if (c == ',') {
+                    String id = data.toString().substring(1, data.toString().length() - 1);
+                    int i = Integer.parseInt(id);
+                    loadTile(i,x,y);
+                    Output.write("Adding tile to " + x + " " + y);
+                    x=x+1;
+                    data.clear();
+                }
+                //If it's a character
+                else {
+                    data.add(c);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            Output.error("Could not find the specified map file: " + mapid);
+            //TODO Create new world
+        } catch (IOException e) {
+            Output.error("IO Exception while attempting to read the map file: " + mapid);
+            e.printStackTrace();
+        }
+        loadMiscData(mapid);
+        loadEntityData(mapid);
+    }
+
     /*public static void saveMap(String mapid) {
         File file = new File(mapid);
         try {

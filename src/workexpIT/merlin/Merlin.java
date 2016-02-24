@@ -11,6 +11,7 @@ import workexpIT.merlin.listeners.JavaKeyListener;
 import workexpIT.merlin.listeners.KeyListener;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -32,33 +33,34 @@ public class Merlin implements Runnable{
     public static ScheduledFuture drawer;
     public static ScheduledFuture gameLoop;
 
+    public static Mode mode;
+
+    public enum Mode {GAME, EDITOR}
+
+
 
     public static void main(String[] args) {
+            if (args.length == 2 && args[0].equals("mapeditor")) {
+                mode = Mode.EDITOR;
+            } else {
+                mode = Mode.GAME;
+            }
 
-        //JFrame frame = new JFrame("The Ambiguous Story of Merlin");
-        //frame.setSize(300,400);
-        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.setVisible(true);
-        JavaDrawer.init();
-
-//        keyListener = new KeyListener();
-        WorldData.entities.add(new Player(1,1,1));
-//        try{platform = args[0];}
-//        catch (Exception e) {e.printStackTrace();}
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        drawer = executor.scheduleWithFixedDelay(new JavaDrawer(),0,12500,TimeUnit.MICROSECONDS);
-        gameLoop = executor.scheduleWithFixedDelay(new GameLoop(),0,250,TimeUnit.MILLISECONDS);
-        //drawer = executor.scheduleWithFixedDelay(new Drawer(), 0, 100, TimeUnit.MILLISECONDS);
-        //drawer.start();
+        JavaDrawer.init();
+        drawer = executor.scheduleWithFixedDelay(new JavaDrawer(), 0, 12500, TimeUnit.MICROSECONDS);
+        if (mode == Mode.EDITOR) {
+            DataReader.editMap(args[1]);
+            gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
+        }
+        else {
+            WorldData.entities.add(new Player(1, 1, 1));
+            gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
 
-        DataReader.loadMap("field");
+            DataReader.loadMap("field");
 
-        //drawer.run();
-
-
-        //Drawer d = new Drawer();
-        //d.init2();
+        }
 
     }
 
