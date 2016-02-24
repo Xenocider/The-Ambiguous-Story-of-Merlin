@@ -288,6 +288,24 @@ public class DataReader {
     public static void saveMap(String mapid) {
         mapid = "test";
         File file = new File("resources/worlddata/default/"+mapid+"/tiledata.txt");
+        File theDir = new File("resources/worlddata/default/"+mapid);
+
+// if the directory does not exist, create it
+        if (!theDir.exists()) {
+            System.out.println("creating directory");
+            boolean result = false;
+
+            try{
+                theDir.mkdir();
+                result = true;
+            }
+            catch(SecurityException se){
+                //handle it
+            }
+            if(result) {
+                System.out.println("DIR created");
+            }
+        }
         try {
             file.createNewFile();
         } catch (IOException e) {
