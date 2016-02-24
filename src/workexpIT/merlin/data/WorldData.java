@@ -13,6 +13,10 @@ import java.util.List;
  */
 public class WorldData {
 
+    public static int selectedTile;
+
+    public static String mapName;
+
     public static Tile[][] tiles = new Tile[Reference.mapSize][Reference.mapSize];
     public static List<Entity> entities = new ArrayList<Entity>();
 

@@ -3,6 +3,7 @@ package workexpIT.merlin.graphics;
 import workexpIT.merlin.Merlin;
 import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
+import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.listeners.MouseListener;
 import workexpIT.merlin.tiles.Tile;
@@ -37,9 +38,30 @@ public class JavaDrawer extends JPanel implements Runnable {
         frame.repaint();
     }
 
+    private void moveScreen() {
+        if (Merlin.keyListener.upPressed || Merlin.keyListener.upTemp) {
+            JavaDrawer.offsetY = JavaDrawer.offsetY + 1 * JavaDrawer.imageSize;
+            Merlin.keyListener.upTemp = false;
+        }
+        if (Merlin.keyListener.leftPressed || Merlin.keyListener.leftTemp) {
+            JavaDrawer.offsetX = JavaDrawer.offsetX + 1 * JavaDrawer.imageSize;
+            Merlin.keyListener.leftTemp = false;
+        }
+        if (Merlin.keyListener.downPressed || Merlin.keyListener.downTemp) {
+            JavaDrawer.offsetY = JavaDrawer.offsetY - 1 * JavaDrawer.imageSize;
+            Merlin.keyListener.downTemp = false;
+        }
+        if (Merlin.keyListener.rightPressed || Merlin.keyListener.rightTemp) {
+            JavaDrawer.offsetX = JavaDrawer.offsetX - 1 * JavaDrawer.imageSize;
+            Merlin.keyListener.rightTemp = false;
+        }
+
+    }
+
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {moveScreen();}
         if (Merlin.mode.equals(Merlin.Mode.GAME)) {smoothOffset();}
         drawTiles(g);
         drawEntities(g);
@@ -65,6 +87,7 @@ public class JavaDrawer extends JPanel implements Runnable {
             g.drawImage(tile.texture,x * JavaDrawer.imageSize + frame.getWidth()-editorMenuSize + 10*x + 10,y * JavaDrawer.imageSize + 10*y + 10,null);
             if (x == 0) {x = 1;} else {x = 0;y=y+1;}
         }
+        g.drawImage(ImageReader.loadImage("resources/graphics/save.png"), frame.getWidth()-10-32, 10,null);
     }
 
     private void smoothOffset() {

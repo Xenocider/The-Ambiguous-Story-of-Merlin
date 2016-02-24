@@ -86,6 +86,7 @@ public class DataReader {
             Output.error("IO Exception while attempting to read the map file: " + mapid);
             e.printStackTrace();
         }
+        WorldData.mapName = mapid;
         loadMiscData(mapid);
         loadEntityData(mapid);
         //Center camera
@@ -247,10 +248,12 @@ public class DataReader {
                     //PC only v
                     //if (Merlin.platform.equals("pc")) {id = id.substring(0, id.length()-3);}
                     //PC only ^
-                    Output.write(id+"");
-                    int i = Integer.parseInt(id);
-                    loadTile(i,x,y);
-                    Output.write("Adding tile to " + x + " " + y);
+                    if (!id.equals("")) {
+                        Output.write(id + "");
+                        int i = Integer.parseInt(id);
+                        loadTile(i, x, y);
+                        Output.write("Adding tile to " + x + " " + y);
+                    }
                     x=0;
                     y=y+1;
                     data.clear();
@@ -258,9 +261,11 @@ public class DataReader {
                 //If it's a comma
                 else if (c == ',') {
                     String id = data.toString().substring(1, data.toString().length() - 1);
-                    int i = Integer.parseInt(id);
-                    loadTile(i,x,y);
-                    Output.write("Adding tile to " + x + " " + y);
+                    if (!id.equals("")) {
+                        int i = Integer.parseInt(id);
+                        loadTile(i, x, y);
+                        Output.write("Adding tile to " + x + " " + y);
+                    }
                     x=x+1;
                     data.clear();
                 }
@@ -280,8 +285,9 @@ public class DataReader {
         loadEntityData(mapid);
     }
 
-    /*public static void saveMap(String mapid) {
-        File file = new File(mapid);
+    public static void saveMap(String mapid) {
+        mapid = "test";
+        File file = new File("resources/worlddata/default/"+mapid+"/tiledata.txt");
         try {
             file.createNewFile();
         } catch (IOException e) {
@@ -290,15 +296,31 @@ public class DataReader {
         }
         FileWriter writer;
         try {
-            writer = new FileWriter(mapid);
-            writer.write(//TODO save map data)
+            writer = new FileWriter("resources/worlddata/default/"+mapid+"/tiledata.txt");
+            for (int b = 0; b<Reference.mapSize; b++) {
+                for (int a = 0;a<WorldData.tiles.length; a++) {
+                try {
+                    for (int i = 0; i < Reference.tileIds.length; i ++ ) {
+                        if (WorldData.tiles[a][b].getClass().getSimpleName().equals(Reference.tileIds[i])) {
+                            writer.write(i+",");
+                            Output.write(WorldData.tiles[a][b].getClass().getSimpleName() + " at " + a + ", " + b);
+                        }
+                    }
+                }
+                catch (NullPointerException e) {
+                    //Output.write("NOTHING");
+                    writer.write(",");
+                }
+                //writer.write();
+            }
+            writer.write(System.lineSeparator()); //newline
+        }
             writer.flush();
             writer.close();
         } catch (IOException e) {
             Output.error("IO Exception while attempting to write to the map file: " + mapid);
             e.printStackTrace();
         }
-
-    }*/
+    }
 
 }

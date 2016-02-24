@@ -2,7 +2,11 @@ package workexpIT.merlin.listeners;
 
 import workexpIT.merlin.Merlin;
 import workexpIT.merlin.Output;
+import workexpIT.merlin.Reference;
+import workexpIT.merlin.data.DataReader;
+import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.graphics.JavaDrawer;
+import workexpIT.merlin.tiles.Tile;
 
 import java.awt.event.MouseEvent;
 
@@ -15,10 +19,30 @@ public class MouseListener implements java.awt.event.MouseListener {
         int x = e.getX();
         int y = e.getY();
         if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
-            int editX;
-            int editY;
-            if (x > JavaDrawer.editorMenuSize) {
-                Output.write((x - JavaDrawer.frame.getWidth() + JavaDrawer.editorMenuSize - 10)/(JavaDrawer.imageSize+10)+"");
+            if (x > JavaDrawer.frame.getWidth()-JavaDrawer.editorMenuSize && x < JavaDrawer.frame.getWidth()-10-32) {
+                int editX = (x - JavaDrawer.frame.getWidth() + JavaDrawer.editorMenuSize - 10)/(JavaDrawer.imageSize+10);
+                int editY = (y - 10)/(JavaDrawer.imageSize+10);
+                int id = editX + editY*2;
+                WorldData.selectedTile = id;
+                Output.write("Selected tile: " + id);
+            }
+            else if (x>JavaDrawer.frame.getWidth()-10-32 && y < 60) {
+                Output.write("Saving map...");
+                DataReader.saveMap(WorldData.mapName);
+            }
+            else if (x<JavaDrawer.frame.getWidth()-JavaDrawer.editorMenuSize){
+                int mapX = (x - JavaDrawer.offsetX)/JavaDrawer.imageSize;
+                int mapY = (y - JavaDrawer.offsetY + JavaDrawer.imageSize)/JavaDrawer.imageSize;
+                try {
+                    WorldData.tiles[mapX][mapY] = (Tile) Class.forName("workexpIT.merlin.tiles."+ Reference.tileIds[WorldData.selectedTile]).newInstance();
+                    Output.write("Placing tile " + WorldData.selectedTile + " at " + mapX + ", " + mapY);
+                } catch (InstantiationException e1) {
+                    e1.printStackTrace();
+                } catch (IllegalAccessException e1) {
+                    e1.printStackTrace();
+                } catch (ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
     }
