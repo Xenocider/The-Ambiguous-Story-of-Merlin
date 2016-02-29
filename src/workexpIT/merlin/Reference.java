@@ -10,7 +10,6 @@ public class Reference {
 
     //Tile IDs
     public static final String[] tileIds = {
-            "Grass",//0
-            "Dirt"//1
+            "Bush0"
     };
 }

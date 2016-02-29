@@ -1,5 +1,8 @@
 package workexpIT.merlin.listeners;
 
+import workexpIT.merlin.Merlin;
+import workexpIT.merlin.graphics.JavaDrawer;
+
 import java.awt.event.*;
 
 /**
@@ -65,6 +68,16 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
                 rightTemp = false;
                 downTemp = true;
                 leftTemp = false;
+                break;
+            case KeyEvent.VK_EQUALS:
+                if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+                    JavaDrawer.scaleUp();
+                }
+                break;
+            case KeyEvent.VK_MINUS:
+                if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+                    JavaDrawer.scaleDown();
+                }
                 break;
         }
 

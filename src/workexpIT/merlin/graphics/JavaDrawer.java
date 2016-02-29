@@ -1,5 +1,6 @@
 package workexpIT.merlin.graphics;
 
+import com.sun.org.apache.xml.internal.serializer.OutputPropertiesFactory;
 import workexpIT.merlin.Merlin;
 import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
@@ -10,6 +11,7 @@ import workexpIT.merlin.tiles.Tile;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 /**
@@ -20,9 +22,10 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static JFrame frame;
     public static int offsetX = 0;
     public static int offsetY = 0;
-    public static int imageSize = 64;
+    public static int imageSize = 16;
     public static int ww = 1200;
     public static int wh = 800;
+    public static float scale = 1;
 
     public static int editorMenuSize = 200;
 
@@ -84,7 +87,9 @@ public class JavaDrawer extends JPanel implements Runnable {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            g.drawImage(tile.texture,x * JavaDrawer.imageSize + frame.getWidth()-editorMenuSize + 10*x + 10,y * JavaDrawer.imageSize + 10*y + 10,null);
+            BufferedImage image = scale(tile.getTexture(),4,4);
+
+            g.drawImage(image,(int)(x * JavaDrawer.imageSize*4 + frame.getWidth()-editorMenuSize + 10*x + 10),(int)(y * JavaDrawer.imageSize*4 + 10*y + 10),null);
             if (x == 0) {x = 1;} else {x = 0;y=y+1;}
         }
         g.drawImage(ImageReader.loadImage("resources/graphics/save.png"), frame.getWidth()-10-32, 10,null);
@@ -121,19 +126,19 @@ public class JavaDrawer extends JPanel implements Runnable {
         //Output.write("Drawing Entities");
         for (int i = 0; i < WorldData.entities.size(); i++) {
             if (WorldData.entities.get(i).spriteId == -1) {
-                BufferedImage sprite = WorldData.entities.get(i).getSprites()[0];
+                BufferedImage sprite = scale(WorldData.entities.get(i).getSprites()[0],scale,scale);
                 int x = WorldData.entities.get(i).getX();
                 int y = WorldData.entities.get(i).getY();
                 int w = sprite.getWidth();
                 int h = sprite.getHeight();
-                g.drawImage(sprite,x * w + offsetX, y * h - h + offsetY,null);
+                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale), (int)((y * imageSize - h + offsetY)*scale),null);
             } else {
-                BufferedImage sprite = WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId];
+                BufferedImage sprite = scale(WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId],scale,scale);
                 int x = WorldData.entities.get(i).getX();
                 int y = WorldData.entities.get(i).getY();
                 int w = sprite.getWidth();
                 int h = sprite.getHeight();
-                g.drawImage(sprite,x * imageSize + offsetX, y * imageSize - h + offsetY,null);
+                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale), (int)((y * imageSize - h + offsetY)*scale),null);
             }
         }
     }
@@ -142,7 +147,8 @@ public class JavaDrawer extends JPanel implements Runnable {
         for (int a = 0; a < WorldData.tiles.length; a++) {
             for (int b = 0; b < WorldData.tiles[a].length; b++) {
                 if (WorldData.tiles[a][b] != null) {
-                    g.drawImage(WorldData.tiles[a][b].texture,a * imageSize + offsetX, b * imageSize - imageSize + offsetY,null);
+                    BufferedImage image = scale(WorldData.tiles[a][b].getTexture(),scale,scale);
+                    g.drawImage(image,(int)(((a * imageSize) + (offsetX))*scale), (int)(((b * imageSize) - imageSize + (offsetY))*scale),null);
                 }
             }
         }
@@ -170,4 +176,26 @@ public class JavaDrawer extends JPanel implements Runnable {
     }
 
 
+    public static void scaleUp() {
+        scale = scale + 0.25f;
+        Output.write("Zooming In");
+    }
+    public static void scaleDown() {
+        scale = scale - 0.25f;
+        Output.write("Zooming Out");
+    }
+
+    public static BufferedImage scale(BufferedImage sbi, double fWidth, double fHeight) {
+        BufferedImage dbi = null;
+        if(sbi != null) {
+            int imageType = sbi.getType();
+            int dWidth = sbi.getWidth();
+            int dHeight = sbi.getHeight();
+            dbi = new BufferedImage((int)(dWidth*fWidth), (int)(dHeight*fHeight), imageType);
+            Graphics2D g = dbi.createGraphics();
+            AffineTransform at = AffineTransform.getScaleInstance(fWidth, fHeight);
+            g.drawRenderedImage(sbi, at);
+        }
+        return dbi;
+    }
 }

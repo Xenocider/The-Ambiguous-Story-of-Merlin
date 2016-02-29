@@ -18,7 +18,7 @@ public class Tile {
     public Tile(BufferedImage texture) {
         this.texture = texture;
     }
-    public BufferedImage texture;
+    protected BufferedImage texture;
 
     protected boolean door;
     protected String doorMap;
@@ -51,6 +51,9 @@ public class Tile {
             }
         }
         return true;
+    }
+    public BufferedImage getTexture() {
+        return texture;
     }
 }
 

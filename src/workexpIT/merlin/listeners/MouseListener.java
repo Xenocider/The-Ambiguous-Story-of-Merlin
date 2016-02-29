@@ -16,12 +16,17 @@ import java.awt.event.MouseEvent;
 public class MouseListener implements java.awt.event.MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
         if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
             if (x > JavaDrawer.frame.getWidth()-JavaDrawer.editorMenuSize && x < JavaDrawer.frame.getWidth()-10-32) {
-                int editX = (x - JavaDrawer.frame.getWidth() + JavaDrawer.editorMenuSize - 10)/(JavaDrawer.imageSize+10);
-                int editY = (y - 10)/(JavaDrawer.imageSize+10);
+                int editX = (x - JavaDrawer.frame.getWidth() + JavaDrawer.editorMenuSize - 10)/(JavaDrawer.imageSize*4+10);
+                int editY = (y - 10)/(JavaDrawer.imageSize*4+10);
                 int id = editX + editY*2;
                 WorldData.selectedTile = id;
                 Output.write("Selected tile: " + id);
@@ -31,8 +36,8 @@ public class MouseListener implements java.awt.event.MouseListener {
                 DataReader.saveMap(WorldData.mapName);
             }
             else if (x<JavaDrawer.frame.getWidth()-JavaDrawer.editorMenuSize){
-                int mapX = (x - JavaDrawer.offsetX)/JavaDrawer.imageSize;
-                int mapY = (y - JavaDrawer.offsetY + JavaDrawer.imageSize)/JavaDrawer.imageSize;
+                int mapX = (int)((x/JavaDrawer.scale - JavaDrawer.offsetX)/JavaDrawer.imageSize);
+                int mapY = (int)((y/JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize)/JavaDrawer.imageSize);
                 try {
                     WorldData.tiles[mapX][mapY] = (Tile) Class.forName("workexpIT.merlin.tiles."+ Reference.tileIds[WorldData.selectedTile]).newInstance();
                     Output.write("Placing tile " + WorldData.selectedTile + " at " + mapX + ", " + mapY);
@@ -45,11 +50,6 @@ public class MouseListener implements java.awt.event.MouseListener {
                 }
             }
         }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
     }
 
     @Override

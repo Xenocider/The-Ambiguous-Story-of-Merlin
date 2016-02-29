@@ -286,7 +286,6 @@ public class DataReader {
     }
 
     public static void saveMap(String mapid) {
-        mapid = "test";
         File file = new File("resources/worlddata/default/"+mapid+"/tiledata.txt");
         File theDir = new File("resources/worlddata/default/"+mapid);
 
