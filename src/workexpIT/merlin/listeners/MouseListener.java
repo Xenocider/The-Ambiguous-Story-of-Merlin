@@ -36,8 +36,11 @@ public class MouseListener implements java.awt.event.MouseListener {
                 DataReader.saveMap(WorldData.mapName);
             }
             else if (x<JavaDrawer.frame.getWidth()-JavaDrawer.editorMenuSize){
-                int mapX = (int)((x/JavaDrawer.scale - JavaDrawer.offsetX)/JavaDrawer.imageSize);
-                int mapY = (int)((y/JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize)/JavaDrawer.imageSize);
+                //int mapX = (int)((x/JavaDrawer.scale - JavaDrawer.offsetX)/JavaDrawer.imageSize);
+                //int mapY = (int)((y/JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize)/JavaDrawer.imageSize);
+                int mapX = (int)((x-JavaDrawer.ww/2)/JavaDrawer.scale - JavaDrawer.offsetX)/JavaDrawer.imageSize;
+                int mapY = (int)((y-JavaDrawer.wh/2)/JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize)/JavaDrawer.imageSize;
+                Output.write(mapX + ", " + mapY);
                 try {
                     WorldData.tiles[mapX][mapY] = (Tile) Class.forName("workexpIT.merlin.tiles."+ Reference.tileIds[WorldData.selectedTile]).newInstance();
                     Output.write("Placing tile " + WorldData.selectedTile + " at " + mapX + ", " + mapY);

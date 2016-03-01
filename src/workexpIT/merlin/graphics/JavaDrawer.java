@@ -131,14 +131,14 @@ public class JavaDrawer extends JPanel implements Runnable {
                 int y = WorldData.entities.get(i).getY();
                 int w = sprite.getWidth();
                 int h = sprite.getHeight();
-                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale), (int)((y * imageSize - h + offsetY)*scale),null);
+                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale)+ww/2, (int)((y * imageSize - h + offsetY)*scale)+wh/2,null);
             } else {
                 BufferedImage sprite = scale(WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId],scale,scale);
                 int x = WorldData.entities.get(i).getX();
                 int y = WorldData.entities.get(i).getY();
                 int w = sprite.getWidth();
                 int h = sprite.getHeight();
-                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale), (int)((y * imageSize - h + offsetY)*scale),null);
+                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale)+ww/2, (int)((y * imageSize - h + offsetY)*scale)+wh/2,null);
             }
         }
     }
@@ -148,7 +148,7 @@ public class JavaDrawer extends JPanel implements Runnable {
             for (int b = 0; b < WorldData.tiles[a].length; b++) {
                 if (WorldData.tiles[a][b] != null) {
                     BufferedImage image = scale(WorldData.tiles[a][b].getTexture(),scale,scale);
-                    g.drawImage(image,(int)(((a * imageSize) + (offsetX))*scale), (int)(((b * imageSize) - imageSize + (offsetY))*scale),null);
+                    g.drawImage(image,(int)((a * imageSize + offsetX)*scale)+ww/2, (int)((b * imageSize - imageSize + offsetY)*scale)+wh/2,null);
                 }
             }
         }
