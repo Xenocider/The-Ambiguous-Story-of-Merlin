@@ -2,6 +2,7 @@ package workexpIT.merlin;
 
 import workexpIT.merlin.data.DataReader;
 import workexpIT.merlin.data.WorldData;
+import workexpIT.merlin.entities.Bob;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.entities.Player;
 import workexpIT.merlin.graphics.Animator;
@@ -59,6 +60,9 @@ public class Merlin implements Runnable{
             gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
 
             DataReader.loadMap("null");
+
+            //Temporary for testing battle code
+            GameLoop.startBattle(WorldData.getPlayer(),new Bob(0,0,Entity.STATE_AGGRESSIVE,1));
 
         }
 

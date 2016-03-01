@@ -1,11 +1,13 @@
 package workexpIT.merlin.graphics;
 
 import com.sun.org.apache.xml.internal.serializer.OutputPropertiesFactory;
+import workexpIT.merlin.GameLoop;
 import workexpIT.merlin.Merlin;
 import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
 import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
+import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.listeners.MouseListener;
 import workexpIT.merlin.tiles.Tile;
 
@@ -80,6 +82,9 @@ public class JavaDrawer extends JPanel implements Runnable {
         }
         if (Merlin.mode.equals(Merlin.Mode.BATTLE)) {
             drawBackground(g);
+            drawBattleEntities(g);
+            drawStatusBars(g);
+            drawBattleMenu(g);
         }
     }
 
@@ -148,14 +153,14 @@ public class JavaDrawer extends JPanel implements Runnable {
                 int y = WorldData.entities.get(i).getY();
                 int w = sprite.getWidth();
                 int h = sprite.getHeight();
-                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale)+ww/2, (int)((y * imageSize - h/scale + offsetY)*scale)+wh/2,null);
+                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale)+frame.getWidth()/2, (int)((y * imageSize - h/scale + offsetY)*scale)+frame.getHeight()/2,null);
             } else {
                 BufferedImage sprite = scale(WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId],scale,scale);
                 int x = WorldData.entities.get(i).getX();
                 int y = WorldData.entities.get(i).getY();
                 int w = sprite.getWidth();
                 int h = sprite.getHeight();
-                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale)+ww/2, (int)((y * imageSize - h/scale + offsetY)*scale)+wh/2,null);
+                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale)+frame.getWidth()/2, (int)((y * imageSize - h/scale + offsetY)*scale)+frame.getHeight()/2,null);
             }
         }
     }
@@ -165,18 +170,19 @@ public class JavaDrawer extends JPanel implements Runnable {
             for (int b = 0; b < WorldData.tiles[a].length; b++) {
                 if (WorldData.tiles[a][b] != null) {
                     BufferedImage image = scale(WorldData.tiles[a][b].getTexture(),scale,scale);
-                    g.drawImage(image,(int)((a * imageSize + offsetX)*scale)+ww/2, (int)((b * imageSize - imageSize + offsetY)*scale)+wh/2,null);
+                    g.drawImage(image,(int)((a * imageSize + offsetX)*scale)+frame.getWidth()/2, (int)((b * imageSize - imageSize + offsetY)*scale)+frame.getHeight()/2,null);
                 }
             }
         }
     }
 
     public void drawGrid(Graphics g) {
+        g.setColor(Color.BLACK);
         for (int x = 0; x < Reference.mapSize+1; x++) {
-            g.fillRect((int) (((x * imageSize + offsetX) * scale) + ww / 2) - 1, (int) (((0 * imageSize - imageSize + offsetY) * scale) + wh / 2), 2, (int) (Reference.mapSize * imageSize * scale));
+            g.fillRect((int) (((x * imageSize + offsetX) * scale) + frame.getWidth() / 2) - 1, (int) (((0 * imageSize - imageSize + offsetY) * scale) + frame.getHeight() / 2), 2, (int) (Reference.mapSize * imageSize * scale));
         }
         for (int y = 0; y < Reference.mapSize+1; y++) {
-            g.fillRect((int) (((0 * imageSize + offsetX) * scale) + ww / 2), (int)(((y * imageSize - imageSize + offsetY) * scale) + wh / 2)-1, (int) ((Reference.mapSize * imageSize) * scale), 2);
+            g.fillRect((int) (((0 * imageSize + offsetX) * scale) + frame.getWidth() / 2), (int)(((y * imageSize - imageSize + offsetY) * scale) + frame.getHeight() / 2)-1, (int) ((Reference.mapSize * imageSize) * scale), 2);
         }
     }
 
@@ -225,7 +231,133 @@ public class JavaDrawer extends JPanel implements Runnable {
         return dbi;
     }
 
-    public static void zoom() {
 
+    //BATTLE STUFF IS DOWN HERE
+
+    //Image Object Locations
+    public static int playerX;
+    public static int playerY;
+    public static int enemyX;
+    public static int enemyY;
+    public static int playerBarX;
+    public static int playerBarY;
+    public static int enemyBarX;
+    public static int enemyBarY;
+    public static int menuX;
+    public static int menuY;
+
+    //Offsets
+    public static int playerOffsetFromBottom = -300;
+    public static int playerOffsetFromSide = 20;
+    public static int enemyOffsetFromTop = 100;
+    public static int enemyOffsetFromSide = 20;
+    public static int playerBarOffsetFromBottom = 325;
+    public static int playerBarOffsetFromSide = 20;
+    public static int enemyBarOffsetFromTop = 50;
+    public static int enemyBarOffsetFromSide = 20;
+    public static int healthBarXOffset = 10;
+    public static int healthBarYOffset = 10;
+    public static int manaBarXOffset = 10;
+    public static int manaBarYOffset = 20;
+    public static int fightButtonXOffset = 100;
+    public static int fightButtonYOffset = 50;
+    public static int bagButtonXOffset = 100;
+    public static int bagButtonYOffset = 150;
+    public static int restButtonXOffset = 100;
+    public static int restButtonYOffset = 50;
+    public static int attackButtonXOffset = 100;
+    public static int attackButtonYOffset = 50;
+
+    //Sizes
+    public static int manaBarLength = 100;
+    public static int healthBarLength = 100;
+    public static int menuBackgroundHeight = 300;
+    public static int fightButtonWidth;
+    public static int fightButtonHeight = 200;
+    public static int otherButtonWidth;
+    public static int otherButtonHeight = 90;
+    public static int attackButtonWidth;
+    public static int attackButtonHeight = 90;
+
+
+
+
+
+    private void drawBattleEntities(Graphics g) {
+        BufferedImage player = ImageReader.loadImage("resources/graphics/charactersprites/player/battle.png");
+        BufferedImage enemy = ImageReader.loadImage("resources/graphics/charactersprites/"+GameLoop.enemy.getName()+"/battle.png");
+        playerX = playerOffsetFromSide;
+        playerY = JavaDrawer.frame.getHeight() - player.getHeight() - playerOffsetFromBottom;
+        enemyX = JavaDrawer.frame.getWidth() - enemy.getWidth() - enemyOffsetFromSide;
+        enemyY = enemyOffsetFromTop;
+        g.drawImage(enemy, enemyX, enemyY,null);
+        g.drawImage(player, playerX,playerY,null);
     }
+
+    private void drawStatusBars(Graphics g) {
+        BufferedImage statusBar = ImageReader.loadImage("resources/graphics/battle/entityStatusBackground.png");
+
+        playerBarX = playerBarOffsetFromSide;
+        playerBarY = JavaDrawer.frame.getHeight()-playerBarOffsetFromBottom - statusBar.getHeight();
+        enemyBarX = JavaDrawer.frame.getWidth()-enemyBarOffsetFromSide - statusBar.getWidth();
+        enemyBarY = enemyBarOffsetFromTop;
+
+        g.drawImage(statusBar,playerBarX,playerBarY,null);
+        g.drawImage(statusBar, enemyBarX, enemyBarY, null);
+
+        g.setColor(Color.GREEN);
+        g.fillRect(playerBarX + healthBarXOffset,playerBarY + healthBarYOffset,WorldData.getPlayer().health*WorldData.getPlayer().healthMax/healthBarLength,5);
+        g.fillRect(enemyBarX + healthBarXOffset,enemyBarY + healthBarYOffset,GameLoop.enemy.health*GameLoop.enemy.healthMax/healthBarLength,5);
+
+        g.setColor(Color.BLUE);
+        g.fillRect(playerBarX + manaBarXOffset,playerBarY + manaBarYOffset,WorldData.getPlayer().mana*WorldData.getPlayer().manaMax/manaBarLength,5);
+        g.fillRect(enemyBarX + manaBarXOffset,enemyBarY + manaBarYOffset,GameLoop.enemy.mana*GameLoop.enemy.manaMax/manaBarLength,5);
+    }
+
+    private void drawBattleMenu(Graphics g) {
+        BufferedImage menuBackground = ImageReader.loadImage("resources/graphics/battle/menuBackground.png");
+        menuBackground = scaleToSize(menuBackground, JavaDrawer.frame.getWidth(),menuBackgroundHeight);
+        menuX = 0;
+        menuY = JavaDrawer.frame.getHeight() - menuBackground.getHeight()-20;
+        g.drawImage(menuBackground,menuX,menuY,null);
+
+        if (!GameLoop.fightMenu) {
+            fightButtonWidth = (int) (JavaDrawer.frame.getWidth()*0.60);
+            BufferedImage fightBackground = scaleToSize(ImageReader.loadImage("resources/graphics/battle/buttonBackground.png"),fightButtonWidth,fightButtonHeight);
+            g.drawImage(fightBackground, menuX + fightButtonXOffset, menuY + fightButtonYOffset, null);
+
+            otherButtonWidth = (int) (JavaDrawer.frame.getWidth()*0.20);
+            BufferedImage buttonBackground = scaleToSize(ImageReader.loadImage("resources/graphics/battle/buttonBackground.png"),otherButtonWidth,otherButtonHeight);
+
+            g.drawImage(buttonBackground, menuX+menuBackground.getWidth()-buttonBackground.getWidth()-bagButtonXOffset, menuY+bagButtonYOffset, null);
+
+            g.drawImage(buttonBackground, menuX+menuBackground.getWidth()-buttonBackground.getWidth()-restButtonXOffset, menuY+restButtonYOffset, null);
+        }
+        else {
+            attackButtonWidth = (int)(JavaDrawer.frame.getWidth() * 0.25);
+            BufferedImage attackBackground = scaleToSize(ImageReader.loadImage("resources/graphics/battle/buttonBackground.png"), attackButtonWidth, attackButtonHeight);
+            g.drawImage(attackBackground, menuX + attackButtonXOffset, menuY + attackButtonYOffset, null);
+            g.drawImage(attackBackground, menuX + attackButtonXOffset, menuY + attackButtonYOffset + attackButtonHeight+10, null);
+            g.drawImage(attackBackground, menuX + attackButtonXOffset + attackButtonWidth + 20, menuY + attackButtonYOffset, null);
+            g.drawImage(attackBackground, menuX + attackButtonXOffset + attackButtonWidth + 20, menuY + attackButtonYOffset + attackButtonHeight+10, null);
+            g.drawImage(attackBackground, menuX + attackButtonXOffset + attackButtonWidth*2 + 20*2, menuY + attackButtonYOffset, null);
+            g.drawImage(attackBackground, menuX + attackButtonXOffset + attackButtonWidth*2 + 20*2, menuY + attackButtonYOffset + attackButtonHeight+10, null);
+        }
+    }
+
+    private BufferedImage scaleToSize(BufferedImage sbi, float x, float y) {
+        float fWidth = x/sbi.getWidth();
+        float fHeight = y/sbi.getHeight();
+        BufferedImage dbi = null;
+        if(sbi != null) {
+            int imageType = sbi.getType();
+            dbi = new BufferedImage((int)x,(int)y, imageType);
+            Graphics2D g = dbi.createGraphics();
+            AffineTransform at = AffineTransform.getScaleInstance(fWidth, fHeight);
+            g.drawRenderedImage(sbi, at);
+        }
+        return dbi;
+    }
+
+
 }

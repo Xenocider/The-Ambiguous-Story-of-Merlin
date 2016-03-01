@@ -2,10 +2,15 @@ package workexpIT.merlin;
 
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
+import workexpIT.merlin.graphics.BattleAnimator;
 import workexpIT.merlin.graphics.JavaDrawer;
 
 public class GameLoop implements Runnable{
     public static boolean pause;
+
+    public static Entity enemy;
+
+    public static boolean fightMenu = false;
 
     @Override
     public void run() {
@@ -56,7 +61,8 @@ public class GameLoop implements Runnable{
         }
     }
 
-    public static void startBattle(Entity player, Entity enemy) {
+    public static void startBattle(Entity player, Entity e) {
+        enemy = e;
         pause = true;
         Thread zoom = new Thread("Zoom") {
             public void run() {

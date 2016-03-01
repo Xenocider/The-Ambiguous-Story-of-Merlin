@@ -32,6 +32,11 @@ public class Entity {
 
     public int spriteId;
 
+    public static int health = 100;
+    public static int healthMax = 100;
+    public static int mana = 100;
+    public static int manaMax = 100;
+
 
     public Entity(int x, int y, String name, int state, int level, BufferedImage[] sprites) {
         this.x = x;
