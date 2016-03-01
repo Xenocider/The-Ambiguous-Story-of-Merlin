@@ -245,6 +245,24 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int enemyBarY;
     public static int menuX;
     public static int menuY;
+    public static int fightX;
+    public static int fightY;
+    public static int bagX;
+    public static int bagY;
+    public static int restX;
+    public static int restY;
+    public static int attack1X;
+    public static int attack1Y;
+    public static int attack2X;
+    public static int attack2Y;
+    public static int attack3X;
+    public static int attack3Y;
+    public static int attack4X;
+    public static int attack4Y;
+    public static int attack5X;
+    public static int attack5Y;
+    public static int attack6X;
+    public static int attack6Y;
 
     //Offsets
     public static int playerOffsetFromBottom = -300;
@@ -324,24 +342,45 @@ public class JavaDrawer extends JPanel implements Runnable {
         if (!GameLoop.fightMenu) {
             fightButtonWidth = (int) (JavaDrawer.frame.getWidth()*0.60);
             BufferedImage fightBackground = scaleToSize(ImageReader.loadImage("resources/graphics/battle/buttonBackground.png"),fightButtonWidth,fightButtonHeight);
-            g.drawImage(fightBackground, menuX + fightButtonXOffset, menuY + fightButtonYOffset, null);
+            fightX = menuX + fightButtonXOffset;
+            fightY = menuY + fightButtonYOffset;
+            g.drawImage(fightBackground,fightX ,fightY , null);
 
             otherButtonWidth = (int) (JavaDrawer.frame.getWidth()*0.20);
             BufferedImage buttonBackground = scaleToSize(ImageReader.loadImage("resources/graphics/battle/buttonBackground.png"),otherButtonWidth,otherButtonHeight);
 
-            g.drawImage(buttonBackground, menuX+menuBackground.getWidth()-buttonBackground.getWidth()-bagButtonXOffset, menuY+bagButtonYOffset, null);
+            bagX = menuX+menuBackground.getWidth()-buttonBackground.getWidth()-bagButtonXOffset;
+            bagY =  menuY+bagButtonYOffset;
+            g.drawImage(buttonBackground,bagX ,bagY, null);
 
-            g.drawImage(buttonBackground, menuX+menuBackground.getWidth()-buttonBackground.getWidth()-restButtonXOffset, menuY+restButtonYOffset, null);
+            restX = menuX+menuBackground.getWidth()-buttonBackground.getWidth()-restButtonXOffset;
+            restY =  menuY+restButtonYOffset;
+            g.drawImage(buttonBackground, restX, restY, null);
         }
         else {
             attackButtonWidth = (int)(JavaDrawer.frame.getWidth() * 0.25);
             BufferedImage attackBackground = scaleToSize(ImageReader.loadImage("resources/graphics/battle/buttonBackground.png"), attackButtonWidth, attackButtonHeight);
-            g.drawImage(attackBackground, menuX + attackButtonXOffset, menuY + attackButtonYOffset, null);
-            g.drawImage(attackBackground, menuX + attackButtonXOffset, menuY + attackButtonYOffset + attackButtonHeight+10, null);
-            g.drawImage(attackBackground, menuX + attackButtonXOffset + attackButtonWidth + 20, menuY + attackButtonYOffset, null);
-            g.drawImage(attackBackground, menuX + attackButtonXOffset + attackButtonWidth + 20, menuY + attackButtonYOffset + attackButtonHeight+10, null);
-            g.drawImage(attackBackground, menuX + attackButtonXOffset + attackButtonWidth*2 + 20*2, menuY + attackButtonYOffset, null);
-            g.drawImage(attackBackground, menuX + attackButtonXOffset + attackButtonWidth*2 + 20*2, menuY + attackButtonYOffset + attackButtonHeight+10, null);
+
+            attack1X = menuX + attackButtonXOffset + (attackButtonWidth + 20)*0;
+            attack1Y =  menuY + attackButtonYOffset;
+            attack2X = menuX + attackButtonXOffset + (attackButtonWidth + 20)*1;
+            attack2Y =  menuY + attackButtonYOffset;
+            attack3X = menuX + attackButtonXOffset + (attackButtonWidth + 20)*2;
+            attack3Y =  menuY + attackButtonYOffset;
+            attack4X = menuX + attackButtonXOffset + (attackButtonWidth + 20)*0;
+            attack4Y = menuY + attackButtonYOffset + attackButtonHeight+10;
+            attack5X = menuX + attackButtonXOffset + (attackButtonWidth + 20)*1;
+            attack5Y = menuY + attackButtonYOffset + attackButtonHeight+10;
+            attack6X = menuX + attackButtonXOffset + (attackButtonWidth + 20)*2;
+            attack6Y = menuY + attackButtonYOffset + attackButtonHeight+10;
+
+            g.drawImage(attackBackground, attack1X, attack1Y, null);
+            g.drawImage(attackBackground, attack2X, attack2Y, null);
+            g.drawImage(attackBackground, attack3X, attack3Y, null);
+            g.drawImage(attackBackground, attack4X, attack4Y, null);
+            g.drawImage(attackBackground, attack5X, attack5Y, null);
+            g.drawImage(attackBackground, attack6X, attack6Y, null);
+
         }
     }
 
