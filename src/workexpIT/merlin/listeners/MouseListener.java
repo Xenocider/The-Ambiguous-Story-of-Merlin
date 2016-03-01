@@ -32,7 +32,6 @@ public class MouseListener implements java.awt.event.MouseListener {
                 Output.write("Selected tile: " + id);
             }
             else if (x>JavaDrawer.frame.getWidth()-10-32 && y < 60) {
-                Output.write("Saving map...");
                 DataReader.saveMap(WorldData.mapName);
             }
             else if (x<JavaDrawer.frame.getWidth()-JavaDrawer.editorMenuSize){

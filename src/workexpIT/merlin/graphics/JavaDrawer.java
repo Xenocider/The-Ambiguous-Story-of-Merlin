@@ -25,7 +25,7 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int imageSize = 16;
     public static int ww = 1200;
     public static int wh = 800;
-    public static float scale = 1;
+    public static float scale = 2;
 
     public static int editorMenuSize = 200;
 
@@ -64,11 +64,18 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {moveScreen();}
-        if (Merlin.mode.equals(Merlin.Mode.GAME)) {smoothOffset();}
+        if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+            moveScreen();
+            drawGrid(g);
+        }
+        if (Merlin.mode.equals(Merlin.Mode.GAME)) {
+            smoothOffset();
+        }
         drawTiles(g);
         drawEntities(g);
-        if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {drawEditorMenu(g);}
+        if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+            drawEditorMenu(g);
+        }
     }
 
     private void drawEditorMenu(Graphics g) {
@@ -97,10 +104,10 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     private void smoothOffset() {
         //try {
-            int newOffsetX = (-WorldData.getPlayer().getX() + ww / 2 / imageSize) * imageSize;
-            int newOffsetY = (-WorldData.getPlayer().getY() + wh / 2 / imageSize) * imageSize;
 
-            //Output.write(newOffsetX+" " + offsetX);
+        int newOffsetX = (int) (-WorldData.getPlayer().getX()*imageSize);
+        int newOffsetY = (int) (-WorldData.getPlayer().getY()*imageSize);
+
 
             if (newOffsetX > offsetX) {
                 offsetX = offsetX + 1;
@@ -131,14 +138,14 @@ public class JavaDrawer extends JPanel implements Runnable {
                 int y = WorldData.entities.get(i).getY();
                 int w = sprite.getWidth();
                 int h = sprite.getHeight();
-                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale)+ww/2, (int)((y * imageSize - h + offsetY)*scale)+wh/2,null);
+                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale)+ww/2, (int)((y * imageSize - h/scale + offsetY)*scale)+wh/2,null);
             } else {
                 BufferedImage sprite = scale(WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId],scale,scale);
                 int x = WorldData.entities.get(i).getX();
                 int y = WorldData.entities.get(i).getY();
                 int w = sprite.getWidth();
                 int h = sprite.getHeight();
-                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale)+ww/2, (int)((y * imageSize - h + offsetY)*scale)+wh/2,null);
+                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale)+ww/2, (int)((y * imageSize - h/scale + offsetY)*scale)+wh/2,null);
             }
         }
     }
@@ -151,6 +158,15 @@ public class JavaDrawer extends JPanel implements Runnable {
                     g.drawImage(image,(int)((a * imageSize + offsetX)*scale)+ww/2, (int)((b * imageSize - imageSize + offsetY)*scale)+wh/2,null);
                 }
             }
+        }
+    }
+
+    public void drawGrid(Graphics g) {
+        for (int x = 0; x < Reference.mapSize+1; x++) {
+            g.fillRect((int) (((x * imageSize + offsetX) * scale) + ww / 2)-1, (int)(((0 * imageSize - imageSize + offsetY) * scale) + wh / 2), 2, (int)(Reference.mapSize * imageSize * scale));
+        }
+        for (int y = 0; y < Reference.mapSize+1; y++) {
+            g.fillRect((int) (((0 * imageSize + offsetX) * scale) + ww / 2), (int)(((y * imageSize - imageSize + offsetY) * scale) + wh / 2)-1, (int) ((Reference.mapSize * imageSize) * scale), 2);
         }
     }
 

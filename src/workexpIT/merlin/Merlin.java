@@ -55,10 +55,10 @@ public class Merlin implements Runnable{
             gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
         }
         else {
-            WorldData.entities.add(new Player(1, 1, 1));
+            WorldData.entities.add(new Player(0, 0, 1));
             gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
 
-            DataReader.loadMap("bushworld");
+            DataReader.loadMap("null");
 
         }
 
