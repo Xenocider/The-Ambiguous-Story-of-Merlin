@@ -71,11 +71,21 @@ public class JavaDrawer extends JPanel implements Runnable {
         if (Merlin.mode.equals(Merlin.Mode.GAME)) {
             smoothOffset();
         }
-        drawTiles(g);
-        drawEntities(g);
+        if (Merlin.mode.equals(Merlin.Mode.GAME) || Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+            drawTiles(g);
+            drawEntities(g);
+        }
         if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
             drawEditorMenu(g);
         }
+        if (Merlin.mode.equals(Merlin.Mode.BATTLE)) {
+            drawBackground(g);
+        }
+    }
+
+    private void drawBackground(Graphics g) {
+        BufferedImage image = ImageReader.loadImage("resources/graphics/backgrounds/"+WorldData.mapName+".png");
+        g.drawImage(image,0,0,null);
     }
 
     private void drawEditorMenu(Graphics g) {
@@ -105,8 +115,8 @@ public class JavaDrawer extends JPanel implements Runnable {
     private void smoothOffset() {
         //try {
 
-        int newOffsetX = (int) (-WorldData.getPlayer().getX()*imageSize);
-        int newOffsetY = (int) (-WorldData.getPlayer().getY()*imageSize);
+        int newOffsetX = (int) (-WorldData.getPlayer().getX()*imageSize-WorldData.getPlayer().getSprites()[0].getWidth()/2);
+        int newOffsetY = (int) (-WorldData.getPlayer().getY()*imageSize+WorldData.getPlayer().getSprites()[0].getHeight()/2);
 
 
             if (newOffsetX > offsetX) {
@@ -163,7 +173,7 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     public void drawGrid(Graphics g) {
         for (int x = 0; x < Reference.mapSize+1; x++) {
-            g.fillRect((int) (((x * imageSize + offsetX) * scale) + ww / 2)-1, (int)(((0 * imageSize - imageSize + offsetY) * scale) + wh / 2), 2, (int)(Reference.mapSize * imageSize * scale));
+            g.fillRect((int) (((x * imageSize + offsetX) * scale) + ww / 2) - 1, (int) (((0 * imageSize - imageSize + offsetY) * scale) + wh / 2), 2, (int) (Reference.mapSize * imageSize * scale));
         }
         for (int y = 0; y < Reference.mapSize+1; y++) {
             g.fillRect((int) (((0 * imageSize + offsetX) * scale) + ww / 2), (int)(((y * imageSize - imageSize + offsetY) * scale) + wh / 2)-1, (int) ((Reference.mapSize * imageSize) * scale), 2);
@@ -213,5 +223,9 @@ public class JavaDrawer extends JPanel implements Runnable {
             g.drawRenderedImage(sbi, at);
         }
         return dbi;
+    }
+
+    public static void zoom() {
+
     }
 }

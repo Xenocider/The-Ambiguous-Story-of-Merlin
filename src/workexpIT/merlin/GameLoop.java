@@ -5,18 +5,29 @@ import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.graphics.JavaDrawer;
 
 public class GameLoop implements Runnable{
+    public static boolean pause;
 
     @Override
     public void run() {
 
-        if (Merlin.mode.equals(Merlin.Mode.GAME)) {
+        if (Merlin.mode.equals(Merlin.Mode.GAME) && !pause) {
             movePlayer();
 
             runAI();
+
+            checkForBattle();
         }
-        else if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
-            //TODO
+        else if (Merlin.mode.equals(Merlin.Mode.BATTLE)) {
+            //TODO Battle code
         }
+    }
+
+    private void checkForBattle() {
+            for (int i = 0; i < WorldData.entities.size(); i++) {
+                if (WorldData.entities.get(i).getX() == WorldData.getPlayer().getX() && WorldData.entities.get(i).getY() == WorldData.getPlayer().getY() && !WorldData.entities.get(i).equals(WorldData.getPlayer())) {
+                        GameLoop.startBattle(WorldData.getPlayer(),WorldData.entities.get(i));
+                }
+            }
     }
 
 
@@ -43,5 +54,24 @@ public class GameLoop implements Runnable{
         for (int i = 0; i < WorldData.entities.size(); i++) {
             WorldData.entities.get(i).runAI();
         }
+    }
+
+    public static void startBattle(Entity player, Entity enemy) {
+        pause = true;
+        Thread zoom = new Thread("Zoom") {
+            public void run() {
+                for (int i = 0; i < 50; i++){
+                    JavaDrawer.scale = JavaDrawer.scale + 0.25f;
+                    Output.write("ZOOOM");
+                    try {
+                        Thread.sleep(30);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Merlin.mode = Merlin.Mode.BATTLE;
+            }
+        };
+        zoom.start();
     }
 }

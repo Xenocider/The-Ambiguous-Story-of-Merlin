@@ -89,7 +89,7 @@ public class Entity {
                             setY(getY() - 1);
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        Output.write("Entity at edge of map!");
+                        Output.write("Entity at edge of map!a");
                     } catch (NullPointerException e) {
                         Output.write("Entity at edge of map!");
                     }
@@ -102,7 +102,7 @@ public class Entity {
                             setX(getX() + 1);
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        Output.write("Entity at edge of map!");
+                        Output.write("Entity at edge of map!a");
                     } catch (NullPointerException e) {
                         Output.write("Entity at edge of map!");
                     }
@@ -115,7 +115,7 @@ public class Entity {
                             setY(getY() + 1);
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        Output.write("Entity at edge of map!");
+                        Output.write("Entity at edge of map!a");
                     } catch (NullPointerException e) {
                         Output.write("Entity at edge of map!");
                     }
@@ -128,7 +128,7 @@ public class Entity {
                             setX(getX() - 1);
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        Output.write("Entity at edge of map!");
+                        Output.write("Entity at edge of map!a");
                     } catch (NullPointerException e) {
                         Output.write("Entity at edge of map!");
                     }

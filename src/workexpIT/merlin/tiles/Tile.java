@@ -1,6 +1,7 @@
 package workexpIT.merlin.tiles;
 
 
+import workexpIT.merlin.GameLoop;
 import workexpIT.merlin.Output;
 import workexpIT.merlin.data.DataReader;
 import workexpIT.merlin.data.WorldData;
@@ -33,7 +34,19 @@ public class Tile {
     }
 
     public boolean movingOnToTile(Entity entity) {
-        return checkForDoor(entity);
+        boolean status = true;
+        if (!movingOnToTileExtra(entity)) {
+            status = false;
+        }
+        if (checkForDoor(entity)) {
+            status = false;
+        }
+        return status;
+    }
+
+    public boolean movingOnToTileExtra(Entity e) {
+        //Used in child classes only
+        return true;
     }
 
     public boolean checkForDoor(Entity entity) {
@@ -47,10 +60,10 @@ public class Tile {
                     }
                 }
                 DataReader.loadMap(doorMap);
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
     public BufferedImage getTexture() {
         return texture;

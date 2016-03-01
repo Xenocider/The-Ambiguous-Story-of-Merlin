@@ -35,7 +35,7 @@ public class Merlin implements Runnable{
 
     public static Mode mode;
 
-    public enum Mode {GAME, EDITOR}
+    public enum Mode {GAME, EDITOR, BATTLE}
 
 
 

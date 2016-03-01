@@ -11,7 +11,7 @@ public class Dirt extends Tile {
     }
 
     @Override
-    public boolean movingOnToTile(Entity e) {
+    public boolean movingOnToTileExtra(Entity e) {
         checkForDoor(e);
         return false;
     }
