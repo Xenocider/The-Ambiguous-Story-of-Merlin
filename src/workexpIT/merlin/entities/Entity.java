@@ -2,6 +2,7 @@ package workexpIT.merlin.entities;
 
 import workexpIT.merlin.Output;
 import workexpIT.merlin.attacks.Attack;
+import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.graphics.Drawer;
 
@@ -23,6 +24,7 @@ public class Entity {
     protected int y;
     protected String name;
     public BufferedImage[] sprites;
+    public BufferedImage battleSprite;
     public static int numOfSprites;
     public boolean moving;
     public int[] lastLoc = new int[2];
@@ -47,6 +49,8 @@ public class Entity {
         this.level = level;
         this.state = state;
         this.sprites = sprites;
+        battleSprite = ImageReader.loadImage("resources/graphics/charactersprites/"+this.getClass().getSimpleName()+"/battle.png");
+        Output.write("resources/graphics/charactersprites/"+this.getClass().getSimpleName()+"/battle.png");
     }
 
     public String getName() {

@@ -21,7 +21,7 @@ public class Bob extends Entity {
         super(x, y, "bob", state, level, sprites);
         this.attacks[0] = new Punch();
         this.attacks[1] = new Fireball();
-        this.health = 0;
+        this.health = 100;
     }
 
     @Override

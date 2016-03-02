@@ -17,7 +17,7 @@ public class BattleAnimator {
                 public void run() {
                     for (int i = 0; i < 500; i++){
                         BattleAnimator.enemyOffsetY = BattleAnimator.enemyOffsetY +4;
-                        Output.write("fainting...");
+                        //Output.write("fainting...");
                         JavaDrawer.frame.repaint();
                         try {
                             Thread.sleep(100);
@@ -34,7 +34,7 @@ public class BattleAnimator {
                 public void run() {
                     for (int i = 0; i < 500; i++){
                         BattleAnimator.playerOffsetY = BattleAnimator.playerOffsetY +4;
-                        Output.write("fainting...");
+                        //Output.write("fainting...");
                         JavaDrawer.frame.repaint();
                         try {
                             Thread.sleep(100);

@@ -1,12 +1,23 @@
 package workexpIT.merlin;
 
 import workexpIT.merlin.attacks.Attack;
+import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.graphics.BattleAnimator;
 import workexpIT.merlin.graphics.JavaDrawer;
 
+import java.awt.image.BufferedImage;
+
 public class GameLoop implements Runnable{
+
+
+    //Game images
+    public static BufferedImage save;
+    public static BufferedImage menu;
+    public static BufferedImage button;
+    public static BufferedImage statusBar;
+
     public static Attack currentAttack = null;
     public static boolean playerTurn=true;
     public static boolean pause;
@@ -64,11 +75,15 @@ public class GameLoop implements Runnable{
             Output.write("Battle over");
             if (WorldData.getPlayer().health <=0) {
                 Output.write("Player lost");
-                BattleAnimator.faint(false);
+                JavaDrawer.pfaint = true;
             }
             else {
                 Output.write("Player won");
-                JavaDrawer.enemyFaint = true;
+                //BattleAnimator.faint(true);
+                JavaDrawer.efaint = true;
+                WorldData.entities.remove(enemy);
+                Merlin.mode = Merlin.Mode.GAME;
+                pause = false;
             }
         }
     }
@@ -76,7 +91,9 @@ public class GameLoop implements Runnable{
     private void checkForBattle() {
             for (int i = 0; i < WorldData.entities.size(); i++) {
                 if (WorldData.entities.get(i).getX() == WorldData.getPlayer().getX() && WorldData.entities.get(i).getY() == WorldData.getPlayer().getY() && !WorldData.entities.get(i).equals(WorldData.getPlayer())) {
-                        GameLoop.startBattle(WorldData.getPlayer(),WorldData.entities.get(i));
+                    enemy = WorldData.entities.get(i);
+                    pause = true;
+                    JavaDrawer.startBattle();
                 }
             }
     }
@@ -108,13 +125,12 @@ public class GameLoop implements Runnable{
     }
 
     public static void startBattle(Entity player, Entity e) {
-        enemy = e;
-        pause = true;
-        Thread zoom = new Thread("Zoom") {
+
+        /*Thread zoom = new Thread("Zoom") {
             public void run() {
                 for (int i = 0; i < 50; i++){
                     JavaDrawer.scale = JavaDrawer.scale + 0.25f;
-                    Output.write("ZOOOM");
+                    //Output.write("ZOOOM");
                     try {
                         Thread.sleep(30);
                     } catch (InterruptedException e) {
@@ -125,6 +141,13 @@ public class GameLoop implements Runnable{
                 pause = false;
             }
         };
-        zoom.start();
+        zoom.start();*/
+    }
+
+    public static void loadAllTextures() {
+        save = ImageReader.loadImage("resources/graphics/save.png");
+        statusBar = ImageReader.loadImage("resources/graphics/battle/entityStatusBackground.png");
+        menu = ImageReader.loadImage("resources/graphics/battle/menuBackground.png");
+        button = ImageReader.loadImage("resources/graphics/battle/buttonBackground.png");
     }
 }

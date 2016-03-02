@@ -21,6 +21,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Merlin implements Runnable{
 
+    public static final float fps = 60;
+
     public static final int UP = 0;
     public static final int RIGHT = 1;
     public static final int DOWN = 2;
@@ -41,6 +43,7 @@ public class Merlin implements Runnable{
 
 
     public static void main(String[] args) {
+        GameLoop.loadAllTextures();
             if (args.length == 2 && args[0].equals("mapeditor")) {
                 mode = Mode.EDITOR;
             } else {
@@ -50,8 +53,8 @@ public class Merlin implements Runnable{
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         JavaDrawer.init();
-        //drawer = executor.scheduleWithFixedDelay(new JavaDrawer(), 0, 12500, TimeUnit.MICROSECONDS);
-        drawer = executor.scheduleWithFixedDelay(new JavaDrawer(), 0, 3, TimeUnit.MILLISECONDS);
+        drawer = executor.scheduleWithFixedDelay(new JavaDrawer(), 0, (int)(1f/fps*1000f), TimeUnit.MILLISECONDS);
+        //drawer = executor.scheduleWithFixedDelay(new JavaDrawer(), 0, 3, TimeUnit.MILLISECONDS);
         if (mode == Mode.EDITOR) {
             DataReader.editMap(args[1]);
             gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
@@ -61,9 +64,6 @@ public class Merlin implements Runnable{
             gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
 
             DataReader.loadMap("null");
-
-            //Temporary for testing battle code
-            GameLoop.startBattle(WorldData.getPlayer(),new Bob(0,0,Entity.STATE_AGGRESSIVE,1));
 
         }
 

@@ -23,22 +23,27 @@ import java.util.regex.Pattern;
 public class DataReader {
 
     public static void loadMap(String mapid) {
+        int xSize = loadMapSizeX(mapid);
+        int ySize = loadMapSizeY(mapid);
+        WorldData.mapSizeX = xSize;
+        WorldData.mapSizeY = ySize;
         try {
             for (int i = 0; i < WorldData.entities.size(); i++) {
                 if (WorldData.entities.get(i).getName().equals("player")) {
                     //Keep player but delete all other entities
                 } else {
                     WorldData.entities.remove(i);
-                    i = i-1;
+                    i = i - 1;
                     Output.write("Removed an entity");
                 }
             }
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         //Center camera on player
-        WorldData.tiles=new Tile[Reference.mapSize][Reference.mapSize];
+        WorldData.tiles = new Tile[xSize][ySize];
         try {
             Output.write("Reading map data: " + mapid);
-            FileReader FReader = new FileReader("resources/worlddata/default/"+mapid+"/tiledata.txt");
+            FileReader FReader = new FileReader("resources/worlddata/default/" + mapid + "/tiledata.txt");
             BufferedReader BReader = new BufferedReader(FReader);
 
             int x = 0;
@@ -47,27 +52,30 @@ public class DataReader {
             List<Character> data = new ArrayList<Character>();
 
             int value = 0;
-            while((value = BReader.read()) != -1) {
+            while ((value = BReader.read()) != -1) {
                 // converts int to character
-                char c = (char)value;
+                char c = (char) value;
 
                 //If it's a new line
                 if (value == 10) {
-                    String id = data.toString().substring(1, data.toString().length()-1);
+                    String id = data.toString().substring(1, data.toString().length() - 1);
                     //PC only v
                     //if (Merlin.platform.equals("pc")) {id = id.substring(0, id.length()-3);}
                     //PC only ^
                     if (!id.equals("")) {
                         Output.write(id + "");
                         int i = -1;
-                        try{i = Integer.parseInt(id);}
-                        catch (Exception e) {
+                        try {
+                            i = Integer.parseInt(id);
+                        } catch (Exception e) {
                         }
-                        if (i>-1) {loadTile(i, x, y);}
+                        if (i > -1) {
+                            loadTile(i, x, y);
+                        }
                         Output.write("Adding tile to " + x + " " + y);
                     }
-                    x=0;
-                    y=y+1;
+                    x = 0;
+                    y = y + 1;
                     data.clear();
                 }
                 //If it's a comma
@@ -76,13 +84,16 @@ public class DataReader {
                     if (!id.equals("")) {
                         Output.write(id + "");
                         int i = -1;
-                        try{i = Integer.parseInt(id);}
-                        catch (Exception e) {
+                        try {
+                            i = Integer.parseInt(id);
+                        } catch (Exception e) {
                         }
-                        if (i>-1) {loadTile(i, x, y);}
+                        if (i > -1) {
+                            loadTile(i, x, y);
+                        }
                         Output.write("Adding tile to " + x + " " + y);
                     }
-                    x=x+1;
+                    x = x + 1;
                     data.clear();
                 }
                 //If it's a character
@@ -100,9 +111,54 @@ public class DataReader {
         WorldData.mapName = mapid;
         loadMiscData(mapid);
         loadEntityData(mapid);
+        WorldData.battleBackground = ImageReader.loadImage("resources/graphics/backgrounds/" + mapid + ".png");
         //Center camera
-        try{Drawer.setCamera((-WorldData.getPlayer().getX()+Drawer.ww/2/Drawer.w)*Drawer.w, (-WorldData.getPlayer().getY()+Drawer.wh/2/Drawer.h)*Drawer.h);}
-        catch (Exception e) {}
+        try {
+            Drawer.setCamera((-WorldData.getPlayer().getX() + Drawer.ww / 2 / Drawer.w) * Drawer.w, (-WorldData.getPlayer().getY() + Drawer.wh / 2 / Drawer.h) * Drawer.h);
+        } catch (Exception e) {
+        }
+    }
+
+    private static int loadMapSizeX(String mapid) {
+        int x = 0;
+        FileReader FReader = null;
+        try {
+            FReader = new FileReader("resources/worlddata/default/" + mapid + "/worldsize.txt");
+            BufferedReader BReader = new BufferedReader(FReader);
+
+            String line = null;
+
+            line = BReader.readLine();
+                Output.write(line);
+                x = Integer.parseInt(line);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return x;
+    }
+    private static int loadMapSizeY(String mapid) {
+        int x = 0;
+        FileReader FReader = null;
+        try {
+            FReader = new FileReader("resources/worlddata/default/" + mapid + "/worldsize.txt");
+            BufferedReader BReader = new BufferedReader(FReader);
+
+            String line = null;
+
+            line = BReader.readLine();
+            line = BReader.readLine();
+            Output.write(line);
+            x = Integer.parseInt(line);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return x;
     }
 
     private static void loadTile(int id, int x, int y) {
@@ -122,7 +178,7 @@ public class DataReader {
         }
         try {WorldData.tiles[x][y] = tile;}
         catch (ArrayIndexOutOfBoundsException e) {
-            Output.error("Map data too large! Max size is " + Reference.mapSize + " by " + Reference.mapSize);
+            Output.error("Map data too large! Max size is " + WorldData.mapSizeX + " by " + WorldData.mapSizeY);
             System.exit(0);
         }
     }
@@ -237,7 +293,7 @@ public class DataReader {
     }
 
     public static void editMap(String mapid) {
-        WorldData.tiles=new Tile[Reference.mapSize][Reference.mapSize];
+        WorldData.tiles=new Tile[WorldData.mapSizeX][WorldData.mapSizeY];
         try {
             Output.write("Reading map data: " + mapid);
             FileReader FReader = new FileReader("resources/worlddata/default/"+mapid+"/tiledata.txt");
@@ -330,7 +386,7 @@ public class DataReader {
         FileWriter writer;
         try {
             writer = new FileWriter("resources/worlddata/default/"+mapid+"/tiledata.txt");
-            for (int b = 0; b<Reference.mapSize; b++) {
+            for (int b = 0; b<WorldData.mapSizeY; b++) {
                 for (int a = 0;a<WorldData.tiles.length; a++) {
                 try {
                     for (int i = 0; i < Reference.tileIds.length; i ++ ) {

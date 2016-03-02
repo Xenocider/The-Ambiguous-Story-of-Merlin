@@ -5,6 +5,7 @@ import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.entities.Player;
 import workexpIT.merlin.tiles.Tile;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +16,14 @@ public class WorldData {
 
     public static int selectedTile;
 
+    public static BufferedImage battleBackground;
+
     public static String mapName;
 
-    public static Tile[][] tiles = new Tile[Reference.mapSize][Reference.mapSize];
+    public static int mapSizeX;
+    public static int mapSizeY;
+
+    public static Tile[][] tiles = new Tile[WorldData.mapSizeX][WorldData.mapSizeY];
     public static List<Entity> entities = new ArrayList<Entity>();
 
     public static Player getPlayer() {
