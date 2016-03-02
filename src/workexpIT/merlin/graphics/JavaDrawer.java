@@ -297,17 +297,23 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int attackButtonWidth;
     public static int attackButtonHeight = 90;
 
-
+    public static boolean enemyFaint = false;
 
 
 
     private void drawBattleEntities(Graphics g) {
+
+        if(enemyFaint && BattleAnimator.enemyOffsetY < JavaDrawer.frame.getHeight()) {
+            BattleAnimator.enemyOffsetY = BattleAnimator.enemyOffsetY + 15;
+            Output.write("Drawing!");
+        }
+//TODO need to speed up grahics by not loading images in loop
         BufferedImage player = ImageReader.loadImage("resources/graphics/charactersprites/player/battle.png");
         BufferedImage enemy = ImageReader.loadImage("resources/graphics/charactersprites/"+GameLoop.enemy.getName()+"/battle.png");
         playerX = playerOffsetFromSide;
-        playerY = JavaDrawer.frame.getHeight() - player.getHeight() - playerOffsetFromBottom;
+        playerY = JavaDrawer.frame.getHeight() - player.getHeight() - playerOffsetFromBottom + BattleAnimator.playerOffsetY;
         enemyX = JavaDrawer.frame.getWidth() - enemy.getWidth() - enemyOffsetFromSide;
-        enemyY = enemyOffsetFromTop;
+        enemyY = enemyOffsetFromTop + BattleAnimator.enemyOffsetY;
         g.drawImage(enemy, enemyX, enemyY,null);
         g.drawImage(player, playerX,playerY,null);
     }

@@ -66,26 +66,25 @@ public class MouseListener implements java.awt.event.MouseListener {
             }
             else {
                 if (x > JavaDrawer.attack1X && x < JavaDrawer.attack1X + JavaDrawer.attackButtonWidth && y > JavaDrawer.attack1Y && y < JavaDrawer.attack1Y + JavaDrawer.attackButtonHeight) {
-                    Output.write("Attack 1!");
+                    GameLoop.currentAttack = WorldData.getPlayer().attacks[0];
                 }
                 if (x > JavaDrawer.attack2X && x < JavaDrawer.attack2X + JavaDrawer.attackButtonWidth && y > JavaDrawer.attack2Y && y < JavaDrawer.attack2Y + JavaDrawer.attackButtonHeight) {
-                    Output.write("Attack 2!");
+                    GameLoop.currentAttack = WorldData.getPlayer().attacks[1];
 
                 }
                 if (x > JavaDrawer.attack3X && x < JavaDrawer.attack3X + JavaDrawer.attackButtonWidth && y > JavaDrawer.attack3Y && y < JavaDrawer.attack3Y + JavaDrawer.attackButtonHeight) {
-                    Output.write("Attack 3!");
+                    GameLoop.currentAttack = WorldData.getPlayer().attacks[2];
 
                 }
                 if (x > JavaDrawer.attack4X && x < JavaDrawer.attack4X + JavaDrawer.attackButtonWidth && y > JavaDrawer.attack4Y && y < JavaDrawer.attack4Y + JavaDrawer.attackButtonHeight) {
-                    Output.write("Attack 4!");
+                    GameLoop.currentAttack = WorldData.getPlayer().attacks[3];
 
                 }
                 if (x > JavaDrawer.attack5X && x < JavaDrawer.attack5X + JavaDrawer.attackButtonWidth && y > JavaDrawer.attack5Y && y < JavaDrawer.attack5Y + JavaDrawer.attackButtonHeight) {
-                    Output.write("Attack 5!");
-
+                    GameLoop.currentAttack = WorldData.getPlayer().attacks[4];
                 }
                 if (x > JavaDrawer.attack6X && x < JavaDrawer.attack6X + JavaDrawer.attackButtonWidth && y > JavaDrawer.attack6Y && y < JavaDrawer.attack6Y + JavaDrawer.attackButtonHeight) {
-                    Output.write("Attack 6!");
+                    GameLoop.currentAttack = WorldData.getPlayer().attacks[5];
 
                 }
             }

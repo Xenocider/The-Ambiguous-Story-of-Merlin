@@ -1,6 +1,7 @@
 package workexpIT.merlin.entities;
 
 import workexpIT.merlin.Output;
+import workexpIT.merlin.attacks.Attack;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.graphics.Drawer;
 
@@ -25,6 +26,7 @@ public class Entity {
     public static int numOfSprites;
     public boolean moving;
     public int[] lastLoc = new int[2];
+    public Attack[] attacks = new Attack[6];
 
     public static final int STATE_NEUTRAL = 0;
     public static final int STATE_FRIENDLY = 1;
@@ -32,10 +34,10 @@ public class Entity {
 
     public int spriteId;
 
-    public static int health = 100;
-    public static int healthMax = 100;
-    public static int mana = 100;
-    public static int manaMax = 100;
+    public int health = 100;
+    public int healthMax = 100;
+    public int mana = 100;
+    public int manaMax = 100;
 
 
     public Entity(int x, int y, String name, int state, int level, BufferedImage[] sprites) {
@@ -81,6 +83,13 @@ public class Entity {
 
     public void runAI() {
 
+    }
+
+    public void regenMana() {
+        mana = mana + 10;
+        if (mana > manaMax) {
+            mana = manaMax;
+        }
     }
 
     public void move(int direction) {

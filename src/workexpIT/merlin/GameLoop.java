@@ -1,11 +1,14 @@
 package workexpIT.merlin;
 
+import workexpIT.merlin.attacks.Attack;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.graphics.BattleAnimator;
 import workexpIT.merlin.graphics.JavaDrawer;
 
 public class GameLoop implements Runnable{
+    public static Attack currentAttack = null;
+    public static boolean playerTurn=true;
     public static boolean pause;
 
     public static Entity enemy;
@@ -22,8 +25,51 @@ public class GameLoop implements Runnable{
 
             checkForBattle();
         }
-        else if (Merlin.mode.equals(Merlin.Mode.BATTLE)) {
-            //TODO Battle code
+        else if (Merlin.mode.equals(Merlin.Mode.BATTLE) && !pause) {
+            runTurn();
+        }
+    }
+
+    private void runTurn() {
+        if (playerTurn && currentAttack != null) {
+            enemy.regenMana();
+            Output.write("Player attacks with " + currentAttack.getClass().getSimpleName());
+            //TODO run player attack
+            enemy.health = enemy.health - currentAttack.enemyDamage;
+            WorldData.getPlayer().health = WorldData.getPlayer().health - currentAttack.selfDamage;
+            WorldData.getPlayer().mana = WorldData.getPlayer().mana - currentAttack.manaCost;
+            currentAttack = null;
+            playerTurn = false;
+        }
+        else if (!playerTurn) {
+            WorldData.getPlayer().regenMana();
+            //TODO run enemy attack
+            boolean attack = true;
+            while (attack) {
+                currentAttack = enemy.attacks[(int)(Math.random()*6)];
+                if (currentAttack != null) {
+                    WorldData.getPlayer().health = WorldData.getPlayer().health - currentAttack.enemyDamage;
+                    enemy.health = enemy.health - currentAttack.selfDamage;
+                    enemy.mana = enemy.mana - currentAttack.manaCost;
+                    Output.write("Enemy attacks with " + currentAttack.getClass().getSimpleName());
+                    currentAttack = null;
+                    playerTurn = true;
+                    attack = false;
+                }
+            }
+        }
+        if (WorldData.getPlayer().health <= 0 || enemy.health <=0) {
+            pause = true;
+            //TODO Battle over
+            Output.write("Battle over");
+            if (WorldData.getPlayer().health <=0) {
+                Output.write("Player lost");
+                BattleAnimator.faint(false);
+            }
+            else {
+                Output.write("Player won");
+                JavaDrawer.enemyFaint = true;
+            }
         }
     }
 
@@ -76,6 +122,7 @@ public class GameLoop implements Runnable{
                     }
                 }
                 Merlin.mode = Merlin.Mode.BATTLE;
+                pause = false;
             }
         };
         zoom.start();

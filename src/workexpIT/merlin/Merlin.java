@@ -50,7 +50,8 @@ public class Merlin implements Runnable{
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         JavaDrawer.init();
-        drawer = executor.scheduleWithFixedDelay(new JavaDrawer(), 0, 12500, TimeUnit.MICROSECONDS);
+        //drawer = executor.scheduleWithFixedDelay(new JavaDrawer(), 0, 12500, TimeUnit.MICROSECONDS);
+        drawer = executor.scheduleWithFixedDelay(new JavaDrawer(), 0, 3, TimeUnit.MILLISECONDS);
         if (mode == Mode.EDITOR) {
             DataReader.editMap(args[1]);
             gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);

@@ -1,5 +1,7 @@
 package workexpIT.merlin.entities;
 
+import workexpIT.merlin.attacks.Fireball;
+import workexpIT.merlin.attacks.Punch;
 import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.graphics.Drawer;
 
@@ -17,6 +19,9 @@ public class Bob extends Entity {
 
     public Bob(int x, int y, int state, int level) {
         super(x, y, "bob", state, level, sprites);
+        this.attacks[0] = new Punch();
+        this.attacks[1] = new Fireball();
+        this.health = 0;
     }
 
     @Override
