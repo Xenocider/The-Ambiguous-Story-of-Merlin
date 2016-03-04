@@ -430,16 +430,22 @@ public class JavaDrawer extends JPanel implements Runnable {
                     playerAdditionOffsetX = playerAdditionOffsetX + flichSpeed;
 
                 }
-                else {
+                else if (Attack.animationStage <Attack.maxAnimationStage*flinchFactor){
                     playerAdditionOffsetX = playerAdditionOffsetX - flichSpeed;
+                }
+                else if (Attack.animationStage >=Attack.maxAnimationStage*flinchFactor){
+                    playerAdditionOffsetX = 0;
                 }
             }
             if (Attack.enemyThrust) {
                 if (Attack.animationStage <Attack.maxAnimationStage/2*flinchFactor) {
                     enemyAdditionOffsetX = enemyAdditionOffsetX - flichSpeed;
                 }
-                else {
+                else if (Attack.animationStage <Attack.maxAnimationStage*flinchFactor){
                     enemyAdditionOffsetX = enemyAdditionOffsetX + flichSpeed;
+                }
+                else if (Attack.animationStage >=Attack.maxAnimationStage*flinchFactor){
+                    enemyAdditionOffsetX = 0;
                 }
             }
                 switch (Attack.animationType) {
@@ -466,16 +472,22 @@ public class JavaDrawer extends JPanel implements Runnable {
                 playerAdditionOffsetX = playerAdditionOffsetX - flichSpeed;
 
             }
-            else {
+            else if (Attack.animationStage <Attack.maxAnimationStage*flinchFactor){
                 playerAdditionOffsetX = playerAdditionOffsetX + flichSpeed;
+            }
+            else if (Attack.animationStage >=Attack.maxAnimationStage*flinchFactor){
+                playerAdditionOffsetX = 0;
             }
         }
         if (Attack.enemyFlinch) {
             if (Attack.animationStage <Attack.maxAnimationStage/2*flinchFactor) {
                 enemyAdditionOffsetX = enemyAdditionOffsetX + flichSpeed;
             }
-            else {
+            else if (Attack.animationStage <Attack.maxAnimationStage*flinchFactor){
                 enemyAdditionOffsetX = enemyAdditionOffsetX - flichSpeed;
+            }
+            else if (Attack.animationStage >=Attack.maxAnimationStage*flinchFactor){
+                enemyAdditionOffsetX = 0;
             }
         }
         if (Attack.playerFlinch || Attack.enemyFlinch) {
