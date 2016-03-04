@@ -23,7 +23,7 @@ public class Bob extends Entity {
         this.attacks[1] = new Fireball();
         this.health = 100;
     }
-
+/*
     @Override
     public void runAI() {
         int action = (int) (Math.random()*4);
@@ -45,5 +45,5 @@ public class Bob extends Entity {
                 break;
         }
     }
-
+*/
 }

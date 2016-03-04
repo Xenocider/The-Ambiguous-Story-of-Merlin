@@ -42,30 +42,26 @@ public class GameLoop implements Runnable{
     }
 
     private void runTurn() {
-        if (playerTurn && currentAttack != null) {
-            enemy.regenMana();
+        if (playerTurn && currentAttack != null && !Attack.attackAnimationRun && !Attack.playerFlinch && !Attack.enemyFlinch) {
+            WorldData.getPlayer().regenMana();
+
             Output.write("Player attacks with " + currentAttack.getClass().getSimpleName());
             //TODO run player attack
-            enemy.health = enemy.health - currentAttack.enemyDamage;
-            WorldData.getPlayer().health = WorldData.getPlayer().health - currentAttack.selfDamage;
-            WorldData.getPlayer().mana = WorldData.getPlayer().mana - currentAttack.manaCost;
-            currentAttack = null;
-            playerTurn = false;
+            currentAttack.runPlayerAnimation();
         }
-        else if (!playerTurn) {
-            WorldData.getPlayer().regenMana();
+        else if (!playerTurn && !Attack.attackAnimationRun && !Attack.playerFlinch && !Attack.enemyFlinch) {
+            enemy.regenMana();
+
             //TODO run enemy attack
             boolean attack = true;
             while (attack) {
                 currentAttack = enemy.attacks[(int)(Math.random()*6)];
                 if (currentAttack != null) {
-                    WorldData.getPlayer().health = WorldData.getPlayer().health - currentAttack.enemyDamage;
-                    enemy.health = enemy.health - currentAttack.selfDamage;
-                    enemy.mana = enemy.mana - currentAttack.manaCost;
+
                     Output.write("Enemy attacks with " + currentAttack.getClass().getSimpleName());
-                    currentAttack = null;
-                    playerTurn = true;
+                    currentAttack.runEnemyAnimation();
                     attack = false;
+
                 }
             }
         }
@@ -85,6 +81,37 @@ public class GameLoop implements Runnable{
                 Merlin.mode = Merlin.Mode.GAME;
                 pause = false;
             }
+        }
+    }
+
+    public static void finishedAttack() {
+        if (playerTurn) {
+            WorldData.getPlayer().mana = WorldData.getPlayer().mana - currentAttack.manaCost;
+            enemy.health = enemy.health - currentAttack.enemyDamage;
+            WorldData.getPlayer().health = WorldData.getPlayer().health - currentAttack.selfDamage;
+            enemy.mana = enemy.mana - currentAttack.manaDamage;
+            currentAttack = null;
+            playerTurn = false;
+        }
+        else {
+            enemy.mana = enemy.mana - currentAttack.manaCost;
+            WorldData.getPlayer().mana = WorldData.getPlayer().mana - currentAttack.manaDamage;
+            WorldData.getPlayer().health = WorldData.getPlayer().health - currentAttack.enemyDamage;
+            enemy.health = enemy.health - currentAttack.selfDamage;
+            currentAttack = null;
+            playerTurn = true;
+        }
+        if (enemy.health > enemy.healthMax) {
+            enemy.health = enemy.healthMax;
+        }
+        if (WorldData.getPlayer().health > WorldData.getPlayer().healthMax) {
+            WorldData.getPlayer().health = WorldData.getPlayer().healthMax;
+        }
+        if (enemy.mana > enemy.manaMax) {
+            enemy.mana = enemy.manaMax;
+        }
+        if (WorldData.getPlayer().mana > WorldData.getPlayer().manaMax) {
+            WorldData.getPlayer().mana = WorldData.getPlayer().manaMax;
         }
     }
 

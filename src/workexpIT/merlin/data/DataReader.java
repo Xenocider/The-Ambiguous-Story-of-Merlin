@@ -293,6 +293,10 @@ public class DataReader {
     }
 
     public static void editMap(String mapid) {
+        int xSize = loadMapSizeX(mapid);
+        int ySize = loadMapSizeY(mapid);
+        WorldData.mapSizeX = xSize;
+        WorldData.mapSizeY = ySize;
         WorldData.tiles=new Tile[WorldData.mapSizeX][WorldData.mapSizeY];
         try {
             Output.write("Reading map data: " + mapid);
