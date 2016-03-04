@@ -17,6 +17,17 @@ public class Entity {
     public static final int MOVE_LEFT = 3;
     public static final int MOVE_DOWN = 2;
 
+    public int leveledHealth,leveledMana,leveledManaRegen,leveledFortitude,leveledSpeed;
+    public float factorHealth = 20;
+    public float factorMana = 15;
+    public float factorManaRegen = 1;
+    public float factorFortitude = 1;
+    public float factorSpeed = 1;
+    public int baseHealth = 100;
+    public int baseMana = 100;
+    public float baseManaRegen = 10;
+    public int baseFortitude = 10;
+    public int baseSpeed = 10;
 
     protected int state;
     protected int level;
@@ -40,6 +51,9 @@ public class Entity {
     public int healthMax = 100;
     public int mana = 100;
     public int manaMax = 100;
+    public int manaRegen = 10;
+    public int fortitude = 10;
+    public int speed = 10;
 
 
     public Entity(int x, int y, String name, int state, int level, BufferedImage[] sprites) {
@@ -51,6 +65,13 @@ public class Entity {
         this.sprites = sprites;
         battleSprite = ImageReader.loadImage("resources/graphics/charactersprites/"+this.getClass().getSimpleName()+"/battle.png");
         Output.write("resources/graphics/charactersprites/"+this.getClass().getSimpleName()+"/battle.png");
+        health = (int)(baseHealth+factorHealth*level);
+        healthMax = (int)(baseHealth+factorHealth*level);
+        mana = (int)(baseMana+factorMana*level);
+        manaMax = (int)(baseMana+factorMana*level);
+        manaRegen = (int)(baseManaRegen+factorManaRegen*level);
+        fortitude = (int)(baseFortitude+factorFortitude*level);
+        speed = (int)(baseSpeed+factorSpeed*level);
     }
 
     public String getName() {
@@ -90,7 +111,7 @@ public class Entity {
     }
 
     public void regenMana() {
-        mana = mana + 10;
+        mana = mana + manaRegen;
         if (mana > manaMax) {
             mana = manaMax;
         }
