@@ -1,7 +1,6 @@
 package workexpIT.merlin.entities;
 
-import workexpIT.merlin.attacks.Fireball;
-import workexpIT.merlin.attacks.Punch;
+import workexpIT.merlin.attacks.*;
 import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.graphics.Drawer;
 
@@ -16,7 +15,11 @@ public class Player extends Entity{
 
     public Player(int x, int y, int level) {
         super(x, y, "player", Entity.STATE_NEUTRAL, level, sprites);
-        this.attacks[0] = new Punch();
-        this.attacks[1] = new Fireball();
+        attacks[0] = new Punch();
+        attacks[1] = new Fireball();
+        attacks[2] = new DrainLife();
+        attacks[3] = new DrainMana();
+        attacks[4] = new Flood();
+        attacks[5] = new LifeBend();
     }
 }

@@ -18,6 +18,7 @@ public class Attack {
     public static boolean enemyFlinch;
     public static boolean playerFlinch;
     public static boolean attackAnimationRun = false;
+
     public static void start(BufferedImage texture, int x, int y, AnimationType aniType) {
         textureX = x;
         textureY = y;
@@ -26,6 +27,14 @@ public class Attack {
         animationType = aniType;
         attackAnimationRun = true;
         animationTexture = texture;
+        if (GameLoop.playerTurn) {
+            playerThrust = true;
+            enemyThrust = false;
+        }
+        else {
+            enemyThrust = true;
+            playerThrust = false;
+        }
     }
     public static BufferedImage animationTexture;
 
@@ -35,21 +44,23 @@ public class Attack {
     }
 
     public static void react() {
-        if (GameLoop.currentAttack.enemyDamage > 0) {
+        if (GameLoop.currentAttack.enemyDamage > 0 || GameLoop.currentAttack.manaDamage > 0) {
             if (GameLoop.playerTurn) {
                 enemyFlinch = true;
             }
             else {
                 playerFlinch = true;
+            }
+        } else if (GameLoop.currentAttack.selfDamage > 0) {
+            if (GameLoop.playerTurn) {
+                playerFlinch = true;
+            }
+            else {
+                enemyFlinch = true;
             }
         }
-        if (GameLoop.currentAttack.selfDamage > 0) {
-            if (GameLoop.playerTurn) {
-                playerFlinch = true;
-            }
-            else {
-                enemyFlinch = true;
-            }
+        else {
+            GameLoop.finishedAttack();
         }
     }
 

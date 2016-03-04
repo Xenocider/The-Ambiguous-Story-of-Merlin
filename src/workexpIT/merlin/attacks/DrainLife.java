@@ -13,7 +13,7 @@ public class DrainLife extends Attack{
                 30,
                 DamageType.NORMAL,
                 20,
-                10,
+                -10,
                 "Shoots a ball of fire at the opponent for a basic amount of damage"
         );
     }

@@ -10,10 +10,10 @@ public class LifeBend extends Attack{
     public LifeBend() {
         super(
                 0,
-                12,
+                -50,
                 DamageType.FIRE,
-                20,
                 0,
+                15,
                 "Shoots a ball of fire at the opponent for a basic amount of damage"
         );
     }
@@ -23,7 +23,7 @@ public class LifeBend extends Attack{
                 this.texture,
                 JavaDrawer.playerX + WorldData.getPlayer().battleSprite.getWidth()/2,
                 JavaDrawer.playerY + WorldData.getPlayer().battleSprite.getHeight()/4 - texture.getHeight()/4,
-                animationType.TOWARDS_ENEMY);
+                animationType.UP);
     }
     @Override
     public void runEnemyAnimation() {
@@ -31,6 +31,6 @@ public class LifeBend extends Attack{
                 this.texture,
                 JavaDrawer.enemyX,
                 JavaDrawer.enemyY + WorldData.getPlayer().battleSprite.getHeight()/4 - texture.getHeight()/2,
-                animationType.TOWARDS_PLAYER);
+                animationType.UP);
     }
 }

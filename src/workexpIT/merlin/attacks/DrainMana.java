@@ -11,14 +11,14 @@ public class DrainMana extends Attack{
         super(
                 20,
                 -10,
-                DamageType.FIRE,
-                20,
+                DamageType.NORMAL,
+                0,
                 0,
                 "Shoots a ball of fire at the opponent for a basic amount of damage"
         );
     }
     @Override
-    public void runPlayerAnimation() {
+    public void runEnemyAnimation() {
         Attack.start(
                 this.texture,
                 JavaDrawer.playerX + WorldData.getPlayer().battleSprite.getWidth()/2,
@@ -26,7 +26,7 @@ public class DrainMana extends Attack{
                 animationType.TOWARDS_ENEMY);
     }
     @Override
-    public void runEnemyAnimation() {
+    public void runPlayerAnimation() {
         Attack.start(
                 this.texture,
                 JavaDrawer.enemyX,

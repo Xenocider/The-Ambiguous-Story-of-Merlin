@@ -425,13 +425,32 @@ public class JavaDrawer extends JPanel implements Runnable {
         }
         else if (Attack.attackAnimationRun) {
                 Attack.animationStage = Attack.animationStage + 1;
+            if (Attack.playerThrust) {
+                if (Attack.animationStage <Attack.maxAnimationStage/2*flinchFactor) {
+                    playerAdditionOffsetX = playerAdditionOffsetX + flichSpeed;
+
+                }
+                else {
+                    playerAdditionOffsetX = playerAdditionOffsetX - flichSpeed;
+                }
+            }
+            if (Attack.enemyThrust) {
+                if (Attack.animationStage <Attack.maxAnimationStage/2*flinchFactor) {
+                    enemyAdditionOffsetX = enemyAdditionOffsetX - flichSpeed;
+                }
+                else {
+                    enemyAdditionOffsetX = enemyAdditionOffsetX + flichSpeed;
+                }
+            }
                 switch (Attack.animationType) {
                     case TOWARDS_ENEMY:
                         Attack.textureX = (enemyX+GameLoop.enemy.battleSprite.getWidth()/2-GameLoop.currentAttack.texture.getWidth()/2-Attack.startX)/Attack.maxAnimationStage*Attack.animationStage + Attack.startX;
                         Attack.textureY = (enemyY+GameLoop.enemy.battleSprite.getHeight()/2-GameLoop.currentAttack.texture.getHeight()/2-Attack.startY)/Attack.maxAnimationStage*Attack.animationStage + Attack.startY;
                     case STILL:
+                        //TODO ****Most if not all animations should be stills with animated sprites that simulate motion****
                         break;
                     case UP:
+                        Attack.textureY = Attack.textureY - 15;
                         break;
                     case DOWN:
                         break;
