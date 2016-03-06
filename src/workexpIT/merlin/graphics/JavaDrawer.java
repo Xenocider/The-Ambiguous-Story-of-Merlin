@@ -9,6 +9,7 @@ import workexpIT.merlin.attacks.Attack;
 import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
+import workexpIT.merlin.listeners.KeyBinder;
 import workexpIT.merlin.listeners.MouseListener;
 import workexpIT.merlin.tiles.Tile;
 
@@ -124,7 +125,7 @@ public class JavaDrawer extends JPanel implements Runnable {
     }
 
     private void smoothOffset() {
-        //try {
+        try {
 
         int newOffsetX = (int) (-WorldData.getPlayer().getX()*imageSize-WorldData.getPlayer().getSprites()[0].getWidth()/2);
         int newOffsetY = (int) (-WorldData.getPlayer().getY()*imageSize+WorldData.getPlayer().getSprites()[0].getHeight()/2);
@@ -142,8 +143,8 @@ public class JavaDrawer extends JPanel implements Runnable {
             if (newOffsetY < offsetY) {
                 offsetY = offsetY - 1;
             }
-        //}
-        //catch (Exception e) {}
+        }
+        catch (Exception e) {}
     }
 
     private void clearScreen() {
@@ -201,7 +202,12 @@ public class JavaDrawer extends JPanel implements Runnable {
             JavaDrawer drawer = new JavaDrawer();
             drawer.setSize(ww,wh);
             drawer.setFocusable(true);
+            Output.write("Adding Keylistener...");
             drawer.addKeyListener(Merlin.keyListener);
+            Output.write("KeyListener added!");
+            //KeyBinder.init();
+            frame.addKeyListener(Merlin.keyListener);
+
             drawer.addMouseListener(new MouseListener());
             frame.setContentPane(drawer);
 

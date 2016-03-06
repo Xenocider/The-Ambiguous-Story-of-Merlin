@@ -40,10 +40,11 @@ public class Merlin implements Runnable{
 
     public enum Mode {GAME, EDITOR, BATTLE}
 
-
+    public static JavaDrawer jDrawer =new JavaDrawer();
 
     public static void main(String[] args) {
         GameLoop.loadAllTextures();
+
             if (args.length == 2 && args[0].equals("mapeditor")) {
                 mode = Mode.EDITOR;
             } else {
@@ -53,14 +54,14 @@ public class Merlin implements Runnable{
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         JavaDrawer.init();
-        drawer = executor.scheduleWithFixedDelay(new JavaDrawer(), 0, (int)(1f/fps*1000f), TimeUnit.MILLISECONDS);
+        drawer = executor.scheduleWithFixedDelay(jDrawer, 0, (int)(1f/fps*1000f), TimeUnit.MILLISECONDS);
         //drawer = executor.scheduleWithFixedDelay(new JavaDrawer(), 0, 3, TimeUnit.MILLISECONDS);
         if (mode == Mode.EDITOR) {
             DataReader.editMap(args[1]);
             gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
         }
         else {
-            WorldData.entities.add(new Player(0, 0, 1));
+            WorldData.entities.add(new Player(0, 0, 10));
             gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
 
             DataReader.loadMap("null");

@@ -8,6 +8,10 @@ import workexpIT.merlin.graphics.BattleAnimator;
 import workexpIT.merlin.graphics.JavaDrawer;
 
 import java.awt.image.BufferedImage;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class GameLoop implements Runnable{
 
@@ -42,29 +46,6 @@ public class GameLoop implements Runnable{
     }
 
     private void runTurn() {
-        if (playerTurn && currentAttack != null && !Attack.attackAnimationRun && !Attack.playerFlinch && !Attack.enemyFlinch) {
-            WorldData.getPlayer().regenMana();
-
-            Output.write("Player attacks with " + currentAttack.getClass().getSimpleName());
-            //TODO run player attack
-            currentAttack.runPlayerAnimation();
-        }
-        else if (!playerTurn && !Attack.attackAnimationRun && !Attack.playerFlinch && !Attack.enemyFlinch) {
-            enemy.regenMana();
-
-            //TODO run enemy attack
-            boolean attack = true;
-            while (attack) {
-                currentAttack = enemy.attacks[(int)(Math.random()*6)];
-                if (currentAttack != null) {
-
-                    Output.write("Enemy attacks with " + currentAttack.getClass().getSimpleName());
-                    currentAttack.runEnemyAnimation();
-                    attack = false;
-
-                }
-            }
-        }
         if (WorldData.getPlayer().health <= 0 || enemy.health <=0) {
             pause = true;
             //TODO Battle over
@@ -72,34 +53,106 @@ public class GameLoop implements Runnable{
             if (WorldData.getPlayer().health <=0) {
                 Output.write("Player lost");
                 JavaDrawer.pfaint = true;
+                endBattle();
+                //TODO Restart from last safe point
             }
             else {
                 Output.write("Player won");
                 //BattleAnimator.faint(true);
+                WorldData.getPlayer().addXP(10*(((enemy.getLevel()-1)^2)+100)/4);
+                Output.write("PLayer's xp = " + WorldData.getPlayer().xp);
                 JavaDrawer.efaint = true;
                 WorldData.entities.remove(enemy);
-                Merlin.mode = Merlin.Mode.GAME;
-                pause = false;
+                endBattle();
+            }
+        } else {
+            if (playerTurn && currentAttack != null && !Attack.attackAnimationRun && !Attack.playerFlinch && !Attack.enemyFlinch) {
+
+                Output.write("Player attacks with " + currentAttack.getClass().getSimpleName());
+                //TODO run player attack
+                currentAttack.runPlayerAnimation();
+            } else if (!playerTurn && !Attack.attackAnimationRun && !Attack.playerFlinch && !Attack.enemyFlinch) {
+
+                //TODO run enemy attack
+                boolean attack = true;
+                while (attack) {
+                    currentAttack = enemy.attacks[(int) (Math.random() * 6)];
+                    if (currentAttack != null) {
+
+                        Output.write("Enemy attacks with " + currentAttack.getClass().getSimpleName());
+                        currentAttack.runEnemyAnimation();
+                        attack = false;
+
+                    }
+                }
             }
         }
     }
 
+    private void endBattle() {
+        int seconds = 3;
+        new Timer().schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        Merlin.mode = Merlin.Mode.GAME;
+                        JavaDrawer.pfaint = false;
+                        JavaDrawer.efaint = false;
+                        BattleAnimator.enemyOffsetY = 0;
+                        BattleAnimator.enemyOffsetY = 0;
+                        pause = false;
+                    }
+                },
+                (1000*seconds)
+        );
+    }
+
     public static void finishedAttack() {
         if (playerTurn) {
-            WorldData.getPlayer().mana = WorldData.getPlayer().mana - currentAttack.manaCost;
-            enemy.health = enemy.health - currentAttack.enemyDamage;
-            WorldData.getPlayer().health = WorldData.getPlayer().health - currentAttack.selfDamage;
-            enemy.mana = enemy.mana - currentAttack.manaDamage;
+            if ((Math.random()*100) <= (0.005*Math.pow(enemy.speed-WorldData.getPlayer().speed,2.2)+10)){
+                Output.write("The enemy dodged the attack!");
+            }
+            else {
+                enemy.health = enemy.health - currentAttack.enemyDamage * WorldData.getPlayer().fortitude / 10;
+                WorldData.getPlayer().health = WorldData.getPlayer().health - currentAttack.selfDamage * WorldData.getPlayer().fortitude / 10;
+                enemy.mana = enemy.mana - currentAttack.manaDamage * WorldData.getPlayer().fortitude / 10;
+                if ((currentAttack.enemyDamage * WorldData.getPlayer().fortitude / 10) > 0) Output.write("Caused " + (currentAttack.enemyDamage * WorldData.getPlayer().fortitude / 10) + " damage to the enemy's health");
+                if ((currentAttack.manaDamage * WorldData.getPlayer().fortitude / 10) > 0)Output.write("Caused " + (currentAttack.manaDamage * WorldData.getPlayer().fortitude / 10) + " damage to the enemy's mana");
+                if ((currentAttack.selfDamage * WorldData.getPlayer().fortitude / 10) > 0) Output.write("Caused " + (currentAttack.selfDamage * WorldData.getPlayer().fortitude / 10) + " damage to yourself");
+                if ((currentAttack.enemyDamage * enemy.fortitude / 10) < 0) Output.write("Regened " + (currentAttack.enemyDamage * enemy.fortitude / 10) + " hp of the enemy's health");
+                if ((currentAttack.manaDamage * enemy.fortitude / 10) < 0)Output.write("Regened " + (currentAttack.manaDamage * enemy.fortitude / 10) + " mana of the enemy's mana");
+                if ((currentAttack.selfDamage * enemy.fortitude / 10) < 0) Output.write("Regened " + (currentAttack.selfDamage * enemy.fortitude / 10) + " hp of health to yourself");
+            }
+            WorldData.getPlayer().mana = WorldData.getPlayer().mana - currentAttack.manaCost * WorldData.getPlayer().fortitude / 10;
+            if ((currentAttack.manaCost * WorldData.getPlayer().fortitude / 10) > 0)Output.write("Cost " + (currentAttack.manaCost * WorldData.getPlayer().fortitude / 10) + " mana to cast the attack");
+
             currentAttack = null;
             playerTurn = false;
+            enemy.regenMana();
+            Output.write("Enemy regened: " + enemy.manaRegen + " mana");
+
         }
         else {
-            enemy.mana = enemy.mana - currentAttack.manaCost;
-            WorldData.getPlayer().mana = WorldData.getPlayer().mana - currentAttack.manaDamage;
-            WorldData.getPlayer().health = WorldData.getPlayer().health - currentAttack.enemyDamage;
-            enemy.health = enemy.health - currentAttack.selfDamage;
+            if ((Math.random()*100) <= (0.005*Math.pow(enemy.speed-WorldData.getPlayer().speed,2.2)+10)) {
+                Output.write("DODGED");
+            }
+            else {
+                WorldData.getPlayer().mana = WorldData.getPlayer().mana - currentAttack.manaDamage * enemy.fortitude / 10;
+                WorldData.getPlayer().health = WorldData.getPlayer().health - currentAttack.enemyDamage * enemy.fortitude / 10;
+                enemy.health = enemy.health - currentAttack.selfDamage * enemy.fortitude / 10;
+                if ((currentAttack.enemyDamage * enemy.fortitude / 10) > 0) Output.write("Caused " + (currentAttack.enemyDamage * enemy.fortitude / 10) + " damage to the enemy's health");
+                if ((currentAttack.manaDamage * enemy.fortitude / 10) > 0)Output.write("Caused " + (currentAttack.manaDamage * enemy.fortitude / 10) + " damage to the enemy's mana");
+                if ((currentAttack.selfDamage * enemy.fortitude / 10) > 0) Output.write("Caused " + (currentAttack.selfDamage * enemy.fortitude / 10) + " damage to yourself");
+                if ((currentAttack.enemyDamage * enemy.fortitude / 10) < 0) Output.write("Regened " + (currentAttack.enemyDamage * enemy.fortitude / 10) + " hp of the enemy's health");
+                if ((currentAttack.manaDamage * enemy.fortitude / 10) < 0)Output.write("Regened " + (currentAttack.manaDamage * enemy.fortitude / 10) + " mana of the enemy's mana");
+                if ((currentAttack.selfDamage * enemy.fortitude / 10) < 0) Output.write("Regened " + (currentAttack.selfDamage * enemy.fortitude / 10) + " hp of health to yourself");
+            }
+            enemy.mana = enemy.mana - currentAttack.manaCost * enemy.fortitude / 10;
+            if ((currentAttack.manaCost * enemy.fortitude / 10) > 0)Output.write("Cost " + (currentAttack.manaCost * enemy.fortitude / 10) + " mana to cast the attack");
             currentAttack = null;
             playerTurn = true;
+            WorldData.getPlayer().regenMana();
+            Output.write("Player regened: " + WorldData.getPlayer().manaRegen + " mana");
         }
         if (enemy.health > enemy.healthMax) {
             enemy.health = enemy.healthMax;
@@ -113,6 +166,8 @@ public class GameLoop implements Runnable{
         if (WorldData.getPlayer().mana > WorldData.getPlayer().manaMax) {
             WorldData.getPlayer().mana = WorldData.getPlayer().manaMax;
         }
+        Output.write("Player Health: " + WorldData.getPlayer().health + " Mana: " + WorldData.getPlayer().mana);
+        Output.write("Enemy Health: " + enemy.health + " Mana: " + enemy.mana);
     }
 
     private void checkForBattle() {
