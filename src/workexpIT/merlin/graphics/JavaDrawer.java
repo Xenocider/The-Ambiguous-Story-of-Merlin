@@ -18,7 +18,6 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-import static workexpIT.merlin.attacks.Attack.AnimationType.TOWARDS_ENEMY;
 
 /**
  * Created by ict11 on 2016-02-22.
@@ -310,6 +309,9 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int enemyAnimationOffsetY = 0;
     public static int playerAnimationOffsetX = 0;
     public static int playerAnimationOffsetY = 0;
+    public static int attackAnimationOffsetX = 0;
+    public static int attackAnimationOffsetY = 0;
+
 
 
     //Sizes
@@ -323,12 +325,10 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int attackButtonWidth;
     public static int attackButtonHeight = 90;
 
-    public static boolean pfaint = false;
-    public static boolean efaint = false;
+    public static boolean pFlinch = false;
+    public static boolean eFlinch = false;
 
-    public static float flinchFactor = 0.8f;
-    public static int blinkSpeed = 5;
-    public static int flichSpeed = 4;
+
 
 
     private void drawBackground(Graphics g) {
@@ -338,18 +338,18 @@ public class JavaDrawer extends JPanel implements Runnable {
     private void drawBattleEnemy(Graphics g) {
 
         BufferedImage enemy = GameLoop.enemy.battleSprite;
-        enemyX = JavaDrawer.frame.getWidth() - enemy.getWidth() - enemyOffsetFromSide;
+        enemyX = JavaDrawer.frame.getWidth() - enemy.getWidth() - enemyOffsetFromSide + enemyAnimationOffsetX;
         enemyY = enemyOffsetFromTop + enemyAnimationOffsetY;
-        if (!(Attack.enemyFlinch && ((Attack.animationStage/blinkSpeed) & 1)==0)) {
+        if (!eFlinch) {
             g.drawImage(enemy, enemyX + enemyAdditionOffsetX, enemyY,null);
         }
     }
 
     private void drawBattlePlayer(Graphics g){
         BufferedImage player = WorldData.getPlayer().battleSprite;
-        playerX = playerOffsetFromSide;
+        playerX = playerOffsetFromSide + playerAnimationOffsetX;
         playerY = JavaDrawer.frame.getHeight() - player.getHeight() - playerOffsetFromBottom + playerAnimationOffsetY;
-        if (!(Attack.playerFlinch && ((Attack.animationStage/blinkSpeed) & 1)==0)) {
+        if (!pFlinch) {
             g.drawImage(player, playerX + playerAdditionOffsetX, playerY, null);
         }
     }
@@ -428,88 +428,8 @@ public class JavaDrawer extends JPanel implements Runnable {
 
 
     private void drawAttack(Graphics g) {
-        if (Attack.animationStage == Attack.maxAnimationStage && Attack.attackAnimationRun) {
-            Attack.attackAnimationRun = false;
-            Attack.animationStage = 0;
-            Attack.react();
-        }
-        else if (Attack.attackAnimationRun) {
-                Attack.animationStage = Attack.animationStage + 1;
-            if (Attack.playerThrust) {
-                if (Attack.animationStage <Attack.maxAnimationStage/2*flinchFactor) {
-                    playerAdditionOffsetX = playerAdditionOffsetX + flichSpeed;
-
-                }
-                else if (Attack.animationStage <Attack.maxAnimationStage*flinchFactor){
-                    playerAdditionOffsetX = playerAdditionOffsetX - flichSpeed;
-                }
-                else if (Attack.animationStage >=Attack.maxAnimationStage*flinchFactor){
-                    playerAdditionOffsetX = 0;
-                }
-            }
-            if (Attack.enemyThrust) {
-                if (Attack.animationStage <Attack.maxAnimationStage/2*flinchFactor) {
-                    enemyAdditionOffsetX = enemyAdditionOffsetX - flichSpeed;
-                }
-                else if (Attack.animationStage <Attack.maxAnimationStage*flinchFactor){
-                    enemyAdditionOffsetX = enemyAdditionOffsetX + flichSpeed;
-                }
-                else if (Attack.animationStage >=Attack.maxAnimationStage*flinchFactor){
-                    enemyAdditionOffsetX = 0;
-                }
-            }
-                switch (Attack.animationType) {
-                    case TOWARDS_ENEMY:
-                        Attack.textureX = (enemyX+GameLoop.enemy.battleSprite.getWidth()/2-GameLoop.currentAttack.texture.getWidth()/2-Attack.startX)/Attack.maxAnimationStage*Attack.animationStage + Attack.startX;
-                        Attack.textureY = (enemyY+GameLoop.enemy.battleSprite.getHeight()/2-GameLoop.currentAttack.texture.getHeight()/2-Attack.startY)/Attack.maxAnimationStage*Attack.animationStage + Attack.startY;
-                    case STILL:
-                        //TODO ****Most if not all animations should be stills with animated sprites that simulate motion****
-                        break;
-                    case UP:
-                        Attack.textureY = Attack.textureY - 15;
-                        break;
-                    case DOWN:
-                        break;
-                    case TOWARDS_PLAYER:
-                        Attack.textureX = (playerX+WorldData.getPlayer().battleSprite.getWidth()/2-GameLoop.currentAttack.texture.getWidth()/2-Attack.startX)/Attack.maxAnimationStage*Attack.animationStage + Attack.startX;
-                        Attack.textureY = (playerY+WorldData.getPlayer().battleSprite.getHeight()/4-GameLoop.currentAttack.texture.getHeight()/4-Attack.startY)/Attack.maxAnimationStage*Attack.animationStage + Attack.startY;
-                        break;
-                }
-                g.drawImage(Attack.animationTexture, Attack.textureX, Attack.textureY, null);
-        }
-        if (Attack.playerFlinch) {
-            if (Attack.animationStage <Attack.maxAnimationStage/2*flinchFactor) {
-                playerAdditionOffsetX = playerAdditionOffsetX - flichSpeed;
-
-            }
-            else if (Attack.animationStage <Attack.maxAnimationStage*flinchFactor){
-                playerAdditionOffsetX = playerAdditionOffsetX + flichSpeed;
-            }
-            else if (Attack.animationStage >=Attack.maxAnimationStage*flinchFactor){
-                playerAdditionOffsetX = 0;
-            }
-        }
-        if (Attack.enemyFlinch) {
-            if (Attack.animationStage <Attack.maxAnimationStage/2*flinchFactor) {
-                enemyAdditionOffsetX = enemyAdditionOffsetX + flichSpeed;
-            }
-            else if (Attack.animationStage <Attack.maxAnimationStage*flinchFactor){
-                enemyAdditionOffsetX = enemyAdditionOffsetX - flichSpeed;
-            }
-            else if (Attack.animationStage >=Attack.maxAnimationStage*flinchFactor){
-                enemyAdditionOffsetX = 0;
-            }
-        }
-        if (Attack.playerFlinch || Attack.enemyFlinch) {
-            Attack.animationStage = Attack.animationStage + 1;
-            if (Attack.animationStage >= Attack.maxAnimationStage*flinchFactor) {
-                Attack.animationStage = 0;
-                Attack.playerFlinch = false;
-                Attack.enemyFlinch = false;
-                GameLoop.finishedAttack();
-                playerAdditionOffsetX = 0;
-                enemyAdditionOffsetX = 0;
-            }
+        if (AttackAnimator.animate && AttackAnimator.animationTexture != null && attackAnimationOffsetX != 0 && attackAnimationOffsetY != 0) {
+            g.drawImage(AttackAnimator.animationTexture, attackAnimationOffsetX, attackAnimationOffsetY, null);
         }
     }
 

@@ -1,6 +1,7 @@
 package workexpIT.merlin.attacks;
 
 import workexpIT.merlin.data.WorldData;
+import workexpIT.merlin.graphics.AttackAnimator;
 import workexpIT.merlin.graphics.JavaDrawer;
 
 /**
@@ -18,20 +19,22 @@ public class Flood extends Attack{
         );
         texture = JavaDrawer.scale(texture,2,1);
     }
-    @Override
-    public void runPlayerAnimation() {
-        Attack.start(
-                this.texture,
-                0,
-                JavaDrawer.frame.getHeight()-texture.getHeight(),
-                animationType.UP);
+    public int getPlayerX() {
+        return (JavaDrawer.playerX + WorldData.getPlayer().battleSprite.getWidth()/2);
     }
-    @Override
-    public void runEnemyAnimation() {
-        Attack.start(
-                this.texture,
-                0,
-                JavaDrawer.frame.getHeight()-texture.getHeight(),
-                animationType.UP);
+    public int getPlayerY() {
+        return (JavaDrawer.playerY + WorldData.getPlayer().battleSprite.getHeight()/4 - texture.getHeight()/4);
+    }
+    public int getEnemyX() {
+        return (JavaDrawer.enemyX);
+    }
+    public int getEnemyY() {
+        return (JavaDrawer.enemyY + WorldData.getPlayer().battleSprite.getHeight()/4 - texture.getHeight()/2);
+    }
+    public AttackAnimator.AnimationType getPlayerAniType() {
+        return (AttackAnimator.AnimationType.animationType.UP);
+    }
+    public AttackAnimator.AnimationType getEnemyAniType() {
+        return (AttackAnimator.AnimationType.animationType.UP);
     }
 }

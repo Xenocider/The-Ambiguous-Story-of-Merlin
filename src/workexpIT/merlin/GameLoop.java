@@ -4,6 +4,7 @@ import workexpIT.merlin.attacks.Attack;
 import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
+import workexpIT.merlin.graphics.AttackAnimator;
 import workexpIT.merlin.graphics.FaintAnimator;
 import workexpIT.merlin.graphics.JavaDrawer;
 
@@ -52,7 +53,7 @@ public class GameLoop implements Runnable{
             Output.write("Battle over");
             if (WorldData.getPlayer().health <=0) {
                 Output.write("Player lost");
-                new FaintAnimator(40,1,false,true);
+                new FaintAnimator(100,1,false,true);
                 endBattle();
                 //TODO Restart from last safe point
             }
@@ -61,17 +62,17 @@ public class GameLoop implements Runnable{
                 //BattleAnimator.faint(true);
                 WorldData.getPlayer().addXP(10*(((enemy.getLevel()-1)^2)+100)/4);
                 Output.write("PLayer's xp = " + WorldData.getPlayer().xp);
-                new FaintAnimator(40,1,false,false);
+                new FaintAnimator(100,1,false,false);
                 WorldData.entities.remove(enemy);
                 endBattle();
             }
         } else {
-            if (playerTurn && currentAttack != null && !Attack.attackAnimationRun && !Attack.playerFlinch && !Attack.enemyFlinch) {
+            if (playerTurn && currentAttack != null && !AttackAnimator.animate) {
 
                 Output.write("Player attacks with " + currentAttack.getClass().getSimpleName());
                 //TODO run player attack
-                currentAttack.runPlayerAnimation();
-            } else if (!playerTurn && !Attack.attackAnimationRun && !Attack.playerFlinch && !Attack.enemyFlinch) {
+                new AttackAnimator(60,2,false,currentAttack.getPlayerX(),currentAttack.getPlayerY(),currentAttack.getPlayerAniType(),currentAttack.texture);
+            } else if (!playerTurn && !AttackAnimator.animate) {
 
                 //TODO run enemy attack
                 boolean attack = true;
@@ -80,7 +81,7 @@ public class GameLoop implements Runnable{
                     if (currentAttack != null) {
 
                         Output.write("Enemy attacks with " + currentAttack.getClass().getSimpleName());
-                        currentAttack.runEnemyAnimation();
+                        new AttackAnimator(60,2,false,currentAttack.getEnemyX(),currentAttack.getEnemyY(),currentAttack.getEnemyAniType(),currentAttack.texture);
                         attack = false;
 
                     }
@@ -96,8 +97,6 @@ public class GameLoop implements Runnable{
                     @Override
                     public void run() {
                         Merlin.mode = Merlin.Mode.GAME;
-                        JavaDrawer.pfaint = false;
-                        JavaDrawer.efaint = false;
                         pause = false;
                     }
                 },

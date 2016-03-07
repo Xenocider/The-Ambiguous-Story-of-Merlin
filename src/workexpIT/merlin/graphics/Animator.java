@@ -24,7 +24,6 @@ public class Animator {
         stageStep = speedFactor;
         currentAnimators.add(this);
         this.shouldLoop = shouldLoop;
-        runAdditionalStartCode();
     }
 
     public void run() {
