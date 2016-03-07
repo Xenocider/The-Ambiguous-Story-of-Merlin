@@ -1,65 +1,64 @@
 package workexpIT.merlin.graphics;
 
+import workexpIT.merlin.Output;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.graphics.Drawer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.lwjgl.opengl.GL11.*;
 
-public class Animator implements Runnable {
+public class Animator {
 
-    @Override
+    public static List<Animator> currentAnimators = new ArrayList<Animator>();
+
+    public int count = 0;
+    public int stage = 0;
+    public int maxStages;
+    public int stageStep;
+    public boolean shouldLoop = false;
+
+    public Animator(int stages,int speedFactor, boolean shouldLoop) {
+        maxStages = stages;
+        stageStep = speedFactor;
+        currentAnimators.add(this);
+        this.shouldLoop = shouldLoop;
+        runAdditionalStartCode();
+    }
+
     public void run() {
-        smoothOffset();
-        //drawEntities();
-    }
-
-    private void drawEntities() {
-        for (int i = 0; i < WorldData.entities.size(); i++) {
-            if (WorldData.entities.get(i).spriteId == -1) {
-                //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Drawer.w, Drawer.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[0]);
-            } else {
-                //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Drawer.w, Drawer.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId]);
+        Output.write("if (" + count + "==" + stage + "*" + stageStep + "+" + stageStep + ") (It equals " + (stage*stageStep+stageStep)+")");
+        if (count == stage*stageStep+stageStep) {
+            stage = stage + 1;
+            if (stage > maxStages) {
+                if (shouldLoop) {
+                    stage = 0;
+                    count = 0;
+                } else {
+                    endAnimation();
+                    close();
+                }
             }
-
-            //Enable Alpha (Transparency)
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-            //Start drawing
-            glBegin(GL_QUADS);
-
-            glTexCoord2f(0.0f, 0.0f);
-            glVertex2f((WorldData.entities.get(i).getX()+WorldData.entities.get(i).getX()-WorldData.entities.get(i).lastLoc[0])* Drawer.w + Drawer.offsetX,(WorldData.entities.get(i).getY()+WorldData.entities.get(i).getY()-WorldData.entities.get(i).lastLoc[1]) * Drawer.h + Drawer.offsetY);
-
-            glTexCoord2f(1.0f, 0.0f);
-            glVertex2f((WorldData.entities.get(i).getX()+WorldData.entities.get(i).getX()-WorldData.entities.get(i).lastLoc[0]) * Drawer.w + Drawer.w + Drawer.offsetX, (WorldData.entities.get(i).getY()+WorldData.entities.get(i).getY()-WorldData.entities.get(i).lastLoc[1]) * Drawer.h + Drawer.offsetY);
-
-            glTexCoord2f(1.0f, 1.0f);
-            glVertex2f((WorldData.entities.get(i).getX()+WorldData.entities.get(i).getX()-WorldData.entities.get(i).lastLoc[0]) * Drawer.w + Drawer.w + Drawer.offsetX, (WorldData.entities.get(i).getY()+WorldData.entities.get(i).getY()-WorldData.entities.get(i).lastLoc[1]) * Drawer.h + Drawer.h + Drawer.offsetY);
-
-            glTexCoord2f(0.0f, 1.0f);
-            glVertex2f((WorldData.entities.get(i).getX()+WorldData.entities.get(i).getX()-WorldData.entities.get(i).lastLoc[0]) * Drawer.w + Drawer.offsetX, (WorldData.entities.get(i).getY()+WorldData.entities.get(i).getY()-WorldData.entities.get(i).lastLoc[1]) * Drawer.h + Drawer.h + Drawer.offsetY);
-
-            //End Drawing
-            glEnd();
+            else {
+                runAnimation();
+            }
         }
+        count = count + 1;
     }
 
-    private void smoothOffset() {
-        int newOffsetX = (-WorldData.getPlayer().getX()+Drawer.ww/2/Drawer.w)*Drawer.w;
-        int newOffsetY = (-WorldData.getPlayer().getY()+Drawer.wh/2/Drawer.h)*Drawer.h;
-
-        if(newOffsetX > Drawer.offsetX) {
-            Drawer.offsetX = Drawer.offsetX+1;
-        }
-        if(newOffsetY > Drawer.offsetY) {
-            Drawer.offsetY = Drawer.offsetY+1;
-        }
-        if(newOffsetX < Drawer.offsetX) {
-            Drawer.offsetX = Drawer.offsetX-1;
-        }
-        if(newOffsetY < Drawer.offsetY) {
-            Drawer.offsetY = Drawer.offsetY-1;
-        }
+    public void close() {
+        currentAnimators.remove(this);
     }
+
+    public void endAnimation() {
+        //For child classes
+    }
+
+
+    public void runAnimation() {
+        //For child classes
+    }
+
+
 }

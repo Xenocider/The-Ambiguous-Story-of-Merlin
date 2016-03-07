@@ -72,6 +72,11 @@ public class JavaDrawer extends JPanel implements Runnable {
         long startTime = System.currentTimeMillis();
         super.paintComponent(g);
         zoomIn();
+        //Run animation code before drawing anything
+        for (int i = 0; i < Animator.currentAnimators.size(); i++) {
+            Animator.currentAnimators.get(i).run();
+        }
+        //Draw stuff
         if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
             moveScreen();
             drawGrid(g);
@@ -300,6 +305,13 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int attackButtonXOffset = 100;
     public static int attackButtonYOffset = 50;
 
+    //Animation Offsets
+    public static int enemyAnimationOffsetX = 0;
+    public static int enemyAnimationOffsetY = 0;
+    public static int playerAnimationOffsetX = 0;
+    public static int playerAnimationOffsetY = 0;
+
+
     //Sizes
     public static int manaBarLength = 100;
     public static int healthBarLength = 100;
@@ -325,26 +337,18 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     private void drawBattleEnemy(Graphics g) {
 
-        if(efaint) {
-            BattleAnimator.enemyOffsetY = BattleAnimator.enemyOffsetY + 8;
-        }
-
-
         BufferedImage enemy = GameLoop.enemy.battleSprite;
         enemyX = JavaDrawer.frame.getWidth() - enemy.getWidth() - enemyOffsetFromSide;
-        enemyY = enemyOffsetFromTop + BattleAnimator.enemyOffsetY;
+        enemyY = enemyOffsetFromTop + enemyAnimationOffsetY;
         if (!(Attack.enemyFlinch && ((Attack.animationStage/blinkSpeed) & 1)==0)) {
             g.drawImage(enemy, enemyX + enemyAdditionOffsetX, enemyY,null);
         }
     }
 
     private void drawBattlePlayer(Graphics g){
-        if (pfaint) {
-            BattleAnimator.playerOffsetY = BattleAnimator.playerOffsetY + 8;
-        }
         BufferedImage player = WorldData.getPlayer().battleSprite;
         playerX = playerOffsetFromSide;
-        playerY = JavaDrawer.frame.getHeight() - player.getHeight() - playerOffsetFromBottom + BattleAnimator.playerOffsetY;
+        playerY = JavaDrawer.frame.getHeight() - player.getHeight() - playerOffsetFromBottom + playerAnimationOffsetY;
         if (!(Attack.playerFlinch && ((Attack.animationStage/blinkSpeed) & 1)==0)) {
             g.drawImage(player, playerX + playerAdditionOffsetX, playerY, null);
         }

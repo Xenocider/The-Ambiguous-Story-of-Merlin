@@ -23,13 +23,11 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        Output.write("Key Pressed: " + e.getKeyChar());
 
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-    Output.write("Key Pressed: " + e.getKeyChar());
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
                 upPressed = true;
@@ -87,7 +85,6 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Output.write("Key Pressed: " + e.getKeyChar());
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:

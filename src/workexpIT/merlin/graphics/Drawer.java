@@ -391,7 +391,7 @@ public class Drawer implements Runnable {
 
             //gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 1000, TimeUnit.MILLISECONDS);
 
-            animator = executor.scheduleWithFixedDelay(new Animator(), 0, 5800, TimeUnit.MICROSECONDS);
+            //animator = executor.scheduleWithFixedDelay(new Animator(), 0, 5800, TimeUnit.MICROSECONDS);
 
             loop();
 

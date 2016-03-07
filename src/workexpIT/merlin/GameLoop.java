@@ -4,7 +4,7 @@ import workexpIT.merlin.attacks.Attack;
 import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
-import workexpIT.merlin.graphics.BattleAnimator;
+import workexpIT.merlin.graphics.FaintAnimator;
 import workexpIT.merlin.graphics.JavaDrawer;
 
 import java.awt.image.BufferedImage;
@@ -52,7 +52,7 @@ public class GameLoop implements Runnable{
             Output.write("Battle over");
             if (WorldData.getPlayer().health <=0) {
                 Output.write("Player lost");
-                JavaDrawer.pfaint = true;
+                new FaintAnimator(40,1,false,true);
                 endBattle();
                 //TODO Restart from last safe point
             }
@@ -61,7 +61,7 @@ public class GameLoop implements Runnable{
                 //BattleAnimator.faint(true);
                 WorldData.getPlayer().addXP(10*(((enemy.getLevel()-1)^2)+100)/4);
                 Output.write("PLayer's xp = " + WorldData.getPlayer().xp);
-                JavaDrawer.efaint = true;
+                new FaintAnimator(40,1,false,false);
                 WorldData.entities.remove(enemy);
                 endBattle();
             }
@@ -98,8 +98,6 @@ public class GameLoop implements Runnable{
                         Merlin.mode = Merlin.Mode.GAME;
                         JavaDrawer.pfaint = false;
                         JavaDrawer.efaint = false;
-                        BattleAnimator.enemyOffsetY = 0;
-                        BattleAnimator.enemyOffsetY = 0;
                         pause = false;
                     }
                 },
