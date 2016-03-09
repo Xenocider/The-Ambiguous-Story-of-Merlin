@@ -21,6 +21,9 @@ public class Tile {
     }
     protected BufferedImage texture;
 
+    public enum Rotation {UP,RIGHT,DOWN,LEFT}
+    public Rotation rotation = Rotation.UP;
+
     protected boolean door;
     protected String doorMap;
     protected int doorX;
@@ -31,6 +34,10 @@ public class Tile {
         doorMap = map;
         doorX = x;
         doorY = y;
+    }
+
+    public void setRotation(Rotation rot){
+        rotation = rot;
     }
 
     public boolean movingOnToTile(Entity entity) {

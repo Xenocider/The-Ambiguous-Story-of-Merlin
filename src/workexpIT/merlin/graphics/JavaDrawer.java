@@ -16,6 +16,7 @@ import workexpIT.merlin.tiles.Tile;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 
@@ -176,11 +177,35 @@ public class JavaDrawer extends JPanel implements Runnable {
         }
     }
 
+    public BufferedImage rotateImage(BufferedImage input, double radians) {
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(radians, input.getWidth()/2, input.getHeight()/2);
+        AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+        BufferedImage output = op.filter(input, null);
+        return output;
+    }
+
     private void drawTiles(Graphics g) {
         for (int a = 0; a < WorldData.tiles.length; a++) {
             for (int b = 0; b < WorldData.tiles[a].length; b++) {
                 if (WorldData.tiles[a][b] != null) {
                     BufferedImage image = scale(WorldData.tiles[a][b].getTexture(),scale,scale);
+                    double radians = 0.0;
+                    switch (WorldData.tiles[a][b].rotation) {
+                        case UP:
+                            radians = Math.PI/2.0*0.0;
+                            break;
+                        case RIGHT:
+                            radians = Math.PI/2.0*1.0;
+                            break;
+                        case DOWN:
+                            radians = Math.PI/2.0*2.0;
+                            break;
+                        case LEFT:
+                            radians = Math.PI/2.0*3.0;
+                            break;
+                    }
+                    image = rotateImage(image, radians);
                     g.drawImage(image,(int)((a * imageSize + offsetX)*scale)+frame.getWidth()/2, (int)((b * imageSize - imageSize + offsetY)*scale)+frame.getHeight()/2,null);
                 }
             }
