@@ -1,9 +1,7 @@
 package workexpIT.merlin.data;
 
-import workexpIT.merlin.Merlin;
 import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
-import workexpIT.merlin.entities.Bob;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.graphics.Drawer;
 import workexpIT.merlin.tiles.*;
@@ -11,7 +9,6 @@ import workexpIT.merlin.tiles.*;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -66,32 +63,40 @@ public class DataReader {
                         Output.write(id + "");
                         int i = -1;
                         String rotation = null;
+                        String flip = null;
                         try {
-                            rotation = id.substring(id.length()-1);
-                            i = Integer.parseInt(id.substring(0,id.length()-3));
-                            Output.write("TILE DATA = ID: " + i + " ROTATION:  " + rotation);
+                            flip = id.substring(id.length()-1);
+                            rotation = id.substring(id.length()-4,id.length()-3);
+                            i = Integer.parseInt(id.substring(0,id.length()-6));
                         } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        Tile.Flip f = null;
+                        switch (flip) {
+                            case "b":
+                                f = Tile.Flip.HORIZONTAL;
+                                break;
+                            case "c":
+                                f = Tile.Flip.VERTICAL;
+                                break;
                         }
                         if (i > -1) {
                             switch (rotation) {
                                 case "b":
-                                    Output.write("ROTATION IS RIGHT");
-                                    loadTile(i, x, y, Tile.Rotation.RIGHT);
+                                    loadTile(i, x, y, Tile.Rotation.RIGHT,f);
                                     break;
                                 case "c":
-                                    Output.write("ROTATION IS DOWN");
-                                    loadTile(i, x, y, Tile.Rotation.DOWN);
+                                    loadTile(i, x, y, Tile.Rotation.DOWN,f);
                                     break;
                                 case "d":
-                                    Output.write("ROTATION IS LEFT");
-                                    loadTile(i, x, y, Tile.Rotation.LEFT);
+                                    loadTile(i, x, y, Tile.Rotation.LEFT,f);
                                     break;
                                 default: //this includes the "a" rotation
-                                    Output.write("ROTATION IS UP");
-                                    loadTile(i, x, y, Tile.Rotation.UP);
+                                    loadTile(i, x, y, Tile.Rotation.UP,f);
                                     break;
                             }
                             Output.write("Adding tile to " + x + " " + y);
+
                         }
                     }
                     x = 0;
@@ -105,29 +110,39 @@ public class DataReader {
                         Output.write(id + "");
                         int i = -1;
                         String rotation = null;
+                        String flip = null;
                         try {
-                            rotation = id.substring(id.length()-1);
-                            i = Integer.parseInt(id.substring(0,id.length()-3));
-                            Output.write("TILE DATA = ID: " + i + " ROTATION:  " + rotation);
+                            flip = id.substring(id.length()-1);
+                            rotation = id.substring(id.length()-4,id.length()-3);
+                            i = Integer.parseInt(id.substring(0,id.length()-6));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        Tile.Flip f = null;
+                        switch (flip) {
+                            case "b":
+                                f = Tile.Flip.HORIZONTAL;
+                                break;
+                            case "c":
+                                f = Tile.Flip.VERTICAL;
+                                break;
+                        }
                         if (i > -1) {
-                            switch (rotation) {
-                                case "b":
-                                    loadTile(i, x, y, Tile.Rotation.RIGHT);
-                                    break;
-                                case "c":
-                                    loadTile(i, x, y, Tile.Rotation.DOWN);
-                                    break;
-                                case "d":
-                                    loadTile(i, x, y, Tile.Rotation.LEFT);
-                                    break;
-                                default: //this includes the "a" rotation
-                                    loadTile(i, x, y, Tile.Rotation.UP);
-                                    break;
-                            }
-                            Output.write("Adding tile to " + x + " " + y);
+                                switch (rotation) {
+                                    case "b":
+                                        loadTile(i, x, y, Tile.Rotation.RIGHT,f);
+                                        break;
+                                    case "c":
+                                        loadTile(i, x, y, Tile.Rotation.DOWN,f);
+                                        break;
+                                    case "d":
+                                        loadTile(i, x, y, Tile.Rotation.LEFT,f);
+                                        break;
+                                    default: //this includes the "a" rotation
+                                        loadTile(i, x, y, Tile.Rotation.UP,f);
+                                        break;
+                                }
+                                Output.write("Adding tile to " + x + " " + y);
                         }
                     }
                     x = x + 1;
@@ -198,12 +213,13 @@ public class DataReader {
         return x;
     }
 
-    private static void loadTile(int id, int x, int y, Tile.Rotation rotation) {
+    private static void loadTile(int id, int x, int y, Tile.Rotation rotation, Tile.Flip f) {
         Tile tile = null;
         Constructor c = null;
         try {
             tile = (Tile) Class.forName("workexpIT.merlin.tiles."+ Reference.tileIds[id]).newInstance();
             tile.setRotation(rotation);
+            tile.setFlip(f);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -361,29 +377,40 @@ public class DataReader {
                         Output.write(id + "");
                         int i = -1;
                         String rotation = null;
+                        String flip = null;
                         try {
-                            rotation = id.substring(id.length()-1);
-                            i = Integer.parseInt(id.substring(0,id.length()-3));
-                            Output.write("TILE DATA = ID: " + i + " ROTATION:  " + rotation);
+                            flip = id.substring(id.length()-1);
+                            rotation = id.substring(id.length()-4,id.length()-3);
+                            i = Integer.parseInt(id.substring(0,id.length()-6));
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        catch (Exception e) {
+                        Tile.Flip f = null;
+                        switch (flip) {
+                            case "b":
+                                f = Tile.Flip.HORIZONTAL;
+                                break;
+                            case "c":
+                                f = Tile.Flip.VERTICAL;
+                                break;
                         }
-                        if (i>-1) {
+                        if (i > -1) {
                             switch (rotation) {
                                 case "b":
-                                    loadTile(i, x, y, Tile.Rotation.RIGHT);
+                                    loadTile(i, x, y, Tile.Rotation.RIGHT,f);
                                     break;
                                 case "c":
-                                    loadTile(i, x, y, Tile.Rotation.DOWN);
+                                    loadTile(i, x, y, Tile.Rotation.DOWN,f);
                                     break;
                                 case "d":
-                                    loadTile(i, x, y, Tile.Rotation.LEFT);
+                                    loadTile(i, x, y, Tile.Rotation.LEFT,f);
                                     break;
                                 default: //this includes the "a" rotation
-                                    loadTile(i, x, y, Tile.Rotation.UP);
+                                    loadTile(i, x, y, Tile.Rotation.UP,f);
                                     break;
-                            }                        }
-                        Output.write("Adding tile to " + x + " " + y);
+                            }
+                            Output.write("Adding tile to " + x + " " + y);
+                        }
                     }
                     x=0;
                     y=y+1;
@@ -396,28 +423,40 @@ public class DataReader {
                         Output.write(id + "");
                         int i = -1;
                         String rotation = null;
+                        String flip = null;
                         try {
-                            rotation = id.substring(id.length()-1);
-                            i = Integer.parseInt(id.substring(0,id.length()-3));
-                            Output.write("TILE DATA = ID: " + i + " ROTATION:  " + rotation);
+                            flip = id.substring(id.length() - 1);
+                            rotation = id.substring(id.length() - 4, id.length() - 3);
+                            i = Integer.parseInt(id.substring(0, id.length() - 6));
                         } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        Tile.Flip f = null;
+                        switch (flip) {
+                            case "b":
+                                f = Tile.Flip.HORIZONTAL;
+                                break;
+                            case "c":
+                                f = Tile.Flip.VERTICAL;
+                                break;
                         }
                         if (i > -1) {
                             switch (rotation) {
                                 case "b":
-                                    loadTile(i, x, y, Tile.Rotation.RIGHT);
+                                    loadTile(i, x, y, Tile.Rotation.RIGHT, f);
                                     break;
                                 case "c":
-                                    loadTile(i, x, y, Tile.Rotation.DOWN);
+                                    loadTile(i, x, y, Tile.Rotation.DOWN, f);
                                     break;
                                 case "d":
-                                    loadTile(i, x, y, Tile.Rotation.LEFT);
+                                    loadTile(i, x, y, Tile.Rotation.LEFT, f);
                                     break;
                                 default: //this includes the "a" rotation
-                                    loadTile(i, x, y, Tile.Rotation.UP);
+                                    loadTile(i, x, y, Tile.Rotation.UP, f);
                                     break;
-                            }                        }
-                        Output.write("Adding tile to " + x + " " + y);
+                            }
+                            Output.write("Adding tile to " + x + " " + y);
+                        }
                     }
                     x = x + 1;
                     data.clear();

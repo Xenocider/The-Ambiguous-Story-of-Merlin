@@ -22,7 +22,9 @@ public class Tile {
     protected BufferedImage texture;
 
     public enum Rotation {UP,RIGHT,DOWN,LEFT}
+    public enum Flip {HORIZONTAL,VERTICAL}
     public Rotation rotation = Rotation.UP;
+    public Flip flip = null;
 
     protected boolean door;
     protected String doorMap;
@@ -39,6 +41,10 @@ public class Tile {
     public void setRotation(Rotation rot){
         rotation = rot;
     }
+    public void setFlip(Flip f){
+        flip = f;
+    }
+
 
     public boolean movingOnToTile(Entity entity) {
         boolean status = true;

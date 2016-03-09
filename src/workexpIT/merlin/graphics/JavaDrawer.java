@@ -177,10 +177,25 @@ public class JavaDrawer extends JPanel implements Runnable {
         }
     }
 
-    public BufferedImage rotateImage(BufferedImage input, double radians) {
+    public static BufferedImage rotateImage(BufferedImage input, double radians) {
         AffineTransform transform = new AffineTransform();
         transform.rotate(radians, input.getWidth()/2, input.getHeight()/2);
         AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+        BufferedImage output = op.filter(input, null);
+        return output;
+    }
+
+    public static BufferedImage flipImage(BufferedImage input, boolean horizontal) {
+        AffineTransform at = new AffineTransform();
+        if (horizontal) {
+            at.concatenate(AffineTransform.getScaleInstance(-1, 1));
+            at.concatenate(AffineTransform.getTranslateInstance(-input.getHeight(), 0));
+        }
+        else {
+            at.concatenate(AffineTransform.getScaleInstance(1, -1));
+            at.concatenate(AffineTransform.getTranslateInstance(0, -input.getHeight()));
+        }
+        AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
         BufferedImage output = op.filter(input, null);
         return output;
     }
@@ -206,6 +221,17 @@ public class JavaDrawer extends JPanel implements Runnable {
                             break;
                     }
                     image = rotateImage(image, radians);
+                    try {
+                        switch (WorldData.tiles[a][b].flip) {
+                            case HORIZONTAL:
+                                image = flipImage(image, true);
+                                break;
+                            case VERTICAL:
+                                image = flipImage(image, false);
+                                break;
+                        }
+                    }
+                    catch (NullPointerException e) {}
                     g.drawImage(image,(int)((a * imageSize + offsetX)*scale)+frame.getWidth()/2, (int)((b * imageSize - imageSize + offsetY)*scale)+frame.getHeight()/2,null);
                 }
             }
