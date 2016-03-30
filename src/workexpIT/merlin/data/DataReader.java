@@ -511,9 +511,33 @@ public class DataReader {
             for (int b = 0; b<WorldData.mapSizeY; b++) {
                 for (int a = 0;a<WorldData.tiles.length; a++) {
                 try {
+                    String rot = "a";
+                    String flip = "a";
+                    switch (WorldData.tiles[a][b].rotation) {
+                        case UP:
+                            rot = "a";
+                            break;
+                        case RIGHT:
+                            rot = "b";
+                            break;
+                        case DOWN:
+                            rot = "c";
+                            break;
+                        case LEFT:
+                            rot = "d";
+                            break;
+                    }
+                    switch (WorldData.tiles[a][b].flip) {
+                        case HORIZONTAL:
+                            flip = "b";
+                            break;
+                        case VERTICAL:
+                            flip = "c";
+                            break;
+                    }
                     for (int i = 0; i < Reference.tileIds.length; i ++ ) {
                         if (WorldData.tiles[a][b].getClass().getSimpleName().equals(Reference.tileIds[i])) {
-                            writer.write(i+",");
+                            writer.write(i+rot+flip+",");
                             Output.write(WorldData.tiles[a][b].getClass().getSimpleName() + " at " + a + ", " + b);
                         }
                     }

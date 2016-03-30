@@ -2,8 +2,11 @@ package workexpIT.merlin.listeners;
 
 import workexpIT.merlin.Merlin;
 import workexpIT.merlin.Output;
+import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.graphics.JavaDrawer;
+import workexpIT.merlin.tiles.Tile;
 
+import java.awt.*;
 import java.awt.event.*;
 
 /**
@@ -79,6 +82,49 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
                     JavaDrawer.scaleDown();
                 }
                 break;
+            case KeyEvent.VK_BRACERIGHT:
+                //Flip Horizontally
+                WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.HORIZONTAL);
+
+                break;
+            case KeyEvent.VK_BRACELEFT:
+                //Flip Vertically
+                WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.VERTICAL);
+                break;
+            case KeyEvent.VK_COMMA:
+                //Rotate Left
+                switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].rotation) {
+                    case UP:
+                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.LEFT);
+                        break;
+                    case RIGHT:
+                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.UP);
+                        break;
+                    case DOWN:
+                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.RIGHT);
+                        break;
+                    case LEFT:
+                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.DOWN);
+                        break;
+                }
+                break;
+            case KeyEvent.VK_PERIOD:
+                //Rotate Right
+                switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].rotation) {
+                    case UP:
+                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.RIGHT);
+                        break;
+                    case RIGHT:
+                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.DOWN);
+                        break;
+                    case DOWN:
+                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.LEFT);
+                        break;
+                    case LEFT:
+                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.UP);
+                        break;
+                }
+                break;
         }
 
     }
@@ -101,5 +147,20 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
                 break;
         }
 
+    }
+
+    public int[] getTileCoordsAtCursor() {
+        double x = MouseInfo.getPointerInfo().getLocation().getX();
+        double y = MouseInfo.getPointerInfo().getLocation().getX();
+        int mapX = -1;
+        int mapY = -1;
+        if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+            if (x < JavaDrawer.frame.getWidth() - JavaDrawer.editorMenuSize) {
+                mapX = (int) ((x - JavaDrawer.frame.getWidth() / 2) / JavaDrawer.scale - JavaDrawer.offsetX) / JavaDrawer.imageSize;
+                mapY = (int) ((y - JavaDrawer.frame.getHeight() / 2) / JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize) / JavaDrawer.imageSize;
+            }
+        }
+        Output.write(mapX + "   " + mapY);
+        return new int[] {mapX,mapY};
     }
 }
