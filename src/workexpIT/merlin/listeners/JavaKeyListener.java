@@ -6,6 +6,7 @@ import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.graphics.JavaDrawer;
 import workexpIT.merlin.tiles.Tile;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -82,47 +83,100 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
                     JavaDrawer.scaleDown();
                 }
                 break;
-            case KeyEvent.VK_BRACERIGHT:
+            case KeyEvent.VK_CLOSE_BRACKET:
                 //Flip Horizontally
-                WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.HORIZONTAL);
+                switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip) {
+                    case DEFAULT:
+                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.HORIZONTAL);
+                        break;
+                    case HORIZONTAL:
+                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.DEFAULT);
+                        break;
+                }
 
                 break;
-            case KeyEvent.VK_BRACELEFT:
+            case KeyEvent.VK_OPEN_BRACKET:
                 //Flip Vertically
-                WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.VERTICAL);
+                Output.write("FLIP " + WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip);
+                switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip) {
+                    case DEFAULT:
+                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.VERTICAL);
+                        break;
+                    case VERTICAL:
+                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.DEFAULT);
+                        break;
+                }
                 break;
             case KeyEvent.VK_COMMA:
                 //Rotate Left
-                switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].rotation) {
-                    case UP:
-                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.LEFT);
-                        break;
-                    case RIGHT:
-                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.UP);
-                        break;
-                    case DOWN:
-                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.RIGHT);
-                        break;
-                    case LEFT:
-                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.DOWN);
-                        break;
+                if (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip == Tile.Flip.DEFAULT) {
+                    switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].rotation) {
+                        case UP:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.LEFT);
+                            break;
+                        case RIGHT:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.UP);
+                            break;
+                        case DOWN:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.RIGHT);
+                            break;
+                        case LEFT:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.DOWN);
+                            break;
+                    }
+                }
+                else {
+                    switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].rotation) {
+                        case UP:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.RIGHT);
+                            break;
+                        case RIGHT:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.DOWN);
+                            break;
+                        case DOWN:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.LEFT);
+                            break;
+                        case LEFT:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.UP);
+                            break;
+                    }
                 }
                 break;
             case KeyEvent.VK_PERIOD:
                 //Rotate Right
-                switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].rotation) {
-                    case UP:
-                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.RIGHT);
-                        break;
-                    case RIGHT:
-                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.DOWN);
-                        break;
-                    case DOWN:
-                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.LEFT);
-                        break;
-                    case LEFT:
-                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.UP);
-                        break;
+                Output.write("Rotating tile at " + getTileCoordsAtCursor()[0] + ", " + getTileCoordsAtCursor()[1]);
+                Output.write("Title " + WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]]);
+                if (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip == Tile.Flip.DEFAULT) {
+                    switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].rotation) {
+                        case UP:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.RIGHT);
+                            break;
+                        case RIGHT:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.DOWN);
+                            break;
+                        case DOWN:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.LEFT);
+                            break;
+                        case LEFT:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.UP);
+                            break;
+                    }
+                }
+                else {
+                    switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].rotation) {
+                        case UP:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.LEFT);
+                            break;
+                        case RIGHT:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.UP);
+                            break;
+                        case DOWN:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.RIGHT);
+                            break;
+                        case LEFT:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.DOWN);
+                            break;
+                    }
                 }
                 break;
         }
@@ -150,8 +204,12 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
     }
 
     public int[] getTileCoordsAtCursor() {
-        double x = MouseInfo.getPointerInfo().getLocation().getX();
-        double y = MouseInfo.getPointerInfo().getLocation().getX();
+        Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+        SwingUtilities.convertPointFromScreen(mouseLocation,JavaDrawer.frame);
+        double x = mouseLocation.getX();
+        double y = mouseLocation.getY();
+        y = y - 21; //not sure why it is off
+        Output.write("MOUSELOC = " + x +" " + y);
         int mapX = -1;
         int mapY = -1;
         if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {

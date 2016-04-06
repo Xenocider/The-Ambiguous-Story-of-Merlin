@@ -431,7 +431,7 @@ public class DataReader {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        Tile.Flip f = null;
+                        Tile.Flip f = Tile.Flip.DEFAULT;
                         switch (flip) {
                             case "b":
                                 f = Tile.Flip.HORIZONTAL;

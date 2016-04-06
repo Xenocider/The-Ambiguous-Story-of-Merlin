@@ -22,9 +22,9 @@ public class Tile {
     protected BufferedImage texture;
 
     public enum Rotation {UP,RIGHT,DOWN,LEFT}
-    public enum Flip {HORIZONTAL,VERTICAL}
+    public enum Flip {HORIZONTAL,VERTICAL,DEFAULT}
     public Rotation rotation = Rotation.UP;
-    public Flip flip = null;
+    public Flip flip = Flip.DEFAULT;
 
     protected boolean door;
     protected String doorMap;
