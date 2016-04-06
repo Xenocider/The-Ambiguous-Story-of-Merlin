@@ -7,6 +7,7 @@ import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.graphics.AttackAnimator;
 import workexpIT.merlin.graphics.FaintAnimator;
 import workexpIT.merlin.graphics.JavaDrawer;
+import workexpIT.merlin.tiles.Tile;
 
 import java.awt.image.BufferedImage;
 import java.util.Timer;
@@ -39,7 +40,6 @@ public class GameLoop implements Runnable{
 
             runAI();
 
-            checkForBattle();
         }
         else if (Merlin.mode.equals(Merlin.Mode.BATTLE) && !pause) {
             runTurn();
@@ -167,16 +167,6 @@ public class GameLoop implements Runnable{
         Output.write("Enemy Health: " + enemy.health + " Mana: " + enemy.mana);
     }
 
-    private void checkForBattle() {
-            for (int i = 0; i < WorldData.entities.size(); i++) {
-                if (WorldData.entities.get(i).getX() == WorldData.getPlayer().getX() && WorldData.entities.get(i).getY() == WorldData.getPlayer().getY() && !WorldData.entities.get(i).equals(WorldData.getPlayer())) {
-                    enemy = WorldData.entities.get(i);
-                    pause = true;
-                    JavaDrawer.startBattle();
-                }
-            }
-    }
-
 
     private static void movePlayer() {
         if (Merlin.keyListener.upPressed || Merlin.keyListener.upTemp) {
@@ -228,5 +218,38 @@ public class GameLoop implements Runnable{
         statusBar = ImageReader.loadImage("resources/graphics/battle/entityStatusBackground.png");
         menu = ImageReader.loadImage("resources/graphics/battle/menuBackground.png");
         button = ImageReader.loadImage("resources/graphics/battle/buttonBackground.png");
+        for (int i =0; i < Reference.tileIds.length; i++) {
+            Tile tile = null;
+            try {
+                tile = (Tile) Class.forName("workexpIT.merlin.tiles."+ Reference.tileIds[i]).newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            WorldData.menuTiles.add(tile);
+        }
+    }
+
+    public static void entityInteract(Entity entity1, Entity entity2) {
+        if (entity1 == WorldData.getPlayer()) {
+            if (entity2.getState() == Entity.STATE_AGGRESSIVE) {
+                enemy = entity2;
+                pause = true;
+                JavaDrawer.startBattle();
+            }
+        }
+        else if (entity2 == WorldData.getPlayer()) {
+            if (entity1.getState() == Entity.STATE_AGGRESSIVE) {
+                enemy = entity1;
+                pause = true;
+                JavaDrawer.startBattle();
+            }
+        }
+        else {
+            //Two NPC entities interact (do nothing at the moment)
+        }
     }
 }

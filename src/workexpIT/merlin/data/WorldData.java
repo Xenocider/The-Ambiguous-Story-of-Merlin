@@ -15,6 +15,7 @@ import java.util.List;
 public class WorldData {
 
     public static int selectedTile;
+    public static List<Tile> menuTiles = new ArrayList<>();
 
     public static BufferedImage battleBackground;
 
@@ -25,6 +26,7 @@ public class WorldData {
 
     public static Tile[][] tiles = new Tile[WorldData.mapSizeX][WorldData.mapSizeY];
     public static List<Entity> entities = new ArrayList<Entity>();
+    public static int selectedInstance = 0;
 
     public static Player getPlayer() {
         Player player = null;

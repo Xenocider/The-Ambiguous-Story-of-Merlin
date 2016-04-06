@@ -110,18 +110,9 @@ public class JavaDrawer extends JPanel implements Runnable {
         int y = 0;
         g.setColor(Color.WHITE);
         g.fillRect(frame.getWidth()-editorMenuSize,0,editorMenuSize,frame.getHeight());
-        for (int i = 0; i < Reference.tileIds.length; i ++) {
-            Tile tile = null;
-            try {
-                tile = (Tile) Class.forName("workexpIT.merlin.tiles."+ Reference.tileIds[i]).newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            BufferedImage image = scale(tile.getTexture(),4,4);
+        for (int i = 0; i < WorldData.menuTiles.size(); i ++) {
+
+            BufferedImage image = scale(WorldData.menuTiles.get(i).getTexture(),4,4);
 
             g.drawImage(image,(int)(x * JavaDrawer.imageSize*4 + frame.getWidth()-editorMenuSize + 10*x + 10),(int)(y * JavaDrawer.imageSize*4 + 10*y + 10),null);
             if (x == 0) {x = 1;} else {x = 0;y=y+1;}

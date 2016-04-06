@@ -9,6 +9,7 @@ import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.graphics.JavaDrawer;
 import workexpIT.merlin.tiles.Tile;
 
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 
 /**
@@ -31,7 +32,19 @@ public class MouseListener implements java.awt.event.MouseListener {
                 int editX = (x - JavaDrawer.frame.getWidth() + JavaDrawer.editorMenuSize - 10)/(JavaDrawer.imageSize*4+10);
                 int editY = (y - 10)/(JavaDrawer.imageSize*4+10);
                 int id = editX + editY*2;
+                if (e.getModifiers() == InputEvent.BUTTON3_MASK) {
+                    //If it is the right mouse button
+                    int instance = WorldData.menuTiles.get(id).instance+1;
+                    if (instance > WorldData.menuTiles.get(id).maxInstances-1) {
+                        WorldData.menuTiles.get(id).setInstance(0);
+                    }
+                    else {
+                        WorldData.menuTiles.get(id).setInstance(instance);
+                    }
+
+                }
                 WorldData.selectedTile = id;
+                WorldData.selectedInstance = WorldData.menuTiles.get(id).instance;
                 Output.write("Selected tile: " + id);
             }
             else if (x>JavaDrawer.frame.getWidth()-10-32 && y < 60) {
@@ -44,7 +57,9 @@ public class MouseListener implements java.awt.event.MouseListener {
                 int mapY = (int)((y-JavaDrawer.frame.getHeight()/2)/JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize)/JavaDrawer.imageSize;
                 Output.write(mapX + ", " + mapY);
                 try {
-                    WorldData.tiles[mapX][mapY] = (Tile) Class.forName("workexpIT.merlin.tiles."+ Reference.tileIds[WorldData.selectedTile]).newInstance();
+                    Tile tile = (Tile) Class.forName("workexpIT.merlin.tiles."+ Reference.tileIds[WorldData.selectedTile]).newInstance();
+                    tile.setInstance(WorldData.selectedInstance);
+                    WorldData.tiles[mapX][mapY] = tile;
                     Output.write("Placing tile " + WorldData.selectedTile + " at " + mapX + ", " + mapY);
                 } catch (InstantiationException e1) {
                     e1.printStackTrace();

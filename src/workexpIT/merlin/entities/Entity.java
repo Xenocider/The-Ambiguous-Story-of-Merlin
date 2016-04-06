@@ -54,6 +54,7 @@ public class Entity {
     public int manaRegen = 10;
     public int fortitude = 10;
     public int speed = 10;
+    public int lastMove;
 
 
     public Entity(int x, int y, String name, int state, int level, BufferedImage[] sprites) {
@@ -117,15 +118,15 @@ public class Entity {
         }
     }
 
-    public void move(int direction) {
+    public boolean move(int direction) {
         //0 = up, 1 = right, 2 = down, 3 = left
             switch (direction) {
                 case MOVE_UP:
                     try {
                         if (WorldData.tiles[getX()][getY() - 1].movingOnToTile(this)) {
-                            lastLoc[0] = getX();
-                            lastLoc[1] = getY();
+                            lastMove = MOVE_UP;
                             setY(getY() - 1);
+                            return true;
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
                         Output.write("Entity at edge of map!a");
@@ -136,9 +137,9 @@ public class Entity {
                 case MOVE_RIGHT:
                     try {
                         if (WorldData.tiles[getX() + 1][getY()].movingOnToTile(this)) {
-                            lastLoc[0] = getX();
-                            lastLoc[1] = getY();
+                            lastMove = MOVE_RIGHT;
                             setX(getX() + 1);
+                            return true;
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
                         Output.write("Entity at edge of map!a");
@@ -149,9 +150,9 @@ public class Entity {
                 case MOVE_DOWN:
                     try {
                         if (WorldData.tiles[getX()][getY() + 1].movingOnToTile(this)) {
-                            lastLoc[0] = getX();
-                            lastLoc[1] = getY();
+                            lastMove = MOVE_DOWN;
                             setY(getY() + 1);
+                            return true;
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
                         Output.write("Entity at edge of map!a");
@@ -162,9 +163,9 @@ public class Entity {
                 case MOVE_LEFT:
                     try {
                         if (WorldData.tiles[getX() - 1][getY()].movingOnToTile(this)) {
-                            lastLoc[0] = getX();
-                            lastLoc[1] = getY();
+                            lastMove = MOVE_LEFT;
                             setX(getX() - 1);
+                            return true;
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
                         Output.write("Entity at edge of map!a");
@@ -173,5 +174,6 @@ public class Entity {
                     }
                     break;
              }
+        return false;
     }
 }

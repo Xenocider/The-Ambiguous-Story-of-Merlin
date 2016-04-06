@@ -64,14 +64,17 @@ public class DataReader {
                         int i = -1;
                         String rotation = null;
                         String flip = null;
+                        int instance = 0;
+
                         try {
-                            flip = id.substring(id.length()-1);
-                            rotation = id.substring(id.length()-4,id.length()-3);
-                            i = Integer.parseInt(id.substring(0,id.length()-6));
+                            instance = Integer.parseInt(id.substring(id.length()-1));
+                            flip = id.substring(id.length() - 4, id.length() - 3);
+                            rotation = id.substring(id.length() - 7, id.length() - 6);
+                            i = Integer.parseInt(id.substring(0, id.length() - 9));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        Tile.Flip f = null;
+                        Tile.Flip f = Tile.Flip.DEFAULT;
                         switch (flip) {
                             case "b":
                                 f = Tile.Flip.HORIZONTAL;
@@ -83,16 +86,16 @@ public class DataReader {
                         if (i > -1) {
                             switch (rotation) {
                                 case "b":
-                                    loadTile(i, x, y, Tile.Rotation.RIGHT,f);
+                                    loadTile(i, instance, x, y, Tile.Rotation.RIGHT,f);
                                     break;
                                 case "c":
-                                    loadTile(i, x, y, Tile.Rotation.DOWN,f);
+                                    loadTile(i, instance, x, y, Tile.Rotation.DOWN,f);
                                     break;
                                 case "d":
-                                    loadTile(i, x, y, Tile.Rotation.LEFT,f);
+                                    loadTile(i, instance, x, y, Tile.Rotation.LEFT,f);
                                     break;
                                 default: //this includes the "a" rotation
-                                    loadTile(i, x, y, Tile.Rotation.UP,f);
+                                    loadTile(i, instance, x, y, Tile.Rotation.UP,f);
                                     break;
                             }
                             Output.write("Adding tile to " + x + " " + y);
@@ -111,14 +114,17 @@ public class DataReader {
                         int i = -1;
                         String rotation = null;
                         String flip = null;
+                        int instance = 0;
+
                         try {
-                            flip = id.substring(id.length()-1);
-                            rotation = id.substring(id.length()-4,id.length()-3);
-                            i = Integer.parseInt(id.substring(0,id.length()-6));
+                            instance = Integer.parseInt(id.substring(id.length()-1));
+                            flip = id.substring(id.length() - 4, id.length() - 3);
+                            rotation = id.substring(id.length() - 7, id.length() - 6);
+                            i = Integer.parseInt(id.substring(0, id.length() - 9));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        Tile.Flip f = null;
+                        Tile.Flip f = Tile.Flip.DEFAULT;
                         switch (flip) {
                             case "b":
                                 f = Tile.Flip.HORIZONTAL;
@@ -130,16 +136,16 @@ public class DataReader {
                         if (i > -1) {
                                 switch (rotation) {
                                     case "b":
-                                        loadTile(i, x, y, Tile.Rotation.RIGHT,f);
+                                        loadTile(i, instance, x, y, Tile.Rotation.RIGHT,f);
                                         break;
                                     case "c":
-                                        loadTile(i, x, y, Tile.Rotation.DOWN,f);
+                                        loadTile(i, instance, x, y, Tile.Rotation.DOWN,f);
                                         break;
                                     case "d":
-                                        loadTile(i, x, y, Tile.Rotation.LEFT,f);
+                                        loadTile(i, instance, x, y, Tile.Rotation.LEFT,f);
                                         break;
                                     default: //this includes the "a" rotation
-                                        loadTile(i, x, y, Tile.Rotation.UP,f);
+                                        loadTile(i, instance, x, y, Tile.Rotation.UP,f);
                                         break;
                                 }
                                 Output.write("Adding tile to " + x + " " + y);
@@ -185,6 +191,7 @@ public class DataReader {
                 x = Integer.parseInt(line);
 
         } catch (FileNotFoundException e) {
+            x = 50;
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -206,6 +213,7 @@ public class DataReader {
             x = Integer.parseInt(line);
 
         } catch (FileNotFoundException e) {
+            x = 50;
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -213,13 +221,16 @@ public class DataReader {
         return x;
     }
 
-    private static void loadTile(int id, int x, int y, Tile.Rotation rotation, Tile.Flip f) {
+    private static void loadTile(int id, int instance, int x, int y, Tile.Rotation rotation, Tile.Flip f) {
         Tile tile = null;
         Constructor c = null;
         try {
             tile = (Tile) Class.forName("workexpIT.merlin.tiles."+ Reference.tileIds[id]).newInstance();
             tile.setRotation(rotation);
             tile.setFlip(f);
+            tile.setInstance(instance);
+            tile.x = x;
+            tile.y = y;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -378,14 +389,17 @@ public class DataReader {
                         int i = -1;
                         String rotation = null;
                         String flip = null;
+                        int instance = 0;
+
                         try {
-                            flip = id.substring(id.length()-1);
-                            rotation = id.substring(id.length()-4,id.length()-3);
-                            i = Integer.parseInt(id.substring(0,id.length()-6));
+                            instance = Integer.parseInt(id.substring(id.length()-1));
+                            flip = id.substring(id.length() - 4, id.length() - 3);
+                            rotation = id.substring(id.length() - 7, id.length() - 6);
+                            i = Integer.parseInt(id.substring(0, id.length() - 9));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        Tile.Flip f = null;
+                        Tile.Flip f = Tile.Flip.DEFAULT;
                         switch (flip) {
                             case "b":
                                 f = Tile.Flip.HORIZONTAL;
@@ -397,16 +411,16 @@ public class DataReader {
                         if (i > -1) {
                             switch (rotation) {
                                 case "b":
-                                    loadTile(i, x, y, Tile.Rotation.RIGHT,f);
+                                    loadTile(i, instance, x, y, Tile.Rotation.RIGHT,f);
                                     break;
                                 case "c":
-                                    loadTile(i, x, y, Tile.Rotation.DOWN,f);
+                                    loadTile(i, instance, x, y, Tile.Rotation.DOWN,f);
                                     break;
                                 case "d":
-                                    loadTile(i, x, y, Tile.Rotation.LEFT,f);
+                                    loadTile(i, instance, x, y, Tile.Rotation.LEFT,f);
                                     break;
                                 default: //this includes the "a" rotation
-                                    loadTile(i, x, y, Tile.Rotation.UP,f);
+                                    loadTile(i, instance, x, y, Tile.Rotation.UP,f);
                                     break;
                             }
                             Output.write("Adding tile to " + x + " " + y);
@@ -424,10 +438,14 @@ public class DataReader {
                         int i = -1;
                         String rotation = null;
                         String flip = null;
+                        int instance = 0;
+
                         try {
-                            flip = id.substring(id.length() - 1);
-                            rotation = id.substring(id.length() - 4, id.length() - 3);
-                            i = Integer.parseInt(id.substring(0, id.length() - 6));
+                            instance = Integer.parseInt(id.substring(id.length()-1));
+                            flip = id.substring(id.length() - 4, id.length() - 3);
+                            rotation = id.substring(id.length() - 7, id.length() - 6);
+                            i = Integer.parseInt(id.substring(0, id.length() - 9));
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -443,16 +461,16 @@ public class DataReader {
                         if (i > -1) {
                             switch (rotation) {
                                 case "b":
-                                    loadTile(i, x, y, Tile.Rotation.RIGHT, f);
+                                    loadTile(i, instance, x, y, Tile.Rotation.RIGHT, f);
                                     break;
                                 case "c":
-                                    loadTile(i, x, y, Tile.Rotation.DOWN, f);
+                                    loadTile(i, instance, x, y, Tile.Rotation.DOWN, f);
                                     break;
                                 case "d":
-                                    loadTile(i, x, y, Tile.Rotation.LEFT, f);
+                                    loadTile(i, instance, x, y, Tile.Rotation.LEFT, f);
                                     break;
                                 default: //this includes the "a" rotation
-                                    loadTile(i, x, y, Tile.Rotation.UP, f);
+                                    loadTile(i, instance, x, y, Tile.Rotation.UP, f);
                                     break;
                             }
                             Output.write("Adding tile to " + x + " " + y);
@@ -513,6 +531,7 @@ public class DataReader {
                 try {
                     String rot = "a";
                     String flip = "a";
+                    int instance = WorldData.tiles[a][b].instance;
                     switch (WorldData.tiles[a][b].rotation) {
                         case UP:
                             rot = "a";
@@ -537,7 +556,7 @@ public class DataReader {
                     }
                     for (int i = 0; i < Reference.tileIds.length; i ++ ) {
                         if (WorldData.tiles[a][b].getClass().getSimpleName().equals(Reference.tileIds[i])) {
-                            writer.write(i+rot+flip+",");
+                            writer.write(i+rot+flip+instance+",");
                             Output.write(WorldData.tiles[a][b].getClass().getSimpleName() + " at " + a + ", " + b);
                         }
                     }

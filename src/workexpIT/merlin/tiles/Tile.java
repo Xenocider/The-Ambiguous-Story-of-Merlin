@@ -3,7 +3,9 @@ package workexpIT.merlin.tiles;
 
 import workexpIT.merlin.GameLoop;
 import workexpIT.merlin.Output;
+import workexpIT.merlin.Reference;
 import workexpIT.merlin.data.DataReader;
+import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.entities.Player;
@@ -16,10 +18,22 @@ import java.nio.ByteBuffer;
  */
 public class Tile {
 
-    public Tile(BufferedImage texture) {
-        this.texture = texture;
+    public Tile(int numOfInstances) {
+        maxInstances = numOfInstances;
+        this.texture = ImageReader.loadImage("resources/graphics/materials/"+ this.getClass().getSimpleName() +"" + instance + ".png");
     }
     protected BufferedImage texture;
+
+    public int maxInstances = 1;
+    public int instance = 0;
+
+    public int x;
+    public int y;
+
+    public void setInstance(int instance) {
+        this.instance = instance;
+        texture = ImageReader.loadImage("resources/graphics/materials/"+ this.getClass().getSimpleName()+"" + instance + ".png");
+    }
 
     public enum Rotation {UP,RIGHT,DOWN,LEFT}
     public enum Flip {HORIZONTAL,VERTICAL,DEFAULT}
@@ -47,14 +61,19 @@ public class Tile {
 
 
     public boolean movingOnToTile(Entity entity) {
-        boolean status = true;
+        for (int i = 0; i < WorldData.entities.size(); i ++) {
+            if (WorldData.entities.get(i).getX() == x && WorldData.entities.get(i).getY() == y) {
+                GameLoop.entityInteract(WorldData.entities.get(i),entity);
+                return false;
+            }
+        }
         if (!movingOnToTileExtra(entity)) {
-            status = false;
+            return false;
         }
         if (checkForDoor(entity)) {
-            status = false;
+            return false;
         }
-        return status;
+        return true;
     }
 
     public boolean movingOnToTileExtra(Entity e) {

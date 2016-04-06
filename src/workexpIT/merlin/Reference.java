@@ -7,6 +7,12 @@ public class Reference {
 
     //Tile IDs
     public static final String[] tileIds = {
-            "Bush0"
+            "TestTile",
+            "Grass",
+            "Bush",
+            "Path",
+            "WoodFence",
+            "Water"
+
     };
 }
