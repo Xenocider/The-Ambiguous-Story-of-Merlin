@@ -1,5 +1,6 @@
 package workexpIT.merlin.entities;
 
+import workexpIT.merlin.GameLoop;
 import workexpIT.merlin.Output;
 import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
@@ -42,6 +43,7 @@ public class George extends Entity {
                                 if (move(Entity.MOVE_RIGHT)) {
                                     go = false;
                                 }
+                                if (GameLoop.pause) {go = false;}
                                 move(Entity.MOVE_RIGHT);
                                 move(Entity.MOVE_RIGHT);
                             }
@@ -49,9 +51,11 @@ public class George extends Entity {
                             if (lastMove != MOVE_RIGHT) {
                                 if (move(Entity.MOVE_LEFT)) {
                                     go = false;
-                                    move(Entity.MOVE_LEFT);
-                                    move(Entity.MOVE_LEFT);
                                 }
+                                if (GameLoop.pause) {go = false;}
+
+                                move(Entity.MOVE_LEFT);
+                                    move(Entity.MOVE_LEFT);
                             }
                         }
                     }
@@ -62,6 +66,8 @@ public class George extends Entity {
                                 if (move(Entity.MOVE_DOWN)) {
                                     go = false;
                                 }
+                                if (GameLoop.pause) {go = false;}
+
                                 move(Entity.MOVE_DOWN);
                                 move(Entity.MOVE_DOWN);
                             }
@@ -70,6 +76,8 @@ public class George extends Entity {
                                 if (move(Entity.MOVE_UP)) {
                                     go = false;
                                 }
+                                if (GameLoop.pause) {go = false;}
+
                                 move(Entity.MOVE_UP);
                                 move(Entity.MOVE_UP);
                             }
@@ -83,6 +91,8 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_DOWN)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_DOWN);
                                     move(Entity.MOVE_DOWN);
                                 }
@@ -91,6 +101,8 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_UP)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_UP);
                                     move(Entity.MOVE_UP);
                                 }
@@ -102,6 +114,8 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_RIGHT)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_RIGHT);
                                     move(Entity.MOVE_RIGHT);
                                 }
@@ -109,9 +123,10 @@ public class George extends Entity {
                                 if (lastMove != MOVE_RIGHT) {
                                     if (move(Entity.MOVE_LEFT)) {
                                         go = false;
-                                        move(Entity.MOVE_LEFT);
-                                        move(Entity.MOVE_LEFT);
                                     }
+                                        if (GameLoop.pause) {go = false;}
+                                        move(Entity.MOVE_LEFT);
+                                        move(Entity.MOVE_LEFT);
                                 }
                             }
                         }
@@ -125,6 +140,8 @@ public class George extends Entity {
                             if (move(Entity.MOVE_RIGHT)) {
                                 go = false;
                             }
+                            if (GameLoop.pause) {go = false;}
+
                             move(Entity.MOVE_RIGHT);
                             move(Entity.MOVE_RIGHT);
                         }
@@ -134,6 +151,8 @@ public class George extends Entity {
                             if (move(Entity.MOVE_LEFT)) {
                                 go = false;
                             }
+                            if (GameLoop.pause) {go = false;}
+
                             move(Entity.MOVE_LEFT);
                             move(Entity.MOVE_LEFT);
                         }
@@ -147,6 +166,8 @@ public class George extends Entity {
                             if (move(Entity.MOVE_DOWN)) {
                                 go = false;
                             }
+                            if (GameLoop.pause) {go = false;}
+
                             move(Entity.MOVE_DOWN);
                             move(Entity.MOVE_DOWN);
                         }
@@ -155,6 +176,8 @@ public class George extends Entity {
                             if (move(Entity.MOVE_UP)) {
                                 go = false;
                             }
+                            if (GameLoop.pause) {go = false;}
+
                             move(Entity.MOVE_UP);
                             move(Entity.MOVE_UP);
                         }
@@ -170,6 +193,8 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_DOWN)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_DOWN);
                                     move(Entity.MOVE_DOWN);
                                 }
@@ -178,8 +203,36 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_UP)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_UP);
                                     move(Entity.MOVE_UP);
+                                }
+                            }
+                            else if (dY == 0) {
+                                int action = (int) (Math.random());
+                                if (action == 0) {
+                                    if (lastMove != MOVE_UP) {
+
+                                        if (move(Entity.MOVE_DOWN)) {
+                                            go = false;
+                                        }
+                                        if (GameLoop.pause) {go = false;}
+
+                                        move(Entity.MOVE_DOWN);
+                                        move(Entity.MOVE_DOWN);
+                                    }
+                                }
+                                else {
+                                    if (lastMove != MOVE_DOWN) {
+                                        if (move(Entity.MOVE_UP)) {
+                                            go = false;
+                                        }
+                                        if (GameLoop.pause) {go = false;}
+
+                                        move(Entity.MOVE_UP);
+                                        move(Entity.MOVE_UP);
+                                    }
                                 }
                             }
                         }
@@ -191,6 +244,8 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_RIGHT)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_RIGHT);
                                     move(Entity.MOVE_RIGHT);
                                 }
@@ -201,8 +256,36 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_LEFT)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_LEFT);
                                     move(Entity.MOVE_LEFT);
+                                }
+                            }
+                            else if (dX == 0) {
+                                int action = (int) (Math.random());
+                                if (action == 0) {
+                                    if (lastMove != MOVE_LEFT) {
+
+                                        if (move(Entity.MOVE_RIGHT)) {
+                                            go = false;
+                                        }
+                                        if (GameLoop.pause) {go = false;}
+
+                                        move(Entity.MOVE_RIGHT);
+                                        move(Entity.MOVE_RIGHT);
+                                    }
+                                }
+                                else {
+                                    if (lastMove != MOVE_RIGHT) {
+                                        if (move(Entity.MOVE_LEFT)) {
+                                            go = false;
+                                        }
+                                        if (GameLoop.pause) {go = false;}
+
+                                        move(Entity.MOVE_LEFT);
+                                        move(Entity.MOVE_LEFT);
+                                    }
                                 }
                             }
                         }
@@ -218,6 +301,8 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_LEFT)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_LEFT);
                                     move(Entity.MOVE_LEFT);
                                 }
@@ -227,6 +312,8 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_RIGHT)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_RIGHT);
                                     move(Entity.MOVE_RIGHT);
                                 }
@@ -240,6 +327,8 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_UP)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_UP);
                                     move(Entity.MOVE_UP);
                                 }
@@ -249,6 +338,8 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_DOWN)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_DOWN);
                                     move(Entity.MOVE_DOWN);
                                 }
@@ -265,6 +356,8 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_UP)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_UP);
                                     move(Entity.MOVE_UP);
                                 }
@@ -273,6 +366,8 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_DOWN)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_DOWN);
                                     move(Entity.MOVE_DOWN);
                                 }
@@ -285,6 +380,8 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_LEFT)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_LEFT);
                                     move(Entity.MOVE_LEFT);
                                 }
@@ -293,12 +390,110 @@ public class George extends Entity {
                                     if (move(Entity.MOVE_RIGHT)) {
                                         go = false;
                                     }
+                                    if (GameLoop.pause) {go = false;}
+
                                     move(Entity.MOVE_RIGHT);
                                     move(Entity.MOVE_RIGHT);
                                 }
                             }
                         }
                     }
+                //If still no luck.... somehow? Randomly choose between all direction not travelled previously and if still not go back the way they came
+                if (go) {
+                    boolean trying = true;
+                    boolean up = false;
+                    boolean right = false;
+                    boolean down = false;
+                    boolean left = false;
+                    switch (lastMove) {
+                        case Entity.MOVE_UP:
+                            down = true;
+                            break;
+                        case Entity.MOVE_RIGHT:
+                            left = true;
+                            break;
+                        case Entity.MOVE_DOWN:
+                            up = true;
+                            break;
+                        case Entity.MOVE_LEFT:
+                            right = true;
+                    }
+                    while (trying) {
+                        int action = (int) (Math.random() * 3);
+                        switch (action) {
+                            case MOVE_UP:
+                                if (move(MOVE_UP)) {
+                                    trying = false;
+                                    go = false;
+                                    move(MOVE_UP);
+                                    move(MOVE_UP);
+                                }
+                                else {
+                                    up = true;
+                                }
+                                break;
+                            case MOVE_RIGHT:
+                                if (move(MOVE_RIGHT)) {
+                                    trying = false;
+                                    go = false;
+                                    move(MOVE_RIGHT);
+                                    move(MOVE_RIGHT);
+                                }
+                                else {
+                                    right = true;
+                                }
+                                break;
+                            case MOVE_DOWN:
+                                if (move(MOVE_DOWN)) {
+                                    trying = false;
+                                    go = false;
+                                    move(MOVE_DOWN);
+                                    move(MOVE_DOWN);
+                                }
+                                else {
+                                    down = true;
+                                }
+                                break;
+                            case MOVE_LEFT:
+                                if (move(MOVE_LEFT)) {
+                                    trying = false;
+                                    go = false;
+                                    move(MOVE_LEFT);
+                                    move(MOVE_LEFT);
+                                }
+                                else {
+                                    left = true;
+                                }
+                                break;
+                        }
+                        if (up & right & down & left) {
+                            trying = false;
+                            switch (lastMove) {
+                                case Entity.MOVE_UP:
+                                    move(MOVE_DOWN);
+                                    move(MOVE_DOWN);
+                                    move(MOVE_DOWN);
+                                    break;
+                                case Entity.MOVE_RIGHT:
+                                    move(MOVE_LEFT);
+                                    move(MOVE_LEFT);
+                                    move(MOVE_LEFT);
+                                    break;
+                                case Entity.MOVE_DOWN:
+                                    move(MOVE_UP);
+                                    move(MOVE_UP);
+                                    move(MOVE_UP);
+                                    break;
+                                case Entity.MOVE_LEFT:
+                                    move(MOVE_RIGHT);
+                                    move(MOVE_RIGHT);
+                                    move(MOVE_RIGHT);
+                            }
+
+                        }
+
+                    }
+                }
         }
     }
 

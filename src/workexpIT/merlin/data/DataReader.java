@@ -57,49 +57,55 @@ public class DataReader {
                 if (value == 10) {
                     String id = data.toString().substring(1, data.toString().length() - 1);
                     //PC only v
-                    //if (Merlin.platform.equals("pc")) {id = id.substring(0, id.length()-3);}
-                    //PC only ^
-                    if (!id.equals("")) {
-                        Output.write(id + "");
-                        int i = -1;
-                        String rotation = null;
-                        String flip = null;
-                        int instance = 0;
+                    //id = id.substring(0, id.length()-3);
+                    boolean isPC = true;
+                    if (isPC) {
+                        data.clear();
+                    }
+                    else {
+                        //PC only ^
+                        if (!id.equals("")) {
+                            Output.write("Tile data = " + id);
+                            int i = -1;
+                            String rotation = null;
+                            String flip = null;
+                            int instance = 0;
 
-                        try {
-                            instance = Integer.parseInt(id.substring(id.length()-1));
-                            flip = id.substring(id.length() - 4, id.length() - 3);
-                            rotation = id.substring(id.length() - 7, id.length() - 6);
-                            i = Integer.parseInt(id.substring(0, id.length() - 9));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        Tile.Flip f = Tile.Flip.DEFAULT;
-                        switch (flip) {
-                            case "b":
-                                f = Tile.Flip.HORIZONTAL;
-                                break;
-                            case "c":
-                                f = Tile.Flip.VERTICAL;
-                                break;
-                        }
-                        if (i > -1) {
-                            switch (rotation) {
+                            try {
+                                instance = Integer.parseInt(id.substring(id.length() - 1));
+                                flip = id.substring(id.length() - 4, id.length() - 3);
+                                rotation = id.substring(id.length() - 7, id.length() - 6);
+                                i = Integer.parseInt(id.substring(0, id.length() - 9));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            Tile.Flip f = Tile.Flip.DEFAULT;
+                            switch (flip) {
                                 case "b":
-                                    loadTile(i, instance, x, y, Tile.Rotation.RIGHT,f);
+                                    f = Tile.Flip.HORIZONTAL;
                                     break;
                                 case "c":
-                                    loadTile(i, instance, x, y, Tile.Rotation.DOWN,f);
-                                    break;
-                                case "d":
-                                    loadTile(i, instance, x, y, Tile.Rotation.LEFT,f);
-                                    break;
-                                default: //this includes the "a" rotation
-                                    loadTile(i, instance, x, y, Tile.Rotation.UP,f);
+                                    f = Tile.Flip.VERTICAL;
                                     break;
                             }
-                            Output.write("Adding tile to " + x + " " + y);
+                            if (i > -1) {
+                                switch (rotation) {
+                                    case "b":
+                                        loadTile(i, instance, x, y, Tile.Rotation.RIGHT, f);
+                                        break;
+                                    case "c":
+                                        loadTile(i, instance, x, y, Tile.Rotation.DOWN, f);
+                                        break;
+                                    case "d":
+                                        loadTile(i, instance, x, y, Tile.Rotation.LEFT, f);
+                                        break;
+                                    default: //this includes the "a" rotation
+                                        loadTile(i, instance, x, y, Tile.Rotation.UP, f);
+                                        break;
+                                }
+                                Output.write("Adding tile to " + x + " " + y);
 
+                            }
                         }
                     }
                     x = 0;
