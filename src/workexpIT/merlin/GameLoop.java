@@ -4,6 +4,7 @@ import workexpIT.merlin.attacks.Attack;
 import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
+import workexpIT.merlin.entities.Player;
 import workexpIT.merlin.graphics.AttackAnimator;
 import workexpIT.merlin.graphics.FaintAnimator;
 import workexpIT.merlin.graphics.JavaDrawer;
@@ -39,6 +40,8 @@ public class GameLoop implements Runnable{
             movePlayer();
 
             runAI();
+            pause = true;
+            JavaDrawer.runAnimation();
 
         }
         else if (Merlin.mode.equals(Merlin.Mode.BATTLE) && !pause) {
@@ -218,6 +221,7 @@ public class GameLoop implements Runnable{
         statusBar = ImageReader.loadImage("resources/graphics/battle/entityStatusBackground.png");
         menu = ImageReader.loadImage("resources/graphics/battle/menuBackground.png");
         button = ImageReader.loadImage("resources/graphics/battle/buttonBackground.png");
+        Player.loadSprites();
         for (int i =0; i < Reference.tileIds.length; i++) {
             Tile tile = null;
             try {

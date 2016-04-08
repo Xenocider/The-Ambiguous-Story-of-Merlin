@@ -9,6 +9,7 @@ import workexpIT.merlin.attacks.Attack;
 import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
+import workexpIT.merlin.listeners.JavaKeyListener;
 import workexpIT.merlin.listeners.KeyBinder;
 import workexpIT.merlin.listeners.MouseListener;
 import workexpIT.merlin.tiles.Tile;
@@ -33,7 +34,12 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int wh = 800;
     public static float scale = 2;
 
+    public static int count = 0;
+    public static boolean runAnimation = false;
+
     public static int editorMenuSize = 200;
+    public static int walkingStage = 1;
+    public static  int walkingCount = 0;
 
     public static void init() {
         createWindow();
@@ -44,7 +50,16 @@ public class JavaDrawer extends JPanel implements Runnable {
         //clearScreen();
         //drawTiles(frame.getGraphics());
         //drawEntities(frame.getGraphics());
+        count = count + 1;
+        if (count == 18) {
+            count = 0;
+            changeAnimationStage();
+        }
         frame.repaint();
+    }
+
+    private void changeAnimationStage() {
+        WorldData.getPlayer().changeAnimationStage();
     }
 
     private void moveScreen() {
@@ -148,22 +163,77 @@ public class JavaDrawer extends JPanel implements Runnable {
     }
 
     private void drawEntities(Graphics g) {
+        if (runAnimation) {
+            walkingCount = walkingCount + 1;
+            if (walkingCount == 10) {
+                walkingCount = 0;
+                walkingStage = walkingStage + 1;
+            }
+            if (walkingStage == 22) {
+                runAnimation = false;
+                walkingCount = 0;
+                walkingStage = 1;
+                GameLoop.pause = false;
+            }
+        }
         //Output.write("Drawing Entities");
         for (int i = 0; i < WorldData.entities.size(); i++) {
-            if (WorldData.entities.get(i).spriteId == -1) {
-                BufferedImage sprite = scale(WorldData.entities.get(i).getSprites()[0],scale,scale);
-                int x = WorldData.entities.get(i).getX();
+            if (WorldData.entities.get(i).equals(WorldData.getPlayer())) {
+                //if (Merlin.keyListener.downTemp)
+                BufferedImage sprite = null;
+                switch (WorldData.getPlayer().lastMove){
+                    case Entity.MOVE_UP:
+                        if (WorldData.getPlayer().moving) {
+                            sprite = scale(WorldData.getPlayer().upWalkingSprites[WorldData.getPlayer().animationStage], scale, scale);
+                        }
+                        else {
+                            sprite = scale(WorldData.getPlayer().upSprite, scale, scale);
+                        }
+                        break;
+                    case Entity.MOVE_RIGHT:
+                        if (WorldData.getPlayer().moving) {
+                            sprite = scale(WorldData.getPlayer().rightWalkingSprites[WorldData.getPlayer().animationStage], scale, scale);
+                        }
+                        else {
+                            sprite = scale(WorldData.getPlayer().rightSprite, scale, scale);
+                        }                        break;
+                    case Entity.MOVE_DOWN:
+                        if (WorldData.getPlayer().moving) {
+                            Output.write("ANIMATING with stage = " + WorldData.getPlayer().animationStage);
+                            sprite = scale(WorldData.getPlayer().downWalkingSprites[WorldData.getPlayer().animationStage], scale, scale);
+                        }
+                        else {
+                            sprite = scale(WorldData.getPlayer().downSprite, scale, scale);
+                        }                      break;
+                    case Entity.MOVE_LEFT:
+                        if (WorldData.getPlayer().moving) {
+                            sprite = scale(WorldData.getPlayer().leftWalkingSprites[WorldData.getPlayer().animationStage], scale, scale);
+                        }
+                        else {
+                            sprite = scale(WorldData.getPlayer().leftSprite, scale, scale);
+                        }                        break;
+                }
+                int x = WorldData.entities.get(i).lastLoc[0] + (WorldData.entities.get(i).getX() - WorldData.entities.get(i).lastLoc[0])*walkingStage/walkingStage;
                 int y = WorldData.entities.get(i).getY();
                 int w = sprite.getWidth();
                 int h = sprite.getHeight();
-                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale)+frame.getWidth()/2, (int)((y * imageSize - h/scale + offsetY)*scale)+frame.getHeight()/2,null);
+                g.drawImage(sprite, (int) ((x + offsetX) * scale) + frame.getWidth() / 2, (int) ((y * imageSize - h / scale + offsetY) * scale) + frame.getHeight() / 2, null);
             } else {
-                BufferedImage sprite = scale(WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId],scale,scale);
-                int x = WorldData.entities.get(i).getX();
-                int y = WorldData.entities.get(i).getY();
-                int w = sprite.getWidth();
-                int h = sprite.getHeight();
-                g.drawImage(sprite,(int)((x * imageSize + offsetX)*scale)+frame.getWidth()/2, (int)((y * imageSize - h/scale + offsetY)*scale)+frame.getHeight()/2,null);
+                if (WorldData.entities.get(i).spriteId == -1) {
+                    BufferedImage sprite = scale(WorldData.entities.get(i).getSprites()[0], scale, scale);
+                    int x = WorldData.entities.get(i).getX();
+                    int y = WorldData.entities.get(i).getY();
+                    int w = sprite.getWidth();
+                    int h = sprite.getHeight();
+                    g.drawImage(sprite, (int) ((x * imageSize + offsetX) * scale) + frame.getWidth() / 2, (int) ((y * imageSize - h / scale + offsetY) * scale) + frame.getHeight() / 2, null);
+                } else {
+                    BufferedImage sprite = scale(WorldData.entities.get(i).getSprites()[WorldData.entities.get(i).spriteId], scale, scale);
+                    int x = WorldData.entities.get(i).getX();
+                    int y = WorldData.entities.get(i).getY();
+                    int w = sprite.getWidth();
+                    int h = sprite.getHeight();
+                    g.drawImage(sprite, (int) ((x * imageSize + offsetX) * scale) + frame.getWidth() / 2, (int) ((y * imageSize - h / scale + offsetY) * scale) + frame.getHeight() / 2, null);
+                }
             }
         }
     }
@@ -506,5 +576,9 @@ public class JavaDrawer extends JPanel implements Runnable {
                 zoomCount = 0;
             }
         }
+    }
+
+    public static void runAnimation() {
+        runAnimation = true;
     }
 }

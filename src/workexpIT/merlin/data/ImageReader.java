@@ -21,4 +21,9 @@ public class ImageReader {
         return image;
     }
 
+    public static BufferedImage cropImage(BufferedImage src, int x,int y, int w, int h) {
+        BufferedImage dest = src.getSubimage(x, y, w, h);
+        return dest;
+    }
+
 }

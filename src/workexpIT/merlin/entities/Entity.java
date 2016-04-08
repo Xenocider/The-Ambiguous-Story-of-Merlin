@@ -37,9 +37,9 @@ public class Entity {
     public BufferedImage[] sprites;
     public BufferedImage battleSprite;
     public static int numOfSprites;
-    public boolean moving;
     public int[] lastLoc = new int[2];
     public Attack[] attacks = new Attack[6];
+    public boolean moving = true;
 
     public static final int STATE_NEUTRAL = 0;
     public static final int STATE_FRIENDLY = 1;
@@ -55,6 +55,8 @@ public class Entity {
     public int fortitude = 10;
     public int speed = 10;
     public int lastMove;
+    public int animationStage = 0;
+    public int maxAnimationStage = 3;
 
 
     public Entity(int x, int y, String name, int state, int level, BufferedImage[] sprites) {
@@ -175,5 +177,13 @@ public class Entity {
                     break;
              }
         return false;
+    }
+
+    public void changeAnimationStage() {
+        Output.write("Changing animation stage");
+        animationStage = animationStage + 1;
+        if (animationStage > maxAnimationStage) {
+            animationStage = 0;
+        }
     }
 }
