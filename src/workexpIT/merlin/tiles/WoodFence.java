@@ -7,7 +7,7 @@ import workexpIT.merlin.graphics.Drawer;
 public class WoodFence extends Tile {
 
     public WoodFence() {
-        super(4);
+        super(5);
     }
 
     @Override
