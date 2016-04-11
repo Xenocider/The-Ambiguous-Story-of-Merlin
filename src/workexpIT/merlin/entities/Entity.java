@@ -34,7 +34,7 @@ public class Entity {
     protected int x;
     protected int y;
     protected String name;
-    public BufferedImage[] sprites;
+    public BufferedImage sprites;
     public BufferedImage battleSprite;
     public static int numOfSprites;
     public int[] lastLoc = new int[2];
@@ -58,16 +58,34 @@ public class Entity {
     public int animationStage = 0;
     public int maxAnimationStage = 3;
 
+    //Sprites
+    private final int[] downWalkingSpritesId = {3,4,3,5};
+    private final int[] upWalkingSpritesId = {0,1,0,2};
+    private final int[] rightWalkingSpritesId = {9,10,9,11};
+    private final int[] leftWalkingSpritesId = {6,7,6,8};
+    private final int upSpriteId = 0;
+    private final int downSpriteId = 3;
+    private final int rightSpriteId = 9;
+    private final int leftSpriteId = 6;
 
-    public Entity(int x, int y, String name, int state, int level, BufferedImage[] sprites) {
+    public BufferedImage[] downWalkingSprites = new BufferedImage[downWalkingSpritesId.length];
+    public BufferedImage[] upWalkingSprites = new BufferedImage[upWalkingSpritesId.length];
+    public BufferedImage[] rightWalkingSprites = new BufferedImage[rightWalkingSpritesId.length];
+    public BufferedImage[] leftWalkingSprites = new BufferedImage[leftWalkingSpritesId.length];
+    public BufferedImage upSprite;
+    public BufferedImage downSprite;
+    public BufferedImage rightSprite;
+    public BufferedImage leftSprite;
+
+
+    public Entity(int x, int y, String name, int state, int level, BufferedImage sprites) {
         this.x = x;
         this.y = y;
         this.name = name;
         this.level = level;
         this.state = state;
         this.sprites = sprites;
-        battleSprite = ImageReader.loadImage("resources/graphics/charactersprites/"+this.getClass().getSimpleName()+"/battle.png");
-        Output.write("resources/graphics/charactersprites/"+this.getClass().getSimpleName()+"/battle.png");
+        battleSprite = ImageReader.loadImage("resources/graphics/charactersprites/battle/"+getClass().getSimpleName()+".png");
         health = (int)(baseHealth+factorHealth*level);
         healthMax = (int)(baseHealth+factorHealth*level);
         mana = (int)(baseMana+factorMana*level);
@@ -75,6 +93,26 @@ public class Entity {
         manaRegen = (int)(baseManaRegen+factorManaRegen*level);
         fortitude = (int)(baseFortitude+factorFortitude*level);
         speed = (int)(baseSpeed+factorSpeed*level);
+        loadSprites();
+    }
+
+    public void loadSprites() {
+        upSprite = ImageReader.cropImage(sprites,upSpriteId*16,0,16,32);
+        downSprite = ImageReader.cropImage(sprites,downSpriteId*16,0,16,32);
+        rightSprite = ImageReader.cropImage(sprites,rightSpriteId*16,0,16,32);
+        leftSprite = ImageReader.cropImage(sprites,leftSpriteId*16,0,16,32);
+        for (int i = 0; i < upWalkingSpritesId.length; i++) {
+            upWalkingSprites[i] = ImageReader.cropImage(sprites, (upWalkingSpritesId[i]) * 16, 0, 16, 32);
+        }
+        for (int i = 0; i < downWalkingSpritesId.length; i++) {
+            downWalkingSprites[i] = ImageReader.cropImage(sprites, (downWalkingSpritesId[i]) * 16, 0, 16, 32);
+        }
+        for (int i = 0; i < rightWalkingSpritesId.length; i++) {
+            rightWalkingSprites[i] = ImageReader.cropImage(sprites, (rightWalkingSpritesId[i]) * 16, 0, 16, 32);
+        }
+        for (int i = 0; i < leftWalkingSpritesId.length; i++) {
+            leftWalkingSprites[i] = ImageReader.cropImage(sprites, (leftWalkingSpritesId[i]) * 16, 0, 16, 32);
+        }
     }
 
     public String getName() {
@@ -97,7 +135,7 @@ public class Entity {
         this.y = y;
     }
 
-    public BufferedImage[] getSprites() {
+    public BufferedImage getSprites() {
         return sprites;
     }
 
@@ -122,8 +160,6 @@ public class Entity {
 
     public boolean move(int direction) {
         //0 = up, 1 = right, 2 = down, 3 = left
-        lastLoc[0] = x;
-        lastLoc[1] = y;
             switch (direction) {
                 case MOVE_UP:
                     try {

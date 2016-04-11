@@ -37,6 +37,7 @@ public class GameLoop implements Runnable{
     public void run() {
 
         if (Merlin.mode.equals(Merlin.Mode.GAME) && !pause) {
+            setLastLocs();
             movePlayer();
 
             runAI();
@@ -46,6 +47,13 @@ public class GameLoop implements Runnable{
         }
         else if (Merlin.mode.equals(Merlin.Mode.BATTLE) && !pause) {
             runTurn();
+        }
+    }
+
+    private void setLastLocs() {
+        for (int i = 0; i < WorldData.entities.size(); i++) {
+            WorldData.entities.get(i).lastLoc[0] = WorldData.entities.get(i).getX();
+            WorldData.entities.get(i).lastLoc[1] = WorldData.entities.get(i).getY();
         }
     }
 
@@ -221,7 +229,6 @@ public class GameLoop implements Runnable{
         statusBar = ImageReader.loadImage("resources/graphics/battle/entityStatusBackground.png");
         menu = ImageReader.loadImage("resources/graphics/battle/menuBackground.png");
         button = ImageReader.loadImage("resources/graphics/battle/buttonBackground.png");
-        Player.loadSprites();
         for (int i =0; i < Reference.tileIds.length; i++) {
             Tile tile = null;
             try {

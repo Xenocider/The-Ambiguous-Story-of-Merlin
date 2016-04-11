@@ -13,12 +13,8 @@ import java.nio.ByteBuffer;
  */
 public class Bob extends Entity {
 
-    public static BufferedImage[] sprites = {
-            ImageReader.loadImage("resources/graphics/charactersprites/bob/0.png")
-    };
-
     public Bob(int x, int y, int state, int level) {
-        super(x, y, "bob", state, level, sprites);
+        super(x, y, "bob", state, level, ImageReader.loadImage("resources/graphics/charactersprites/bob.png"));
         this.attacks[0] = new Punch();
         this.attacks[1] = new Fireball();
         this.health = 100;

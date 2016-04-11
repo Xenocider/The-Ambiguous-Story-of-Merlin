@@ -14,12 +14,8 @@ import java.nio.ByteBuffer;
  */
 public class George extends Entity {
 
-    public static BufferedImage[] sprites = {
-            ImageReader.loadImage("resources/graphics/charactersprites/george/0.png")
-    };
-
     public George(int x, int y, int state, int level) {
-        super(x, y, "george", state, level, sprites);
+        super(x, y, "george", state, level, ImageReader.loadImage("resources/graphics/charactersprites/george.png"));
     }
 
     @Override
