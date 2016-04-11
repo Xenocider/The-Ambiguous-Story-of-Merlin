@@ -32,14 +32,15 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int imageSize = 16;
     public static int ww = 1200;
     public static int wh = 800;
-    public static float scale = 2;
+    public static float scale = 4;
 
     public static int count = 0;
     public static boolean runAnimation = false;
 
     public static int editorMenuSize = 200;
     public static int walkingStage = 1;
-    public static  int walkingCount = 0;
+    public static int maxWalkingStage = 15;
+    private static int maxCount = 7;
 
     public static void init() {
         createWindow();
@@ -50,11 +51,6 @@ public class JavaDrawer extends JPanel implements Runnable {
         //clearScreen();
         //drawTiles(frame.getGraphics());
         //drawEntities(frame.getGraphics());
-        count = count + 1;
-        if (count == 18) {
-            count = 0;
-            changeAnimationStage();
-        }
         frame.repaint();
     }
 
@@ -164,16 +160,24 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     private void drawEntities(Graphics g) {
         if (runAnimation) {
-            walkingCount = walkingCount + 1;
-            if (walkingCount == 10) {
-                walkingCount = 0;
                 walkingStage = walkingStage + 1;
+            count = count + 1;
+            if (count == maxCount) {
+                count = 0;
+                changeAnimationStage();
+                Output.write("Changed animation stage");
             }
-            if (walkingStage == 22) {
+            if (walkingStage == maxWalkingStage) {
+                for (int i =0; i< WorldData.entities.size(); i++) {
+                    WorldData.entities.get(i).lastLoc[0] = WorldData.entities.get(i).getX();
+                    WorldData.entities.get(i).lastLoc[1] = WorldData.entities.get(i).getY();
+                    WorldData.entities.get(i).moving = false;
+                }
                 runAnimation = false;
-                walkingCount = 0;
                 walkingStage = 1;
+                //count = 0;
                 GameLoop.pause = false;
+                Output.write("Movement Animation Stage Finished");
             }
         }
         //Output.write("Drawing Entities");
@@ -213,11 +217,11 @@ public class JavaDrawer extends JPanel implements Runnable {
                             sprite = scale(WorldData.getPlayer().leftSprite, scale, scale);
                         }                        break;
                 }
-                int x = WorldData.entities.get(i).lastLoc[0] + (WorldData.entities.get(i).getX() - WorldData.entities.get(i).lastLoc[0])*walkingStage/walkingStage;
-                int y = WorldData.entities.get(i).getY();
+                int x = WorldData.entities.get(i).lastLoc[0]*imageSize + (WorldData.entities.get(i).getX()*imageSize - WorldData.entities.get(i).lastLoc[0]*imageSize)*walkingStage/maxWalkingStage;
+                int y = WorldData.entities.get(i).lastLoc[1]*imageSize + (WorldData.entities.get(i).getY()*imageSize - WorldData.entities.get(i).lastLoc[1]*imageSize)*walkingStage/maxWalkingStage;
                 int w = sprite.getWidth();
                 int h = sprite.getHeight();
-                g.drawImage(sprite, (int) ((x + offsetX) * scale) + frame.getWidth() / 2, (int) ((y * imageSize - h / scale + offsetY) * scale) + frame.getHeight() / 2, null);
+                g.drawImage(sprite, (int) ((x + offsetX) * scale) + frame.getWidth() / 2, (int) ((y - h / scale + offsetY) * scale) + frame.getHeight() / 2, null);
             } else {
                 if (WorldData.entities.get(i).spriteId == -1) {
                     BufferedImage sprite = scale(WorldData.entities.get(i).getSprites()[0], scale, scale);
@@ -580,5 +584,6 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     public static void runAnimation() {
         runAnimation = true;
+        Output.write("Movement Animation Stage Started");
     }
 }

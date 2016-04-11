@@ -122,12 +122,15 @@ public class Entity {
 
     public boolean move(int direction) {
         //0 = up, 1 = right, 2 = down, 3 = left
+        lastLoc[0] = x;
+        lastLoc[1] = y;
             switch (direction) {
                 case MOVE_UP:
                     try {
                         if (WorldData.tiles[getX()][getY() - 1].movingOnToTile(this)) {
                             lastMove = MOVE_UP;
                             setY(getY() - 1);
+                            moving = true;
                             return true;
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
@@ -141,6 +144,7 @@ public class Entity {
                         if (WorldData.tiles[getX() + 1][getY()].movingOnToTile(this)) {
                             lastMove = MOVE_RIGHT;
                             setX(getX() + 1);
+                            moving = true;
                             return true;
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
@@ -154,6 +158,7 @@ public class Entity {
                         if (WorldData.tiles[getX()][getY() + 1].movingOnToTile(this)) {
                             lastMove = MOVE_DOWN;
                             setY(getY() + 1);
+                            moving = true;
                             return true;
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
@@ -167,6 +172,7 @@ public class Entity {
                         if (WorldData.tiles[getX() - 1][getY()].movingOnToTile(this)) {
                             lastMove = MOVE_LEFT;
                             setX(getX() - 1);
+                            moving = true;
                             return true;
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
@@ -180,7 +186,7 @@ public class Entity {
     }
 
     public void changeAnimationStage() {
-        Output.write("Changing animation stage");
+        //Output.write("Changing animation stage");
         animationStage = animationStage + 1;
         if (animationStage > maxAnimationStage) {
             animationStage = 0;

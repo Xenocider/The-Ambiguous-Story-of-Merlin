@@ -387,8 +387,9 @@ public class DataReader {
                 //If it's a new line
                 if (value == 10) {
                     String id = data.toString().substring(1, data.toString().length()-1);
+                    Output.write("ID = " + id);
                     //PC only v
-                    //if (Merlin.platform.equals("pc")) {id = id.substring(0, id.length()-3);}
+                    id = id.substring(0, id.length()-1);
                     //PC only ^
                     if (!id.equals("")) {
                         Output.write(id + "");
