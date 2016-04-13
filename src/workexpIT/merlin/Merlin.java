@@ -43,30 +43,46 @@ public class Merlin implements Runnable{
     public static JavaDrawer jDrawer =new JavaDrawer();
 
     public static void main(String[] args) {
+        Output.recordStart();
         GameLoop.loadAllTextures();
-
+        Output.log("Took " + Output.recordEnd() + " milliseconds to load the game's textures");
+Output.recordStart();
             if (args.length == 2 && args[0].equals("mapeditor")) {
                 mode = Mode.EDITOR;
             } else {
                 mode = Mode.GAME;
             }
 
-
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        Output.log("Took " + Output.recordEnd() + " milliseconds to set the gamemode");
+        Output.recordStart();
         JavaDrawer.init();
+        Output.log("Took " + Output.recordEnd() + " milliseconds to initialize the JavaDrawer");
+        Output.recordStart();
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+
         drawer = executor.scheduleWithFixedDelay(jDrawer, 0, (int)(1f/fps*1000f), TimeUnit.MILLISECONDS);
+        Output.log("Took " + Output.recordEnd() + " milliseconds to schedule a thread for the JavaDrawer");
+        Output.recordStart();
         //drawer = executor.scheduleWithFixedDelay(new JavaDrawer(), 0, 3, TimeUnit.MILLISECONDS);
         if (mode == Mode.EDITOR) {
             DataReader.editMap(args[1]);
+            Output.log("Took " + Output.recordEnd() + " milliseconds to load the map");
+            Output.recordStart();
             gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
+            Output.log("Took " + Output.recordEnd() + " milliseconds to schedule a thread for the GameLoop");
         }
         else {
             WorldData.entities.add(new Player(0, 0, 10));
-            gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 10, TimeUnit.MILLISECONDS);
-
+            Output.log("Took " + Output.recordEnd() + " milliseconds to add the Player");
+            Output.recordStart();
+            gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
+            Output.log("Took " + Output.recordEnd() + " milliseconds to schedule a thread for the GameLoop");
+            Output.recordStart();
             DataReader.loadMap("test");
+            Output.log("Took " + Output.recordEnd() + " milliseconds to load the map");
 
         }
+
 
     }
 

@@ -19,6 +19,8 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.sql.Timestamp;
+import java.util.Date;
 
 
 /**
@@ -27,12 +29,12 @@ import java.awt.image.BufferedImage;
 public class JavaDrawer extends JPanel implements Runnable {
 
     public static JFrame frame;
-    public static int offsetX = 0;
-    public static int offsetY = 0;
+    public static float offsetX = 0;
+    public static float offsetY = 0;
     public static int imageSize = 16;
     public static int ww = 1200;
     public static int wh = 800;
-    public static float scale = 4;
+    public static float scale = 2;
 
     public static int count = 0;
     public static boolean runAnimation = false;
@@ -52,6 +54,8 @@ public class JavaDrawer extends JPanel implements Runnable {
         //drawTiles(frame.getGraphics());
         //drawEntities(frame.getGraphics());
         frame.repaint();
+
+
     }
 
     private void changeAnimationStage() {
@@ -82,6 +86,7 @@ public class JavaDrawer extends JPanel implements Runnable {
 
 
     public void paintComponent(Graphics g) {
+        recordStart();
         long startTime = System.currentTimeMillis();
         super.paintComponent(g);
         zoomIn();
@@ -89,28 +94,47 @@ public class JavaDrawer extends JPanel implements Runnable {
         for (int i = 0; i < Animator.currentAnimators.size(); i++) {
             Animator.currentAnimators.get(i).run();
         }
+        Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to run current animators");
         //Draw stuff
         if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+            recordStart();
+
             moveScreen();
             drawGrid(g);
+            Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to repaint the editor grid");
+
         }
         if (Merlin.mode.equals(Merlin.Mode.GAME)) {
+            recordStart();
+
             smoothOffset();
+            Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to repaint the screen's smooth offsetting");
+
         }
         if (Merlin.mode.equals(Merlin.Mode.GAME) || Merlin.mode.equals(Merlin.Mode.EDITOR)) {
-            drawTiles(g);
+            recordStart();
+            //drawTiles(g); //Need to load the whole map as one image and not do so many loops
+            drawMap(g);
+            Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the Tiles");
+            recordStart();
             drawEntities(g);
+            Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the Entities");
         }
         if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+            recordStart();
             drawEditorMenu(g);
+            Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the editor menu");
+
         }
         if (Merlin.mode.equals(Merlin.Mode.BATTLE)) {
+            recordStart();
             drawBackground(g);
             drawBattleEnemy(g);
             drawAttack(g);
             drawBattlePlayer(g);
             drawStatusBars(g);
             drawBattleMenu(g);
+            Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the Battle Scene");
         }
         long endTime = System.currentTimeMillis();
         //Output.write("Took " + (endTime-startTime) + "ms to render this frame");
@@ -136,21 +160,21 @@ public class JavaDrawer extends JPanel implements Runnable {
     private void smoothOffset() {
         try {
 
-        int newOffsetX = (int) (-WorldData.getPlayer().getX()*imageSize-WorldData.getPlayer().downSprite.getWidth()/scale);
-        int newOffsetY = (int) (-WorldData.getPlayer().getY()*imageSize+WorldData.getPlayer().downSprite.getHeight()/scale);
+        float newOffsetX = (-WorldData.getPlayer().getX()*imageSize-WorldData.getPlayer().downSprite.getWidth()/scale);
+        float newOffsetY = (-WorldData.getPlayer().getY()*imageSize+WorldData.getPlayer().downSprite.getHeight()/scale);
 
 
             if (newOffsetX > offsetX) {
-                offsetX = offsetX + 1;
+                offsetX = offsetX + 1f;
             }
             if (newOffsetY > offsetY) {
-                offsetY = offsetY + 1;
+                offsetY = offsetY + 1f;
             }
             if (newOffsetX < offsetX) {
-                offsetX = offsetX - 1;
+                offsetX = offsetX - 1f;
             }
             if (newOffsetY < offsetY) {
-                offsetY = offsetY - 1;
+                offsetY = offsetY - 1f;
             }
         }
         catch (Exception e) {}
@@ -185,7 +209,7 @@ public class JavaDrawer extends JPanel implements Runnable {
         //Output.write("Drawing Entities");
         for (int i = 0; i < WorldData.entities.size(); i++) {
                 BufferedImage sprite = null;
-                switch (WorldData.entities.get(i).lastMove){
+                switch (WorldData.entities.get(i).facing){
                     case Entity.MOVE_UP:
                         if (WorldData.entities.get(i).moving) {
                             sprite = scale(WorldData.entities.get(i).upWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
@@ -246,6 +270,11 @@ public class JavaDrawer extends JPanel implements Runnable {
         AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
         BufferedImage output = op.filter(input, null);
         return output;
+    }
+
+    private void drawMap(Graphics g) {
+        //BufferedImage scaledMap = scale(WorldData.map,scale,scale);
+        g.drawImage(WorldData.scaledMap,(int)(offsetX*scale+frame.getWidth()/2),(int)((offsetY-imageSize)*scale+frame.getHeight()/2),null);
     }
 
     private void drawTiles(Graphics g) {
@@ -332,6 +361,9 @@ public class JavaDrawer extends JPanel implements Runnable {
         Output.write("Zooming Out");
     }
 
+    
+    //WARNING THIS FUNCTION IS VERY VERY CPU INTENSIVE AND WILL LAG THE COMPUTER IF RUN ON A LOOP!!!!
+    //TODO WARNING THIS FUNCTION IS VERY VERY CPU INTENSIVE AND WILL LAG THE COMPUTER IF RUN ON A LOOP!!!!
     public static BufferedImage scale(BufferedImage sbi, double fWidth, double fHeight) {
         BufferedImage dbi = null;
         if(sbi != null) {
@@ -562,11 +594,22 @@ public class JavaDrawer extends JPanel implements Runnable {
                 startBattleZoom = false;
                 zoomCount = 0;
             }
+            WorldData.scaledMap = JavaDrawer.scale(WorldData.map,scale,scale);
         }
     }
 
     public static void runAnimation() {
         runAnimation = true;
         Output.write("Movement Animation Stage Started");
+    }
+
+    private static Timestamp recordStartTime;
+    public static void recordStart() {
+        recordStartTime = new Timestamp(new Date().getTime());
+    }
+    public static long recordEnd() {
+        Timestamp recordEndTime = new Timestamp(new Date().getTime());
+        long time = recordEndTime.getTime() - recordStartTime.getTime();
+        return time;
     }
 }

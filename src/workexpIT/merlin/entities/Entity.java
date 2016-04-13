@@ -17,6 +17,8 @@ public class Entity {
     public static final int MOVE_LEFT = 3;
     public static final int MOVE_DOWN = 2;
 
+    public int facing = 2;
+
     public int leveledHealth,leveledMana,leveledManaRegen,leveledFortitude,leveledSpeed;
     public float factorHealth = 20;
     public float factorMana = 15;
@@ -94,6 +96,8 @@ public class Entity {
         fortitude = (int)(baseFortitude+factorFortitude*level);
         speed = (int)(baseSpeed+factorSpeed*level);
         loadSprites();
+        lastLoc[0] = x;
+        lastLoc[1] = y;
     }
 
     public void loadSprites() {
@@ -159,6 +163,7 @@ public class Entity {
     }
 
     public boolean move(int direction) {
+        facing = direction;
         //0 = up, 1 = right, 2 = down, 3 = left
             switch (direction) {
                 case MOVE_UP:

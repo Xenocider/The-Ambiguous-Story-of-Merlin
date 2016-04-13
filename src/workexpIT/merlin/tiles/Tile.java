@@ -9,6 +9,7 @@ import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.entities.Player;
+import workexpIT.merlin.graphics.JavaDrawer;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
@@ -85,12 +86,12 @@ public class Tile {
         if (entity.getClass().equals(Player.class)) {
             if (door) {
                 Output.write("DOOOOOOOOR");
-                for (int i = 0; i < WorldData.entities.size(); i++) {
-                    if (WorldData.entities.get(i).getName() == "player") {
-                        WorldData.entities.get(i).setX(doorX);
-                        WorldData.entities.get(i).setY(doorY);
-                    }
-                }
+                        WorldData.getPlayer().setX(doorX);
+                        WorldData.getPlayer().setY(doorY);
+                        WorldData.getPlayer().lastLoc[0] = doorX;
+                        WorldData.getPlayer().lastLoc[1] = doorY;
+                        JavaDrawer.offsetX = (-WorldData.getPlayer().getX()*JavaDrawer.imageSize-WorldData.getPlayer().downSprite.getWidth()/JavaDrawer.scale);
+                        JavaDrawer.offsetY = (-WorldData.getPlayer().getY()*JavaDrawer.imageSize+WorldData.getPlayer().downSprite.getHeight()/JavaDrawer.scale);
                 DataReader.loadMap(doorMap);
                 return true;
             }

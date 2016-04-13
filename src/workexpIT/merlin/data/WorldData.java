@@ -19,6 +19,10 @@ public class WorldData {
 
     public static BufferedImage battleBackground;
 
+    public static BufferedImage map;
+    public static BufferedImage scaledMap;
+
+
     public static String mapName;
 
     public static int mapSizeX;

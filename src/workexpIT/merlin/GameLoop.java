@@ -11,6 +11,8 @@ import workexpIT.merlin.graphics.JavaDrawer;
 import workexpIT.merlin.tiles.Tile;
 
 import java.awt.image.BufferedImage;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledExecutorService;
@@ -36,13 +38,18 @@ public class GameLoop implements Runnable{
     @Override
     public void run() {
 
+        recordStart();
+
         if (Merlin.mode.equals(Merlin.Mode.GAME) && !pause) {
             setLastLocs();
             movePlayer();
 
             runAI();
+            Output.log("[GameLoop] Took " + recordEnd() + " milliseconds to calculate entity movements");
+            recordStart();
             pause = true;
             JavaDrawer.runAnimation();
+            Output.log("[GameLoop] Took " + recordEnd() + " milliseconds to tell the Java Drawer to run the animation");
 
         }
         else if (Merlin.mode.equals(Merlin.Mode.BATTLE) && !pause) {
@@ -262,5 +269,15 @@ public class GameLoop implements Runnable{
         else {
             //Two NPC entities interact (do nothing at the moment)
         }
+    }
+
+    private static Timestamp recordStartTime;
+    public static void recordStart() {
+        recordStartTime = new Timestamp(new Date().getTime());
+    }
+    public static long recordEnd() {
+        Timestamp recordEndTime = new Timestamp(new Date().getTime());
+        long time = recordEndTime.getTime() - recordStartTime.getTime();
+        return time;
     }
 }
