@@ -41,8 +41,10 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     public static int editorMenuSize = 200;
     public static int walkingStage = 1;
-    public static int maxWalkingStage = 15;
-    private static int maxCount = 7;
+    private static int maxCount = 10;
+    public static int maxWalkingStage = maxCount*2+1;
+    private float offsetSpeed = 0.5f;
+
 
     public static void init() {
         createWindow();
@@ -165,16 +167,16 @@ public class JavaDrawer extends JPanel implements Runnable {
 
 
             if (newOffsetX > offsetX) {
-                offsetX = offsetX + 1f;
+                offsetX = offsetX + offsetSpeed;
             }
             if (newOffsetY > offsetY) {
-                offsetY = offsetY + 1f;
+                offsetY = offsetY + offsetSpeed;
             }
             if (newOffsetX < offsetX) {
-                offsetX = offsetX - 1f;
+                offsetX = offsetX - offsetSpeed;
             }
             if (newOffsetY < offsetY) {
-                offsetY = offsetY - 1f;
+                offsetY = offsetY - offsetSpeed;
             }
         }
         catch (Exception e) {}

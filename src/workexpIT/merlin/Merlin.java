@@ -75,7 +75,7 @@ Output.recordStart();
             WorldData.entities.add(new Player(0, 0, 10));
             Output.log("Took " + Output.recordEnd() + " milliseconds to add the Player");
             Output.recordStart();
-            gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
+            gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250/4, TimeUnit.MILLISECONDS);
             Output.log("Took " + Output.recordEnd() + " milliseconds to schedule a thread for the GameLoop");
             Output.recordStart();
             DataReader.loadMap("test");
