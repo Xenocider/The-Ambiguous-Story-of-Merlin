@@ -1,12 +1,11 @@
 package workexpIT.merlin.tiles;
 
-        import workexpIT.merlin.data.ImageReader;
         import workexpIT.merlin.entities.Entity;
 
-public class Bush extends Tile {
+public class Tree extends Tile {
 
-    public Bush() {
-        super(1);
+    public Tree() {
+        super(2);
     }
 
     @Override

@@ -21,19 +21,40 @@ public class Tile {
 
     public Tile(int numOfInstances) {
         maxInstances = numOfInstances;
-        this.texture = ImageReader.loadImage("resources/graphics/materials/"+ this.getClass().getSimpleName() +"" + instance + ".png");
+        texture = loadTextures(ImageReader.loadImage("resources/graphics/materials/"+ this.getClass().getSimpleName() +"" + instance + ".png"));
     }
-    protected BufferedImage texture;
+
+    private BufferedImage[] loadTextures(BufferedImage image) {
+        int frames = image.getWidth()/16;
+        BufferedImage[] output = new BufferedImage[frames];
+        for (int i = 0; i < frames; i++) {
+            output[i] = ImageReader.cropImage(image, i * 16, 0, 16, image.getHeight());
+        }
+        maxAnimationStage = frames;
+        return output;
+    }
+
+    protected BufferedImage[] texture;
 
     public int maxInstances = 1;
     public int instance = 0;
+
+    public int animationStage = 0;
+    public int maxAnimationStage = 3;
 
     public int x;
     public int y;
 
     public void setInstance(int instance) {
         this.instance = instance;
-        texture = ImageReader.loadImage("resources/graphics/materials/"+ this.getClass().getSimpleName()+"" + instance + ".png");
+        texture = loadTextures(ImageReader.loadImage("resources/graphics/materials/"+ this.getClass().getSimpleName() +"" + instance + ".png"));
+    }
+
+    public void changeAnimationStage() {
+        animationStage = animationStage + 1;
+        if (animationStage == maxAnimationStage) {
+            animationStage = 0;
+        }
     }
 
     public enum Rotation {UP,RIGHT,DOWN,LEFT}
@@ -98,7 +119,7 @@ public class Tile {
         }
         return false;
     }
-    public BufferedImage getTexture() {
+    public BufferedImage[] getTexture() {
         return texture;
     }
 }

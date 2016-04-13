@@ -30,6 +30,6 @@ public class Output {
 
 
     public static void log(String string) {
-        System.out.println(string);
+        //System.out.println(string);
     }
 }

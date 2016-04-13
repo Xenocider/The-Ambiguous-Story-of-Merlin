@@ -12,7 +12,8 @@ public class Reference {
             "Bush",
             "Path",
             "WoodFence",
-            "Water"
+            "Water",
+            "Tree"
 
     };
 }

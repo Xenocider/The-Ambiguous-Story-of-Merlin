@@ -64,6 +64,13 @@ public class JavaDrawer extends JPanel implements Runnable {
         for (int i = 0; i < WorldData.entities.size(); i++) {
             WorldData.entities.get(i).changeAnimationStage();
         }
+        for (int a = 0; a < WorldData.tiles.length; a++) {
+            for (int b = 0; b < WorldData.tiles.length; b++) {
+                if (WorldData.tiles[a][b] != null) {
+                    WorldData.tiles[a][b].changeAnimationStage();
+                }
+            }
+        }
     }
 
     private void moveScreen() {
@@ -126,6 +133,7 @@ public class JavaDrawer extends JPanel implements Runnable {
             recordStart();
             drawEditorMenu(g);
             Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the editor menu");
+            updateMap();
 
         }
         if (Merlin.mode.equals(Merlin.Mode.BATTLE)) {
@@ -151,7 +159,7 @@ public class JavaDrawer extends JPanel implements Runnable {
         g.fillRect(frame.getWidth()-editorMenuSize,0,editorMenuSize,frame.getHeight());
         for (int i = 0; i < WorldData.menuTiles.size(); i ++) {
 
-            BufferedImage image = scale(WorldData.menuTiles.get(i).getTexture(),4,4);
+            BufferedImage image = scale(WorldData.menuTiles.get(i).getTexture()[WorldData.menuTiles.get(i).animationStage],4,4);
 
             g.drawImage(image,(int)(x * JavaDrawer.imageSize*4 + frame.getWidth()-editorMenuSize + 10*x + 10),(int)(y * JavaDrawer.imageSize*4 + 10*y + 10),null);
             if (x == 0) {x = 1;} else {x = 0;y=y+1;}
@@ -194,6 +202,7 @@ public class JavaDrawer extends JPanel implements Runnable {
                 count = 0;
                 changeAnimationStage();
                 Output.write("Changed animation stage");
+                updateMap();
             }
             if (walkingStage == maxWalkingStage) {
                 for (int i =0; i< WorldData.entities.size(); i++) {
@@ -251,6 +260,53 @@ public class JavaDrawer extends JPanel implements Runnable {
         }
     }
 
+    private void updateMap() {
+        WorldData.map = JavaDrawer.loadMapIntoOneImage();
+        WorldData.scaledMap = JavaDrawer.scale(WorldData.map,JavaDrawer.scale,JavaDrawer.scale);
+    }
+    public static BufferedImage loadMapIntoOneImage() {
+        BufferedImage map = new BufferedImage(WorldData.mapSizeX*16,WorldData.mapSizeY*16, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = map.createGraphics();
+        BufferedImage tile;
+        for (int a = 0; a < WorldData.tiles.length; a++) {
+            for (int b = 0; b < WorldData.tiles[a].length; b++) {
+                if (WorldData.tiles[a][b] != null) {
+                    tile = WorldData.tiles[a][b].getTexture()[WorldData.tiles[a][b].animationStage];
+                    double radians = 0.0;
+                    switch (WorldData.tiles[a][b].rotation) {
+                        case UP:
+                            radians = Math.PI/2.0*0.0;
+                            break;
+                        case RIGHT:
+                            radians = Math.PI/2.0*1.0;
+                            break;
+                        case DOWN:
+                            radians = Math.PI/2.0*2.0;
+                            break;
+                        case LEFT:
+                            radians = Math.PI/2.0*3.0;
+                            break;
+                    }
+                    tile = rotateImage(tile, radians);
+                    try {
+                        switch (WorldData.tiles[a][b].flip) {
+                            case HORIZONTAL:
+                                tile = flipImage(tile, true);
+                                break;
+                            case VERTICAL:
+                                tile = flipImage(tile, false);
+                                break;
+                        }
+                    }
+                    catch (NullPointerException e) {}
+                    System.out.println(tile.getHeight());
+                    g2.drawImage(tile,null,a*16,b*16-tile.getHeight()+16);
+                }
+            }
+        }
+        g2.dispose();
+        return map;
+    }
     public static BufferedImage rotateImage(BufferedImage input, double radians) {
         AffineTransform transform = new AffineTransform();
         transform.rotate(radians, input.getWidth()/2, input.getHeight()/2);
@@ -283,7 +339,7 @@ public class JavaDrawer extends JPanel implements Runnable {
         for (int a = 0; a < WorldData.tiles.length; a++) {
             for (int b = 0; b < WorldData.tiles[a].length; b++) {
                 if (WorldData.tiles[a][b] != null) {
-                    BufferedImage image = scale(WorldData.tiles[a][b].getTexture(),scale,scale);
+                    BufferedImage image = scale(WorldData.tiles[a][b].getTexture()[0],scale,scale);
                     double radians = 0.0;
                     switch (WorldData.tiles[a][b].rotation) {
                         case UP:
@@ -588,7 +644,7 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static void zoomIn() {
         if (startBattleZoom) {
             zoomCount = zoomCount + 1;
-            scale = scale + 0.25f;
+            //scale = scale + 0.25f;
             if (zoomCount > 30) {
                 scale = 2;
                 Merlin.mode = Merlin.Mode.BATTLE;

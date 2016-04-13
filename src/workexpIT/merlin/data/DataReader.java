@@ -179,7 +179,7 @@ public class DataReader {
             Output.error("IO Exception while attempting to read the map file: " + mapid);
             e.printStackTrace();
         }
-        WorldData.map = loadMapIntoOneImage();
+        WorldData.map = JavaDrawer.loadMapIntoOneImage();
         WorldData.scaledMap = JavaDrawer.scale(WorldData.map,JavaDrawer.scale,JavaDrawer.scale);
         WorldData.mapName = mapid;
         loadMiscData(mapid);
@@ -192,48 +192,7 @@ public class DataReader {
         }
     }
 
-    private static BufferedImage loadMapIntoOneImage() {
-        BufferedImage map = new BufferedImage(WorldData.mapSizeX*16,WorldData.mapSizeY*16, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = map.createGraphics();
-        BufferedImage tile;
-        for (int a = 0; a < WorldData.tiles.length; a++) {
-            for (int b = 0; b < WorldData.tiles[a].length; b++) {
-                if (WorldData.tiles[a][b] != null) {
-                    tile = WorldData.tiles[a][b].getTexture();
-                    double radians = 0.0;
-                    switch (WorldData.tiles[a][b].rotation) {
-                        case UP:
-                            radians = Math.PI/2.0*0.0;
-                            break;
-                        case RIGHT:
-                            radians = Math.PI/2.0*1.0;
-                            break;
-                        case DOWN:
-                            radians = Math.PI/2.0*2.0;
-                            break;
-                        case LEFT:
-                            radians = Math.PI/2.0*3.0;
-                            break;
-                    }
-                    tile = rotateImage(tile, radians);
-                    try {
-                        switch (WorldData.tiles[a][b].flip) {
-                            case HORIZONTAL:
-                                tile = flipImage(tile, true);
-                                break;
-                            case VERTICAL:
-                                tile = flipImage(tile, false);
-                                break;
-                        }
-                    }
-                    catch (NullPointerException e) {}
-                    g2.drawImage(tile,null,a*16,b*16);
-                }
-            }
-        }
-        g2.dispose();
-        return map;
-    }
+
 
     private static int loadMapSizeX(String mapid) {
         int x = 0;
@@ -550,6 +509,8 @@ public class DataReader {
             Output.error("IO Exception while attempting to read the map file: " + mapid);
             e.printStackTrace();
         }
+        WorldData.map = JavaDrawer.loadMapIntoOneImage();
+        WorldData.scaledMap = JavaDrawer.scale(WorldData.map,JavaDrawer.scale,JavaDrawer.scale);
         WorldData.mapName = mapid;
         loadMiscData(mapid);
         loadEntityData(mapid);
