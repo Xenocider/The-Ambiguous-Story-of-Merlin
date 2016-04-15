@@ -85,6 +85,7 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
                 break;
             case KeyEvent.VK_CLOSE_BRACKET:
                 //Flip Horizontally
+                System.out.println("Flipping the " + WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].getClass().getName() + " tile at " + getTileCoordsAtCursor()[0] + " " + getTileCoordsAtCursor()[1]);
                 switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip) {
                     case DEFAULT:
                         WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.HORIZONTAL);
@@ -208,14 +209,14 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
         SwingUtilities.convertPointFromScreen(mouseLocation,JavaDrawer.frame);
         double x = mouseLocation.getX();
         double y = mouseLocation.getY();
-        y = y - 21; //not sure why it is off
+        //y = y - 21; //not sure why it is off
         Output.write("MOUSELOC = " + x +" " + y);
         int mapX = -1;
         int mapY = -1;
         if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
             if (x < JavaDrawer.frame.getWidth() - JavaDrawer.editorMenuSize) {
-                mapX = (int) ((x - JavaDrawer.frame.getWidth() / 2) / JavaDrawer.scale - JavaDrawer.offsetX) / JavaDrawer.imageSize;
-                mapY = (int) ((y - JavaDrawer.frame.getHeight() / 2) / JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize) / JavaDrawer.imageSize;
+                mapX = (int) (((x - JavaDrawer.frame.getWidth() / 2) / JavaDrawer.scale - JavaDrawer.offsetX) / JavaDrawer.imageSize-0.5);
+                mapY = (int) ((y - JavaDrawer.frame.getHeight() / 2) / JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize) / JavaDrawer.imageSize-2;
             }
         }
         Output.write(mapX + "   " + mapY);

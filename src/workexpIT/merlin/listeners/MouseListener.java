@@ -16,6 +16,9 @@ import java.awt.event.MouseEvent;
  * Created by ict11 on 2016-02-24.
  */
 public class MouseListener implements java.awt.event.MouseListener {
+
+    public static boolean pressed = false;
+
     @Override
     public void mouseClicked(MouseEvent e) {
 
@@ -23,6 +26,8 @@ public class MouseListener implements java.awt.event.MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+
+        pressed = true;
 
         int x = e.getX();
         int y = e.getY();
@@ -56,18 +61,7 @@ public class MouseListener implements java.awt.event.MouseListener {
                 int mapX = (int)((x-JavaDrawer.frame.getWidth()/2)/JavaDrawer.scale - JavaDrawer.offsetX)/JavaDrawer.imageSize;
                 int mapY = (int)((y-JavaDrawer.frame.getHeight()/2)/JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize)/JavaDrawer.imageSize;
                 Output.write(mapX + ", " + mapY);
-                try {
-                    Tile tile = (Tile) Class.forName("workexpIT.merlin.tiles."+ Reference.tileIds[WorldData.selectedTile]).newInstance();
-                    tile.setInstance(WorldData.selectedInstance);
-                    WorldData.tiles[mapX][mapY] = tile;
-                    Output.write("Placing tile " + WorldData.selectedTile + " at " + mapX + ", " + mapY);
-                } catch (InstantiationException e1) {
-                    e1.printStackTrace();
-                } catch (IllegalAccessException e1) {
-                    e1.printStackTrace();
-                } catch (ClassNotFoundException e1) {
-                    e1.printStackTrace();
-                }
+                    placeTile(WorldData.selectedTile,WorldData.selectedInstance,mapX,mapY);
             }
         }
         else if (Merlin.mode.equals(Merlin.Mode.BATTLE)) {
@@ -110,7 +104,7 @@ public class MouseListener implements java.awt.event.MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
+        pressed = false;
     }
 
     @Override
@@ -121,5 +115,21 @@ public class MouseListener implements java.awt.event.MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    public static void placeTile(int id, int inst, int x, int y) {
+        Tile tile = null;
+        try {
+            tile = (Tile) Class.forName("workexpIT.merlin.tiles."+ Reference.tileIds[id]).newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        tile.setInstance(WorldData.selectedInstance);
+        WorldData.tiles[x][y] = tile;
+        Output.write("Placing tile " + id + " at " + x + ", " + y);
     }
 }

@@ -8,8 +8,11 @@ import workexpIT.merlin.entities.Player;
 import workexpIT.merlin.graphics.AttackAnimator;
 import workexpIT.merlin.graphics.FaintAnimator;
 import workexpIT.merlin.graphics.JavaDrawer;
+import workexpIT.merlin.listeners.MouseListener;
 import workexpIT.merlin.tiles.Tile;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -54,6 +57,19 @@ public class GameLoop implements Runnable{
         }
         else if (Merlin.mode.equals(Merlin.Mode.BATTLE) && !pause) {
             runTurn();
+        }
+        else if (Merlin.mode.equals(Merlin.Mode.EDITOR) && !pause) {
+            if (MouseListener.pressed) {
+                Point loc = MouseInfo.getPointerInfo().getLocation();
+                SwingUtilities.convertPointFromScreen(loc, JavaDrawer.frame);
+                int mapX = (int) (((loc.getX() - JavaDrawer.frame.getWidth() / 2) / JavaDrawer.scale - JavaDrawer.offsetX) / JavaDrawer.imageSize-0.5);
+                int mapY = (int) ((loc.getY() - JavaDrawer.frame.getHeight() / 2) / JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize) / JavaDrawer.imageSize-2;
+                if (mapX >= 0 && mapY >= 0) {
+                    if (loc.getX() < JavaDrawer.frame.getWidth()-JavaDrawer.editorMenuSize){
+                        MouseListener.placeTile(WorldData.selectedTile, WorldData.selectedInstance, mapX, mapY);
+                    }
+                }
+            }
         }
     }
 

@@ -26,6 +26,8 @@ import static workexpIT.merlin.graphics.JavaDrawer.rotateImage;
  */
 public class DataReader {
 
+    private static String OS = System.getProperty("os.name").toLowerCase();
+
     public static void loadMap(String mapid) {
         int xSize = loadMapSizeX(mapid);
         int ySize = loadMapSizeY(mapid);
@@ -63,8 +65,9 @@ public class DataReader {
                 //If it's a new line
                 if (value == 10) {
                     String id = data.toString().substring(1, data.toString().length() - 1);
-                    //PC only v
-                    //id = id.substring(0, id.length()-3);
+                    if (OS.contains("win")) {
+                        id = id.substring(0, id.length() - 1);
+                    }
                     boolean isPC = true;
                     if (isPC) {
                         data.clear();
@@ -400,7 +403,9 @@ public class DataReader {
                     String id = data.toString().substring(1, data.toString().length()-1);
                     Output.write("ID = " + id);
                     //PC only v
-                    //id = id.substring(0, id.length()-1);
+                    if (OS.contains("win")) {
+                        id = id.substring(0, id.length() - 1);
+                    }
                     //PC only ^
                     if (!id.equals("")) {
                         Output.write(id + "");

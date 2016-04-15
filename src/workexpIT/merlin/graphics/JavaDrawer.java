@@ -34,20 +34,28 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int imageSize = 16;
     public static int ww = 1200;
     public static int wh = 800;
-    public static float scale = 2;
+    public static float scale = 4;
 
     public static int count = 0;
     public static boolean runAnimation = false;
 
     public static int editorMenuSize = 200;
     public static int walkingStage = 1;
-    private static int maxCount = 10;
+    private static int maxCount = 10/2;
     public static int maxWalkingStage = maxCount*2+1;
     private float offsetSpeed = 0.5f;
 
+    public static int minOffsetX;
+    public static int maxOffsetX;
+    public static int minOffsetY;
+    public static int maxOffsetY;
 
     public static void init() {
         createWindow();
+        maxOffsetX = (int) (-frame.getWidth()/2/scale);
+        maxOffsetY = (int) (-frame.getHeight()/2/scale+imageSize);
+        minOffsetX = (int) (-(imageSize*WorldData.mapSizeX-frame.getWidth()/2/scale)-imageSize*2/scale);
+        minOffsetY = (int) (-(imageSize*WorldData.mapSizeY-frame.getHeight()/2/scale)-imageSize*(5.5f-scale)/scale);
     }
 
     @Override
@@ -57,6 +65,10 @@ public class JavaDrawer extends JPanel implements Runnable {
         //drawEntities(frame.getGraphics());
         frame.repaint();
 
+        maxOffsetX = (int) (-frame.getWidth()/2/scale);
+        maxOffsetY = (int) (-frame.getHeight()/2/scale+imageSize);
+        minOffsetX = (int) (-(imageSize*WorldData.mapSizeX-frame.getWidth()/2/scale)-imageSize*2/scale);
+        minOffsetY = (int) (-(imageSize*WorldData.mapSizeY-frame.getHeight()/2/scale)-imageSize*(5.5f-scale)/scale);
 
     }
 
@@ -116,7 +128,8 @@ public class JavaDrawer extends JPanel implements Runnable {
         if (Merlin.mode.equals(Merlin.Mode.GAME)) {
             recordStart();
 
-            smoothOffset();
+            //smoothOffset();
+            centerCameraOnPlayer();
             Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to repaint the screen's smooth offsetting");
 
         }
@@ -260,6 +273,38 @@ public class JavaDrawer extends JPanel implements Runnable {
         }
     }
 
+    public void centerCameraOnPlayer() {
+        if (WorldData.getPlayer() != null) {
+            try {
+                int x = WorldData.getPlayer().lastLoc[0] * imageSize + (WorldData.getPlayer().getX() * imageSize - WorldData.getPlayer().lastLoc[0] * imageSize) * walkingStage / maxWalkingStage;
+                int y = WorldData.getPlayer().lastLoc[1] * imageSize + (WorldData.getPlayer().getY() * imageSize - WorldData.getPlayer().lastLoc[1] * imageSize) * walkingStage / maxWalkingStage;
+                int w = WorldData.getPlayer().downSprite.getWidth();
+                int h = WorldData.getPlayer().downSprite.getHeight();
+                int offX = (int) (-x);
+                int offY = (int) (-y);
+                //offsetX = offsetX + (offX - offsetX)*0.05f;
+                //offsetY = offsetY + (offY - offsetY)*0.05f;
+                offsetX = offX;
+                offsetY = offY;
+                if (offsetX > maxOffsetX) {
+                    offsetX = maxOffsetX;
+                }
+                if (offsetY > maxOffsetY) {
+                    offsetY = maxOffsetY;
+                }
+                if (offsetY < minOffsetY) {
+                    offsetY = minOffsetY;
+                }
+                if (offsetX < minOffsetX) {
+                    offsetX = minOffsetX;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void updateMap() {
         WorldData.map = JavaDrawer.loadMapIntoOneImage();
         WorldData.scaledMap = JavaDrawer.scale(WorldData.map,JavaDrawer.scale,JavaDrawer.scale);
@@ -299,7 +344,6 @@ public class JavaDrawer extends JPanel implements Runnable {
                         }
                     }
                     catch (NullPointerException e) {}
-                    System.out.println(tile.getHeight());
                     g2.drawImage(tile,null,a*16,b*16-tile.getHeight()+16);
                 }
             }
