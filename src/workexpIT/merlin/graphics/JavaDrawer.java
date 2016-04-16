@@ -34,7 +34,7 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int imageSize = 16;
     public static int ww = 1200;
     public static int wh = 800;
-    public static float scale = 4;
+    public static float scale = 2;
 
     public static int count = 0;
     public static boolean runAnimation = false;

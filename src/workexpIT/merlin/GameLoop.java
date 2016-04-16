@@ -62,8 +62,11 @@ public class GameLoop implements Runnable{
             if (MouseListener.pressed) {
                 Point loc = MouseInfo.getPointerInfo().getLocation();
                 SwingUtilities.convertPointFromScreen(loc, JavaDrawer.frame);
-                int mapX = (int) (((loc.getX() - JavaDrawer.frame.getWidth() / 2) / JavaDrawer.scale - JavaDrawer.offsetX) / JavaDrawer.imageSize-0.5);
-                int mapY = (int) ((loc.getY() - JavaDrawer.frame.getHeight() / 2) / JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize) / JavaDrawer.imageSize-2;
+                loc.x = (int) (loc.getX()-16);
+                loc.y = (int) (loc.getY()-72);
+                System.out.println("PointerInfo Click " + loc.getX() + " " + loc.getY());
+                int mapX = (int) (((loc.getX() - JavaDrawer.frame.getWidth() / 2) / JavaDrawer.scale - JavaDrawer.offsetX) / JavaDrawer.imageSize);
+                int mapY = (int) ((loc.getY() - JavaDrawer.frame.getHeight() / 2) / JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize) / JavaDrawer.imageSize;
                 if (mapX >= 0 && mapY >= 0) {
                     if (loc.getX() < JavaDrawer.frame.getWidth()-JavaDrawer.editorMenuSize){
                         MouseListener.placeTile(WorldData.selectedTile, WorldData.selectedInstance, mapX, mapY);

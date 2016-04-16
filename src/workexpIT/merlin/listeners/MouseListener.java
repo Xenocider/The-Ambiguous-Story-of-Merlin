@@ -31,6 +31,7 @@ public class MouseListener implements java.awt.event.MouseListener {
 
         int x = e.getX();
         int y = e.getY();
+        System.out.println("MouseEvent CLICK = " + x +" " + y);
         Output.write("MOUSELOC CLICK = " + x +" " + y);
         if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
             if (x > JavaDrawer.frame.getWidth()-JavaDrawer.editorMenuSize && x < JavaDrawer.frame.getWidth()-10-32) {

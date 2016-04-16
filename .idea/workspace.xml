@@ -2,23 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="16a013c5-be38-4650-a464-bd74f40ceefd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/GameLoop$1.class" afterPath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/GameLoop$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/GameLoop.class" afterPath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/GameLoop.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/Merlin.class" afterPath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/Merlin.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/data/DataReader$1.class" afterPath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/data/DataReader$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/data/DataReader.class" afterPath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/data/DataReader.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/graphics/JavaDrawer$1.class" afterPath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/graphics/JavaDrawer$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/graphics/JavaDrawer.class" afterPath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/graphics/JavaDrawer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/listeners/JavaKeyListener$1.class" afterPath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/listeners/JavaKeyListener$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/listeners/JavaKeyListener.class" afterPath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/listeners/JavaKeyListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/listeners/MouseListener.class" afterPath="$PROJECT_DIR$/out/production/The Ambiguous Story of Merlin/workexpIT/merlin/listeners/MouseListener.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/worlddata/default/test/tiledata.txt" afterPath="$PROJECT_DIR$/resources/worlddata/default/test/tiledata.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/workexpIT/merlin/GameLoop.java" afterPath="$PROJECT_DIR$/src/workexpIT/merlin/GameLoop.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/workexpIT/merlin/Merlin.java" afterPath="$PROJECT_DIR$/src/workexpIT/merlin/Merlin.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/workexpIT/merlin/data/DataReader.java" afterPath="$PROJECT_DIR$/src/workexpIT/merlin/data/DataReader.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/workexpIT/merlin/graphics/JavaDrawer.java" afterPath="$PROJECT_DIR$/src/workexpIT/merlin/graphics/JavaDrawer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/workexpIT/merlin/listeners/JavaKeyListener.java" afterPath="$PROJECT_DIR$/src/workexpIT/merlin/listeners/JavaKeyListener.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/workexpIT/merlin/listeners/MouseListener.java" afterPath="$PROJECT_DIR$/src/workexpIT/merlin/listeners/MouseListener.java" />
     </list>
     <ignored path="The Ambiguous Story of Merlin.iws" />
@@ -46,21 +32,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="JavaDrawer.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="JavaDrawer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/workexpIT/merlin/graphics/JavaDrawer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.67901236">
-              <caret line="43" column="38" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="38" />
-              <folding>
-                <element signature="e#7721#7722#0" expanded="true" />
-                <element signature="e#7756#7757#0" expanded="true" />
-                <element signature="e#23481#23482#0" expanded="true" />
-                <element signature="e#23545#23546#0" expanded="true" />
-                <element signature="e#29325#29326#0" expanded="true" />
-                <element signature="e#29363#29364#0" expanded="true" />
-                <element signature="e#30093#30094#0" expanded="true" />
-                <element signature="e#30162#30163#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0">
+              <caret line="36" column="33" selection-start-line="36" selection-start-column="33" selection-end-line="36" selection-end-column="33" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -79,11 +56,8 @@
         <entry file="file://$PROJECT_DIR$/src/workexpIT/merlin/listeners/MouseListener.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="35" column="59" selection-start-line="35" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-              <folding>
-                <element signature="e#5507#5508#0" expanded="true" />
-                <element signature="e#5538#5539#0" expanded="true" />
-              </folding>
+              <caret line="33" column="38" selection-start-line="33" selection-start-column="38" selection-end-line="33" selection-end-column="38" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -118,11 +92,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GameLoop.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GameLoop.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/workexpIT/merlin/GameLoop.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.54046243">
+              <caret line="66" column="89" selection-start-line="66" selection-start-column="89" selection-end-line="66" selection-end-column="89" />
               <folding />
             </state>
           </provider>
@@ -153,7 +127,7 @@
       <file leaf-file-name="George.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/workexpIT/merlin/entities/George.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.909091">
+            <state vertical-scroll-proportion="0.0">
               <caret line="224" column="53" selection-start-line="224" selection-start-column="52" selection-end-line="224" selection-end-column="53" />
               <folding />
             </state>
@@ -229,11 +203,11 @@
         <option value="$PROJECT_DIR$/src/workexpIT/merlin/tiles/Tree.java" />
         <option value="$PROJECT_DIR$/src/workexpIT/merlin/data/DataReader.java" />
         <option value="$PROJECT_DIR$/resources/worlddata/default/test/tiledata.txt" />
-        <option value="$PROJECT_DIR$/src/workexpIT/merlin/listeners/MouseListener.java" />
         <option value="$PROJECT_DIR$/src/workexpIT/merlin/Merlin.java" />
-        <option value="$PROJECT_DIR$/src/workexpIT/merlin/GameLoop.java" />
         <option value="$PROJECT_DIR$/src/workexpIT/merlin/listeners/JavaKeyListener.java" />
+        <option value="$PROJECT_DIR$/src/workexpIT/merlin/listeners/MouseListener.java" />
         <option value="$PROJECT_DIR$/src/workexpIT/merlin/graphics/JavaDrawer.java" />
+        <option value="$PROJECT_DIR$/src/workexpIT/merlin/GameLoop.java" />
       </list>
     </option>
   </component>
@@ -278,6 +252,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -518,9 +495,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -557,7 +531,7 @@
       <recent name="$PROJECT_DIR$/resources/worlddata/default/test" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Default">
+  <component name="RunManager" selected="Application.MapEditor">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
@@ -904,7 +878,6 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1271875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287414" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -919,6 +892,7 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987553" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" x="100" y="122" width="1720" height="805" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287414" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1274,7 +1248,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/workexpIT/merlin/entities/George.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.909091">
+        <state vertical-scroll-proportion="0.0">
           <caret line="224" column="53" selection-start-line="224" selection-start-column="52" selection-end-line="224" selection-end-column="53" />
           <folding />
         </state>
@@ -1288,37 +1262,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/workexpIT/merlin/listeners/MouseListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="35" column="59" selection-start-line="35" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-          <folding>
-            <element signature="e#5507#5508#0" expanded="true" />
-            <element signature="e#5538#5539#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/workexpIT/merlin/GameLoop.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/workexpIT/merlin/listeners/JavaKeyListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="217" column="0" selection-start-line="217" selection-start-column="0" selection-end-line="217" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/workexpIT/merlin/data/ImageReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1341,20 +1288,35 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/workexpIT/merlin/data/ImageReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/workexpIT/merlin/graphics/JavaDrawer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.67901236">
-          <caret line="43" column="38" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="38" />
-          <folding>
-            <element signature="e#7721#7722#0" expanded="true" />
-            <element signature="e#7756#7757#0" expanded="true" />
-            <element signature="e#23481#23482#0" expanded="true" />
-            <element signature="e#23545#23546#0" expanded="true" />
-            <element signature="e#29325#29326#0" expanded="true" />
-            <element signature="e#29363#29364#0" expanded="true" />
-            <element signature="e#30093#30094#0" expanded="true" />
-            <element signature="e#30162#30163#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0">
+          <caret line="36" column="33" selection-start-line="36" selection-start-column="33" selection-end-line="36" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/workexpIT/merlin/listeners/MouseListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="33" column="38" selection-start-line="33" selection-start-column="38" selection-end-line="33" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/workexpIT/merlin/GameLoop.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.54046243">
+          <caret line="66" column="89" selection-start-line="66" selection-start-column="89" selection-end-line="66" selection-end-column="89" />
+          <folding />
         </state>
       </provider>
     </entry>
