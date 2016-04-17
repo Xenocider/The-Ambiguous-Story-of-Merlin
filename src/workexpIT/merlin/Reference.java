@@ -13,7 +13,8 @@ public class Reference {
             "Path",
             "WoodFence",
             "Water",
-            "Tree"
+            "Tree",
+            "Hole"
 
     };
 }

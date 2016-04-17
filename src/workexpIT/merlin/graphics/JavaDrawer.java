@@ -305,7 +305,7 @@ public class JavaDrawer extends JPanel implements Runnable {
         }
     }
 
-    private void updateMap() {
+    public static void updateMap() {
         WorldData.map = JavaDrawer.loadMapIntoOneImage();
         WorldData.scaledMap = JavaDrawer.scale(WorldData.map,JavaDrawer.scale,JavaDrawer.scale);
     }
