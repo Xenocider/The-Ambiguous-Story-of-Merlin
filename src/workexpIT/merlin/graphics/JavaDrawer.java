@@ -41,7 +41,7 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     public static int editorMenuSize = 200;
     public static int walkingStage = 1;
-    private static int maxCount = 10/2;
+    private static int maxCount = 10;
     public static int maxWalkingStage = maxCount*2+1;
     private float offsetSpeed = 0.5f;
 

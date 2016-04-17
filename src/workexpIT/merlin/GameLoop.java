@@ -271,19 +271,26 @@ public class GameLoop implements Runnable{
     }
 
     public static void entityInteract(Entity entity1, Entity entity2) {
+        //TODO move commented out code into each entities playerInteraction()
         if (entity1 == WorldData.getPlayer()) {
-            if (entity2.getState() == Entity.STATE_AGGRESSIVE) {
+            /*if (entity2.getState() == Entity.STATE_AGGRESSIVE) {
                 enemy = entity2;
                 pause = true;
                 JavaDrawer.startBattle();
             }
+            else {*/
+                entity2.playerInteraction();
+            //}
         }
         else if (entity2 == WorldData.getPlayer()) {
-            if (entity1.getState() == Entity.STATE_AGGRESSIVE) {
+            /*if (entity1.getState() == Entity.STATE_AGGRESSIVE) {
                 enemy = entity1;
                 pause = true;
                 JavaDrawer.startBattle();
             }
+            else {*/
+                entity1.playerInteraction();
+            //}
         }
         else {
             //Two NPC entities interact (do nothing at the moment)

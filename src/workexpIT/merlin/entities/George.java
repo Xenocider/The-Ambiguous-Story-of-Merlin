@@ -16,6 +16,15 @@ public class George extends Entity {
 
     public George(int x, int y, int state, int level) {
         super(x, y, "george", state, level, ImageReader.loadImage("resources/graphics/charactersprites/george.png"));
+        downWalkingSpritesId = new int[]{3, 4, 3, 5};
+        upWalkingSpritesId = new int[]{0, 1, 0, 2};
+        rightWalkingSpritesId = new int[]{9, 10, 9, 11};
+        leftWalkingSpritesId = new int[]{6, 7, 6, 8};
+        upSpriteId = 0;
+        downSpriteId = 3;
+        rightSpriteId = 9;
+        leftSpriteId = 6;
+        loadSprites();
     }
 
     @Override

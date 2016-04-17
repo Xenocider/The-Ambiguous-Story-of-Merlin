@@ -61,19 +61,19 @@ public class Entity {
     public int maxAnimationStage = 3;
 
     //Sprites
-    private final int[] downWalkingSpritesId = {3,4,3,5};
-    private final int[] upWalkingSpritesId = {0,1,0,2};
-    private final int[] rightWalkingSpritesId = {9,10,9,11};
-    private final int[] leftWalkingSpritesId = {6,7,6,8};
-    private final int upSpriteId = 0;
-    private final int downSpriteId = 3;
-    private final int rightSpriteId = 9;
-    private final int leftSpriteId = 6;
+    public int[] downWalkingSpritesId;
+    public int[] upWalkingSpritesId;
+    public int[] rightWalkingSpritesId;
+    public int[] leftWalkingSpritesId;
+    public int upSpriteId;
+    public int downSpriteId;
+    public int rightSpriteId;
+    public int leftSpriteId;
 
-    public BufferedImage[] downWalkingSprites = new BufferedImage[downWalkingSpritesId.length];
-    public BufferedImage[] upWalkingSprites = new BufferedImage[upWalkingSpritesId.length];
-    public BufferedImage[] rightWalkingSprites = new BufferedImage[rightWalkingSpritesId.length];
-    public BufferedImage[] leftWalkingSprites = new BufferedImage[leftWalkingSpritesId.length];
+    public BufferedImage[] downWalkingSprites;
+    public BufferedImage[] upWalkingSprites;
+    public BufferedImage[] rightWalkingSprites;
+    public BufferedImage[] leftWalkingSprites;
     public BufferedImage upSprite;
     public BufferedImage downSprite;
     public BufferedImage rightSprite;
@@ -95,12 +95,15 @@ public class Entity {
         manaRegen = (int)(baseManaRegen+factorManaRegen*level);
         fortitude = (int)(baseFortitude+factorFortitude*level);
         speed = (int)(baseSpeed+factorSpeed*level);
-        loadSprites();
         lastLoc[0] = x;
         lastLoc[1] = y;
     }
 
     public void loadSprites() {
+        downWalkingSprites = new BufferedImage[downWalkingSpritesId.length];
+        upWalkingSprites = new BufferedImage[upWalkingSpritesId.length];
+        rightWalkingSprites = new BufferedImage[rightWalkingSpritesId.length];
+        leftWalkingSprites = new BufferedImage[leftWalkingSpritesId.length];
         upSprite = ImageReader.cropImage(sprites,upSpriteId*16,0,16,32);
         downSprite = ImageReader.cropImage(sprites,downSpriteId*16,0,16,32);
         rightSprite = ImageReader.cropImage(sprites,rightSpriteId*16,0,16,32);
@@ -232,5 +235,9 @@ public class Entity {
         if (animationStage > maxAnimationStage) {
             animationStage = 0;
         }
+    }
+
+    public void playerInteraction() {
+
     }
 }
