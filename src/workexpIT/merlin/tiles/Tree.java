@@ -5,7 +5,7 @@ package workexpIT.merlin.tiles;
 public class Tree extends Tile {
 
     public Tree() {
-        super(2);
+        super(2,false);
     }
 
     @Override

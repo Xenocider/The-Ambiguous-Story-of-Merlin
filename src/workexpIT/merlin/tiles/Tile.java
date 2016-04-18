@@ -19,9 +19,12 @@ import java.nio.ByteBuffer;
  */
 public class Tile {
 
-    public Tile(int numOfInstances) {
+    public Tile(int numOfInstances,boolean needsToBeUpdated) {
         maxInstances = numOfInstances;
         texture = loadTextures(ImageReader.loadImage("resources/graphics/materials/"+ this.getClass().getSimpleName() +"" + instance + ".png"));
+        if (needsToBeUpdated) {
+            WorldData.animatedTiles.add(new int[]{x,y});
+        }
     }
 
     private BufferedImage[] loadTextures(BufferedImage image) {

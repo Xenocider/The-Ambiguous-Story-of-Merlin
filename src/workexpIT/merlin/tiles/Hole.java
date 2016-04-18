@@ -8,7 +8,7 @@ package workexpIT.merlin.tiles;
 public class Hole extends Tile {
 
     public Hole() {
-        super(2);
+        super(2,false);
     }
 
     @Override

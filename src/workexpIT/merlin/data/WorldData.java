@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class WorldData {
 
+    public static List<int[]>animatedTiles = new ArrayList<>();
+
     public static int selectedTile;
     public static List<Tile> menuTiles = new ArrayList<>();
 

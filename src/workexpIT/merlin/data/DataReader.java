@@ -26,7 +26,7 @@ import static workexpIT.merlin.graphics.JavaDrawer.rotateImage;
  */
 public class DataReader {
 
-    private static String OS = System.getProperty("os.name").toLowerCase();
+    public static String OS = System.getProperty("os.name").toLowerCase();
 
     public static void loadMap(String mapid) {
         int xSize = loadMapSizeX(mapid);
@@ -89,6 +89,7 @@ public class DataReader {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                            if (i < Reference.tileIds.length) {
                             Tile.Flip f = Tile.Flip.DEFAULT;
                             switch (flip) {
                                 case "b":
@@ -114,7 +115,7 @@ public class DataReader {
                                         break;
                                 }
                                 Output.write("Adding tile to " + x + " " + y);
-
+                            }
                             }
                         }
                     }
@@ -182,8 +183,7 @@ public class DataReader {
             Output.error("IO Exception while attempting to read the map file: " + mapid);
             e.printStackTrace();
         }
-        WorldData.map = JavaDrawer.loadMapIntoOneImage();
-        WorldData.scaledMap = JavaDrawer.scale(WorldData.map,JavaDrawer.scale,JavaDrawer.scale);
+        WorldData.scaledMap = JavaDrawer.loadMapIntoOneImage();
         WorldData.mapName = mapid;
         loadMiscData(mapid);
         loadEntityData(mapid);
@@ -256,6 +256,9 @@ public class DataReader {
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         if (tile == null) {
@@ -514,8 +517,7 @@ public class DataReader {
             Output.error("IO Exception while attempting to read the map file: " + mapid);
             e.printStackTrace();
         }
-        WorldData.map = JavaDrawer.loadMapIntoOneImage();
-        WorldData.scaledMap = JavaDrawer.scale(WorldData.map,JavaDrawer.scale,JavaDrawer.scale);
+        WorldData.scaledMap = JavaDrawer.loadMapIntoOneImage();
         WorldData.mapName = mapid;
         loadMiscData(mapid);
         loadEntityData(mapid);

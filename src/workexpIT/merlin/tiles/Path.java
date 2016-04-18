@@ -5,6 +5,6 @@ package workexpIT.merlin.tiles;
  */
 public class Path extends Tile {
     public Path() {
-        super(1);
+        super(1,false);
     }
 }

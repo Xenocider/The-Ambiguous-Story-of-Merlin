@@ -1,6 +1,7 @@
 package workexpIT.merlin;
 
 import workexpIT.merlin.attacks.Attack;
+import workexpIT.merlin.data.DataReader;
 import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
@@ -65,8 +66,13 @@ public class GameLoop implements Runnable{
             if (MouseListener.pressed) {
                 Point loc = MouseInfo.getPointerInfo().getLocation();
                 SwingUtilities.convertPointFromScreen(loc, JavaDrawer.frame);
-                loc.x = (int) (loc.getX()-16);
-                loc.y = (int) (loc.getY()-72);
+                if (DataReader.OS.contains("win")) {
+                    loc.x = (int) (loc.getX() - 16);
+                    loc.y = (int) (loc.getY() - 72);
+                }
+                else {
+                    loc.y = (int) (loc.getY()-21);
+                }
                 System.out.println("PointerInfo Click " + loc.getX() + " " + loc.getY());
                 int mapX = (int) (((loc.getX() - JavaDrawer.frame.getWidth() / 2) / JavaDrawer.scale - JavaDrawer.offsetX) / JavaDrawer.imageSize);
                 int mapY = (int) ((loc.getY() - JavaDrawer.frame.getHeight() / 2) / JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize) / JavaDrawer.imageSize;
@@ -333,6 +339,11 @@ public class GameLoop implements Runnable{
     }
 
     public static void switchToEntityEditor() {
-        tileEditor = false;
+        if (tileEditor) {
+            tileEditor = false;
+        }
+        else {
+            tileEditor = true;
+        }
     }
 }

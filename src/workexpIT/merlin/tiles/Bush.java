@@ -6,7 +6,7 @@ package workexpIT.merlin.tiles;
 public class Bush extends Tile {
 
     public Bush() {
-        super(1);
+        super(1,false);
     }
 
     @Override

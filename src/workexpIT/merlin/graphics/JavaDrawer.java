@@ -41,7 +41,7 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     public static int editorMenuSize = 200;
     public static int walkingStage = 1;
-    private static int maxCount = 10;
+    private static int maxCount = 7;
     public static int maxWalkingStage = maxCount*2+1;
     private float offsetSpeed = 0.5f;
 
@@ -271,7 +271,7 @@ public class JavaDrawer extends JPanel implements Runnable {
 
                 WorldData.entityMenu.get(i);
 
-                BufferedImage image = scale(WorldData.entityMenu.get(i).downSprite.getSubimage(0,10,16,16),4,4);
+                BufferedImage image = scale(WorldData.entityMenu.get(i).getSprites().getSubimage(0,10,16,16),4,4);
 
                 g.drawImage(image, (int) (x * JavaDrawer.imageSize * 4 + frame.getWidth() - editorMenuSize + 10 * x + 10), (int) (y * JavaDrawer.imageSize * 4 + 10 * y + 10), null);
                 if (x == 0) {
@@ -315,6 +315,7 @@ public class JavaDrawer extends JPanel implements Runnable {
     private void drawEntities(Graphics g) {
         if (runAnimation) {
             walkingStage = walkingStage + 1;
+            Output.write(walkingStage + " < " + maxWalkingStage);
             count = count + 1;
             if (count == maxCount) {
                 count = 0;
@@ -336,39 +337,39 @@ public class JavaDrawer extends JPanel implements Runnable {
             }
         }
         //Output.write("Drawing Entities");
-        for (int checkX = 0; checkX < WorldData.mapSizeX; checkX++) {
-            for (int checkY = 0; checkY < WorldData.mapSizeY; checkY++) {
+        for (int checkY = 0; checkY < WorldData.mapSizeY; checkY++) {
+            for (int checkX = 0; checkX < WorldData.mapSizeX; checkX++) {
                 for (int i = 0; i < WorldData.entities.size(); i++) {
                     if (WorldData.entities.get(i).getX() == checkX && WorldData.entities.get(i).getY() == checkY) {
                         BufferedImage sprite = null;
                         switch (WorldData.entities.get(i).facing) {
                             case Entity.MOVE_UP:
                                 if (WorldData.entities.get(i).moving) {
-                                    sprite = scale(WorldData.entities.get(i).upWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
+                                    sprite = WorldData.entities.get(i).upWalkingSprites[WorldData.entities.get(i).animationStage];
                                 } else {
-                                    sprite = scale(WorldData.entities.get(i).upSprite, scale, scale);
+                                    sprite = WorldData.entities.get(i).upSprite;
                                 }
                                 break;
                             case Entity.MOVE_RIGHT:
                                 if (WorldData.entities.get(i).moving) {
-                                    sprite = scale(WorldData.entities.get(i).rightWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
+                                    sprite = WorldData.entities.get(i).rightWalkingSprites[WorldData.entities.get(i).animationStage];
                                 } else {
-                                    sprite = scale(WorldData.entities.get(i).rightSprite, scale, scale);
+                                    sprite = WorldData.entities.get(i).rightSprite;
                                 }
                                 break;
                             case Entity.MOVE_DOWN:
                                 if (WorldData.entities.get(i).moving) {
                                     //Output.write("ANIMATING with stage = " + WorldData.entities.get(i).animationStage);
-                                    sprite = scale(WorldData.entities.get(i).downWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
+                                    sprite = WorldData.entities.get(i).downWalkingSprites[WorldData.entities.get(i).animationStage];
                                 } else {
-                                    sprite = scale(WorldData.entities.get(i).downSprite, scale, scale);
+                                    sprite = WorldData.entities.get(i).downSprite;
                                 }
                                 break;
                             case Entity.MOVE_LEFT:
                                 if (WorldData.entities.get(i).moving) {
-                                    sprite = scale(WorldData.entities.get(i).leftWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
+                                    sprite = WorldData.entities.get(i).leftWalkingSprites[WorldData.entities.get(i).animationStage];
                                 } else {
-                                    sprite = scale(WorldData.entities.get(i).leftSprite, scale, scale);
+                                    sprite = WorldData.entities.get(i).leftSprite;
                                 }
                                 break;
                         }
@@ -416,17 +417,60 @@ public class JavaDrawer extends JPanel implements Runnable {
     }
 
     public static void updateMap() {
-        WorldData.map = JavaDrawer.loadMapIntoOneImage();
-        WorldData.scaledMap = JavaDrawer.scale(WorldData.map,JavaDrawer.scale,JavaDrawer.scale);
+        //WorldData.map = JavaDrawer.loadMapIntoOneImage();
+        //WorldData.scaledMap = JavaDrawer.scale(WorldData.map,JavaDrawer.scale,JavaDrawer.scale);
+        //WorldData.scaledMap = JavaDrawer.loadMapIntoOneImage();
+        BufferedImage map = WorldData.scaledMap;
+        try {
+            Graphics2D g2 = map.createGraphics();
+            for (int i = 0; i < WorldData.animatedTiles.size(); i++) {
+                int a = WorldData.animatedTiles.get(i)[0];
+                int b = WorldData.animatedTiles.get(i)[1];
+                BufferedImage tile = scale(WorldData.tiles[a][b].getTexture()[WorldData.tiles[a][b].animationStage], scale, scale);
+                double radians = 0.0;
+                switch (WorldData.tiles[a][b].rotation) {
+                    case UP:
+                        radians = Math.PI / 2.0 * 0.0;
+                        break;
+                    case RIGHT:
+                        radians = Math.PI / 2.0 * 1.0;
+                        break;
+                    case DOWN:
+                        radians = Math.PI / 2.0 * 2.0;
+                        break;
+                    case LEFT:
+                        radians = Math.PI / 2.0 * 3.0;
+                        break;
+                }
+                tile = rotateImage(tile, radians);
+                try {
+                    switch (WorldData.tiles[a][b].flip) {
+                        case HORIZONTAL:
+                            tile = flipImage(tile, true);
+                            break;
+                        case VERTICAL:
+                            tile = flipImage(tile, false);
+                            break;
+                    }
+                } catch (NullPointerException e) {
+                }
+                g2.drawImage(tile, null, (int) (a * 16 * scale), (int) ((b * 16) * scale));
+            }
+            g2.dispose();
+            WorldData.scaledMap = map;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public static BufferedImage loadMapIntoOneImage() {
-        BufferedImage map = new BufferedImage(WorldData.mapSizeX*16,WorldData.mapSizeY*16, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage map = new BufferedImage((int)(WorldData.mapSizeX*16*scale),(int)(WorldData.mapSizeY*16*scale), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = map.createGraphics();
         BufferedImage tile;
         for (int a = 0; a < WorldData.tiles.length; a++) {
             for (int b = 0; b < WorldData.tiles[a].length; b++) {
                 if (WorldData.tiles[a][b] != null) {
-                    tile = WorldData.tiles[a][b].getTexture()[WorldData.tiles[a][b].animationStage];
+                    tile = scale(WorldData.tiles[a][b].getTexture()[WorldData.tiles[a][b].animationStage],scale,scale);
                     double radians = 0.0;
                     switch (WorldData.tiles[a][b].rotation) {
                         case UP:
@@ -454,7 +498,7 @@ public class JavaDrawer extends JPanel implements Runnable {
                         }
                     }
                     catch (NullPointerException e) {}
-                    g2.drawImage(tile,null,a*16,b*16-tile.getHeight()+16);
+                    g2.drawImage(tile,null,(int)(a*16*scale),(int)((b*16)*scale));
                 }
             }
         }

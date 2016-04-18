@@ -15,7 +15,6 @@ public class Reference {
             "Path",
             "WoodFence",
             "Water",
-            "Tree",
             "Hole"
 
     };

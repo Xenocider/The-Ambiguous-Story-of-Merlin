@@ -8,7 +8,7 @@ import workexpIT.merlin.entities.Entity;
 public class Water extends Tile {
 
     public Water() {
-        super(10);
+        super(10,false);
     }
 
     @Override

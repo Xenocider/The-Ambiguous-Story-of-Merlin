@@ -24,10 +24,10 @@ public class Player extends Entity{
         attacks[3] = new DrainMana();
         attacks[4] = new Flood();
         attacks[5] = new LifeBend();
-        downWalkingSpritesId = new int[]{3, 4, 3, 5};
-        upWalkingSpritesId = new int[]{0, 1, 0, 2};
-        rightWalkingSpritesId = new int[]{9, 10, 9, 11};
-        leftWalkingSpritesId = new int[]{6, 7, 6, 8};
+        downWalkingSpritesId = new int[]{4, 3, 5, 3};
+        upWalkingSpritesId = new int[]{1, 0, 2, 0};
+        rightWalkingSpritesId = new int[]{10, 9, 11, 9};
+        leftWalkingSpritesId = new int[]{7, 6, 8, 6};
         upSpriteId = 0;
         downSpriteId = 3;
         rightSpriteId = 9;

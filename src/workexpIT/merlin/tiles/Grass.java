@@ -5,6 +5,6 @@ import workexpIT.merlin.data.ImageReader;
 public class Grass extends Tile {
 
     public Grass() {
-        super(2);
+        super(2,false);
     }
 }
