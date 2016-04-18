@@ -522,6 +522,56 @@ public class DataReader {
     }
 
     public static void saveMap(String mapid) {
+        saveTileData(mapid);
+        saveEntityData(mapid);
+        Output.write("Svaing complete!");
+    }
+
+    public static void saveEntityData(String mapid) {
+        Output.write("Saving map " + mapid + "...");
+        File file = new File("resources/worlddata/default/" + mapid + "/entitydata.txt");
+        File theDir = new File("resources/worlddata/default/" + mapid);
+
+// if the directory does not exist, create it
+        if (!theDir.exists()) {
+            System.out.println("creating directory");
+            boolean result = false;
+
+            try {
+                theDir.mkdir();
+                result = true;
+            } catch (SecurityException se) {
+                //handle it
+            }
+            if (result) {
+                System.out.println("DIR created");
+            }
+        }
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            Output.error("IO Exception while attempting to create the map file: " + mapid);
+            e.printStackTrace();
+        }
+        FileWriter writer;
+        try {
+            writer = new FileWriter("resources/worlddata/default/" + mapid + "/entitydata.txt");
+
+            for (int i = 0; i < WorldData.entities.size(); i ++) {
+                Entity e = WorldData.entities.get(i);
+                writer.write("("+e.getClass().getSimpleName()+")("+e.getState()+")("+e.getLevel()+")("+e.getX()+")("+e.getY()+")");
+                writer.write(System.lineSeparator());
+            }
+
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            Output.error("IO Exception while attempting to write to the map file: " + mapid);
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveTileData(String mapid) {
         Output.write("Saving map " + mapid + "...");
         File file = new File("resources/worlddata/default/"+mapid+"/tiledata.txt");
         File theDir = new File("resources/worlddata/default/"+mapid);

@@ -31,6 +31,8 @@ public class WorldData {
     public static Tile[][] tiles = new Tile[WorldData.mapSizeX][WorldData.mapSizeY];
     public static List<Entity> entities = new ArrayList<Entity>();
     public static int selectedInstance = 0;
+    public static List<Entity> entityMenu = new ArrayList<>();
+    public static int selectedEntity;
 
     public static Player getPlayer() {
         Player player = null;

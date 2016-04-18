@@ -6,11 +6,14 @@ import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
 import workexpIT.merlin.data.DataReader;
 import workexpIT.merlin.data.WorldData;
+import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.graphics.JavaDrawer;
 import workexpIT.merlin.tiles.Tile;
 
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by ict11 on 2016-02-24.
@@ -31,20 +34,18 @@ public class MouseListener implements java.awt.event.MouseListener {
 
         int x = e.getX();
         int y = e.getY();
-        System.out.println("MouseEvent CLICK = " + x +" " + y);
         Output.write("MOUSELOC CLICK = " + x +" " + y);
-        if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
-            if (x > JavaDrawer.frame.getWidth()-JavaDrawer.editorMenuSize && x < JavaDrawer.frame.getWidth()-10-32) {
-                int editX = (x - JavaDrawer.frame.getWidth() + JavaDrawer.editorMenuSize - 10)/(JavaDrawer.imageSize*4+10);
-                int editY = (y - 10)/(JavaDrawer.imageSize*4+10);
-                int id = editX + editY*2;
+        if (Merlin.mode.equals(Merlin.Mode.EDITOR) && GameLoop.tileEditor) {
+            if (x > JavaDrawer.frame.getWidth() - JavaDrawer.editorMenuSize && x < JavaDrawer.frame.getWidth() - 10 - 32) {
+                int editX = (x - JavaDrawer.frame.getWidth() + JavaDrawer.editorMenuSize - 10) / (JavaDrawer.imageSize * 4 + 10);
+                int editY = (y - 10) / (JavaDrawer.imageSize * 4 + 10);
+                int id = editX + editY * 2;
                 if (e.getModifiers() == InputEvent.BUTTON3_MASK) {
                     //If it is the right mouse button
-                    int instance = WorldData.menuTiles.get(id).instance+1;
-                    if (instance > WorldData.menuTiles.get(id).maxInstances-1) {
+                    int instance = WorldData.menuTiles.get(id).instance + 1;
+                    if (instance > WorldData.menuTiles.get(id).maxInstances - 1) {
                         WorldData.menuTiles.get(id).setInstance(0);
-                    }
-                    else {
+                    } else {
                         WorldData.menuTiles.get(id).setInstance(instance);
                     }
 
@@ -52,18 +53,36 @@ public class MouseListener implements java.awt.event.MouseListener {
                 WorldData.selectedTile = id;
                 WorldData.selectedInstance = WorldData.menuTiles.get(id).instance;
                 Output.write("Selected tile: " + id);
-            }
-            else if (x>JavaDrawer.frame.getWidth()-10-32 && y < 60) {
+            } else if (x > JavaDrawer.frame.getWidth() - 10 - 32 && y < 60) {
                 DataReader.saveMap(WorldData.mapName);
-            }
-            else if (x<JavaDrawer.frame.getWidth()-JavaDrawer.editorMenuSize){
+            } else if (x < JavaDrawer.frame.getWidth() - JavaDrawer.editorMenuSize) {
                 //int mapX = (int)((x/JavaDrawer.scale - JavaDrawer.offsetX)/JavaDrawer.imageSize);
                 //int mapY = (int)((y/JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize)/JavaDrawer.imageSize);
-                int mapX = (int)((x-JavaDrawer.frame.getWidth()/2)/JavaDrawer.scale - JavaDrawer.offsetX)/JavaDrawer.imageSize;
-                int mapY = (int)((y-JavaDrawer.frame.getHeight()/2)/JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize)/JavaDrawer.imageSize;
+                int mapX = (int) ((x - JavaDrawer.frame.getWidth() / 2) / JavaDrawer.scale - JavaDrawer.offsetX) / JavaDrawer.imageSize;
+                int mapY = (int) ((y - JavaDrawer.frame.getHeight() / 2) / JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize) / JavaDrawer.imageSize;
                 Output.write(mapX + ", " + mapY);
-                    placeTile(WorldData.selectedTile,WorldData.selectedInstance,mapX,mapY);
+                placeTile(WorldData.selectedTile, WorldData.selectedInstance, mapX, mapY);
             }
+        }
+            else if (Merlin.mode.equals(Merlin.Mode.EDITOR) && !GameLoop.tileEditor) {
+                if (x > JavaDrawer.frame.getWidth()-JavaDrawer.editorMenuSize && x < JavaDrawer.frame.getWidth()-10-32) {
+                    int editX = (x - JavaDrawer.frame.getWidth() + JavaDrawer.editorMenuSize - 10)/(JavaDrawer.imageSize*4+10);
+                    int editY = (y - 10)/(JavaDrawer.imageSize*4+10);
+                    int id = editX + editY*2;
+                    WorldData.selectedEntity = id;
+                    Output.write("Selected entity: " + id);
+                }
+                else if (x>JavaDrawer.frame.getWidth()-10-32 && y < 60) {
+                    DataReader.saveMap(WorldData.mapName);
+                }
+                else if (x<JavaDrawer.frame.getWidth()-JavaDrawer.editorMenuSize){
+                    //int mapX = (int)((x/JavaDrawer.scale - JavaDrawer.offsetX)/JavaDrawer.imageSize);
+                    //int mapY = (int)((y/JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize)/JavaDrawer.imageSize);
+                    int mapX = (int)((x-JavaDrawer.frame.getWidth()/2)/JavaDrawer.scale - JavaDrawer.offsetX)/JavaDrawer.imageSize;
+                    int mapY = (int)((y-JavaDrawer.frame.getHeight()/2)/JavaDrawer.scale - JavaDrawer.offsetY + JavaDrawer.imageSize)/JavaDrawer.imageSize;
+                    Output.write(mapX + ", " + mapY);
+                    placeEntity(WorldData.selectedEntity,mapX,mapY);
+                }
         }
         else if (Merlin.mode.equals(Merlin.Mode.BATTLE)) {
             if (!GameLoop.fightMenu) {
@@ -116,6 +135,29 @@ public class MouseListener implements java.awt.event.MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    private void placeEntity(int selectedEntity, int mapX, int mapY) {
+        Entity entity = null;
+        try {
+            Class<?> clazz = Class.forName("workexpIT.merlin.entities."+ Reference.entities[selectedEntity]);
+            Constructor<?> ctor = null;
+            try {
+                ctor = clazz.getConstructor(int.class,int.class,int.class,int.class);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+            entity = (Entity) ctor.newInstance(mapX,mapY,0,1);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        WorldData.entities.add(entity);
     }
 
     public static void placeTile(int id, int inst, int x, int y) {

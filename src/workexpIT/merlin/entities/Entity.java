@@ -87,7 +87,6 @@ public class Entity {
         this.level = level;
         this.state = state;
         this.sprites = sprites;
-        battleSprite = ImageReader.loadImage("resources/graphics/charactersprites/battle/"+getClass().getSimpleName()+".png");
         health = (int)(baseHealth+factorHealth*level);
         healthMax = (int)(baseHealth+factorHealth*level);
         mana = (int)(baseMana+factorMana*level);

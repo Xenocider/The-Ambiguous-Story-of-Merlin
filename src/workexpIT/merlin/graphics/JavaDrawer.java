@@ -141,6 +141,7 @@ public class JavaDrawer extends JPanel implements Runnable {
             recordStart();
             drawEntities(g);
             Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the Entities");
+            //drawMapAndEntities(g);
         }
         if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
             recordStart();
@@ -164,18 +165,122 @@ public class JavaDrawer extends JPanel implements Runnable {
         //Output.write("FPS: " + Math.pow((endTime-startTime),-1)*1000);
     }
 
+    private void drawMapAndEntities(Graphics g) {
+        BufferedImage tile;
+        for (int x = 0; x < WorldData.mapSizeX; x++) {
+            for (int y = 0; y < WorldData.mapSizeY; y++) {
+                if (WorldData.tiles[x][y] != null) {
+                    tile = WorldData.tiles[x][y].getTexture()[WorldData.tiles[x][y].animationStage];
+                    double radians = 0.0;
+                    switch (WorldData.tiles[x][y].rotation) {
+                        case UP:
+                            radians = Math.PI/2.0*0.0;
+                            break;
+                        case RIGHT:
+                            radians = Math.PI/2.0*1.0;
+                            break;
+                        case DOWN:
+                            radians = Math.PI/2.0*2.0;
+                            break;
+                        case LEFT:
+                            radians = Math.PI/2.0*3.0;
+                            break;
+                    }
+                    tile = rotateImage(tile, radians);
+                    try {
+                        switch (WorldData.tiles[x][y].flip) {
+                            case HORIZONTAL:
+                                tile = flipImage(tile, true);
+                                break;
+                            case VERTICAL:
+                                tile = flipImage(tile, false);
+                                break;
+                        }
+                    }
+                    catch (NullPointerException e) {}
+                    g.drawImage(scale(tile,scale,scale),(int)((x * imageSize + offsetX)*scale)+frame.getWidth()/2, (int)((y * imageSize - imageSize + offsetY)*scale)+frame.getHeight()/2,null);
+                }
+                for (int i =0; i< WorldData.entities.size(); i++) {
+                    if (WorldData.entities.get(i).getX() == x && WorldData.entities.get(i).getY() == y) {
+                        BufferedImage sprite = null;
+                        switch (WorldData.entities.get(i).facing){
+                            case Entity.MOVE_UP:
+                                if (WorldData.entities.get(i).moving) {
+                                    sprite = scale(WorldData.entities.get(i).upWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
+                                }
+                                else {
+                                    sprite = scale(WorldData.entities.get(i).upSprite, scale, scale);
+                                }
+                                break;
+                            case Entity.MOVE_RIGHT:
+                                if (WorldData.entities.get(i).moving) {
+                                    sprite = scale(WorldData.entities.get(i).rightWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
+                                }
+                                else {
+                                    sprite = scale(WorldData.entities.get(i).rightSprite, scale, scale);
+                                }                        break;
+                            case Entity.MOVE_DOWN:
+                                if (WorldData.entities.get(i).moving) {
+                                    Output.write("ANIMATING with stage = " + WorldData.entities.get(i).animationStage);
+                                    sprite = scale(WorldData.entities.get(i).downWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
+                                }
+                                else {
+                                    sprite = scale(WorldData.entities.get(i).downSprite, scale, scale);
+                                }                      break;
+                            case Entity.MOVE_LEFT:
+                                if (WorldData.entities.get(i).moving) {
+                                    sprite = scale(WorldData.entities.get(i).leftWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
+                                }
+                                else {
+                                    sprite = scale(WorldData.entities.get(i).leftSprite, scale, scale);
+                                }                        break;
+                        }
+                        int entityX = WorldData.entities.get(i).lastLoc[0]*imageSize + (WorldData.entities.get(i).getX()*imageSize - WorldData.entities.get(i).lastLoc[0]*imageSize)*walkingStage/maxWalkingStage;
+                        int entityY = WorldData.entities.get(i).lastLoc[1]*imageSize + (WorldData.entities.get(i).getY()*imageSize - WorldData.entities.get(i).lastLoc[1]*imageSize)*walkingStage/maxWalkingStage;
+                        int w = sprite.getWidth();
+                        int h = sprite.getHeight();
+                        g.drawImage(sprite, (int) ((entityX + offsetX) * scale) + frame.getWidth() / 2, (int) ((entityY - h / scale + offsetY) * scale) + frame.getHeight() / 2, null);
+                    }
+                }
+            }
+        }
+    }
+
 
     private void drawEditorMenu(Graphics g) {
         int x = 0;
         int y = 0;
         g.setColor(Color.WHITE);
         g.fillRect(frame.getWidth()-editorMenuSize,0,editorMenuSize,frame.getHeight());
-        for (int i = 0; i < WorldData.menuTiles.size(); i ++) {
+        if (GameLoop.tileEditor) {
+            for (int i = 0; i < WorldData.menuTiles.size(); i++) {
 
-            BufferedImage image = scale(WorldData.menuTiles.get(i).getTexture()[WorldData.menuTiles.get(i).animationStage],4,4);
+                BufferedImage image = scale(WorldData.menuTiles.get(i).getTexture()[WorldData.menuTiles.get(i).animationStage], 4, 4);
 
-            g.drawImage(image,(int)(x * JavaDrawer.imageSize*4 + frame.getWidth()-editorMenuSize + 10*x + 10),(int)(y * JavaDrawer.imageSize*4 + 10*y + 10),null);
-            if (x == 0) {x = 1;} else {x = 0;y=y+1;}
+                g.drawImage(image, (int) (x * JavaDrawer.imageSize * 4 + frame.getWidth() - editorMenuSize + 10 * x + 10), (int) (y * JavaDrawer.imageSize * 4 + 10 * y + 10), null);
+                if (x == 0) {
+                    x = 1;
+                } else {
+                    x = 0;
+                    y = y + 1;
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < WorldData.entityMenu.size(); i++) {
+
+                WorldData.entityMenu.get(i);
+
+                BufferedImage image = scale(WorldData.entityMenu.get(i).downSprite.getSubimage(0,10,16,16),4,4);
+
+                g.drawImage(image, (int) (x * JavaDrawer.imageSize * 4 + frame.getWidth() - editorMenuSize + 10 * x + 10), (int) (y * JavaDrawer.imageSize * 4 + 10 * y + 10), null);
+                if (x == 0) {
+                    x = 1;
+                } else {
+                    x = 0;
+                    y = y + 1;
+                }
+            }
         }
         g.drawImage(GameLoop.save, frame.getWidth()-10-32, 10,null);
     }
@@ -209,7 +314,7 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     private void drawEntities(Graphics g) {
         if (runAnimation) {
-                walkingStage = walkingStage + 1;
+            walkingStage = walkingStage + 1;
             count = count + 1;
             if (count == maxCount) {
                 count = 0;
@@ -218,7 +323,7 @@ public class JavaDrawer extends JPanel implements Runnable {
                 updateMap();
             }
             if (walkingStage == maxWalkingStage) {
-                for (int i =0; i< WorldData.entities.size(); i++) {
+                for (int i = 0; i < WorldData.entities.size(); i++) {
                     WorldData.entities.get(i).lastLoc[0] = WorldData.entities.get(i).getX();
                     WorldData.entities.get(i).lastLoc[1] = WorldData.entities.get(i).getY();
                     WorldData.entities.get(i).moving = false;
@@ -231,45 +336,50 @@ public class JavaDrawer extends JPanel implements Runnable {
             }
         }
         //Output.write("Drawing Entities");
-        for (int i = 0; i < WorldData.entities.size(); i++) {
-                BufferedImage sprite = null;
-                switch (WorldData.entities.get(i).facing){
-                    case Entity.MOVE_UP:
-                        if (WorldData.entities.get(i).moving) {
-                            sprite = scale(WorldData.entities.get(i).upWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
+        for (int checkX = 0; checkX < WorldData.mapSizeX; checkX++) {
+            for (int checkY = 0; checkY < WorldData.mapSizeY; checkY++) {
+                for (int i = 0; i < WorldData.entities.size(); i++) {
+                    if (WorldData.entities.get(i).getX() == checkX && WorldData.entities.get(i).getY() == checkY) {
+                        BufferedImage sprite = null;
+                        switch (WorldData.entities.get(i).facing) {
+                            case Entity.MOVE_UP:
+                                if (WorldData.entities.get(i).moving) {
+                                    sprite = scale(WorldData.entities.get(i).upWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
+                                } else {
+                                    sprite = scale(WorldData.entities.get(i).upSprite, scale, scale);
+                                }
+                                break;
+                            case Entity.MOVE_RIGHT:
+                                if (WorldData.entities.get(i).moving) {
+                                    sprite = scale(WorldData.entities.get(i).rightWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
+                                } else {
+                                    sprite = scale(WorldData.entities.get(i).rightSprite, scale, scale);
+                                }
+                                break;
+                            case Entity.MOVE_DOWN:
+                                if (WorldData.entities.get(i).moving) {
+                                    //Output.write("ANIMATING with stage = " + WorldData.entities.get(i).animationStage);
+                                    sprite = scale(WorldData.entities.get(i).downWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
+                                } else {
+                                    sprite = scale(WorldData.entities.get(i).downSprite, scale, scale);
+                                }
+                                break;
+                            case Entity.MOVE_LEFT:
+                                if (WorldData.entities.get(i).moving) {
+                                    sprite = scale(WorldData.entities.get(i).leftWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
+                                } else {
+                                    sprite = scale(WorldData.entities.get(i).leftSprite, scale, scale);
+                                }
+                                break;
                         }
-                        else {
-                            sprite = scale(WorldData.entities.get(i).upSprite, scale, scale);
-                        }
-                        break;
-                    case Entity.MOVE_RIGHT:
-                        if (WorldData.entities.get(i).moving) {
-                            sprite = scale(WorldData.entities.get(i).rightWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
-                        }
-                        else {
-                            sprite = scale(WorldData.entities.get(i).rightSprite, scale, scale);
-                        }                        break;
-                    case Entity.MOVE_DOWN:
-                        if (WorldData.entities.get(i).moving) {
-                            Output.write("ANIMATING with stage = " + WorldData.entities.get(i).animationStage);
-                            sprite = scale(WorldData.entities.get(i).downWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
-                        }
-                        else {
-                            sprite = scale(WorldData.entities.get(i).downSprite, scale, scale);
-                        }                      break;
-                    case Entity.MOVE_LEFT:
-                        if (WorldData.entities.get(i).moving) {
-                            sprite = scale(WorldData.entities.get(i).leftWalkingSprites[WorldData.entities.get(i).animationStage], scale, scale);
-                        }
-                        else {
-                            sprite = scale(WorldData.entities.get(i).leftSprite, scale, scale);
-                        }                        break;
+                        int x = WorldData.entities.get(i).lastLoc[0] * imageSize + (WorldData.entities.get(i).getX() * imageSize - WorldData.entities.get(i).lastLoc[0] * imageSize) * walkingStage / maxWalkingStage;
+                        int y = WorldData.entities.get(i).lastLoc[1] * imageSize + (WorldData.entities.get(i).getY() * imageSize - WorldData.entities.get(i).lastLoc[1] * imageSize) * walkingStage / maxWalkingStage;
+                        int w = sprite.getWidth();
+                        int h = sprite.getHeight();
+                        g.drawImage(sprite, (int) ((x + offsetX) * scale) + frame.getWidth() / 2, (int) ((y - h / scale + offsetY) * scale) + frame.getHeight() / 2, null);
+                    }
                 }
-                int x = WorldData.entities.get(i).lastLoc[0]*imageSize + (WorldData.entities.get(i).getX()*imageSize - WorldData.entities.get(i).lastLoc[0]*imageSize)*walkingStage/maxWalkingStage;
-                int y = WorldData.entities.get(i).lastLoc[1]*imageSize + (WorldData.entities.get(i).getY()*imageSize - WorldData.entities.get(i).lastLoc[1]*imageSize)*walkingStage/maxWalkingStage;
-                int w = sprite.getWidth();
-                int h = sprite.getHeight();
-                g.drawImage(sprite, (int) ((x + offsetX) * scale) + frame.getWidth() / 2, (int) ((y - h / scale + offsetY) * scale) + frame.getHeight() / 2, null);
+            }
         }
     }
 

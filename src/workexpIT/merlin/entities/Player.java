@@ -32,6 +32,7 @@ public class Player extends Entity{
         downSpriteId = 3;
         rightSpriteId = 9;
         leftSpriteId = 6;
+        battleSprite = ImageReader.loadImage("resources/graphics/charactersprites/battle/"+getClass().getSimpleName()+".png");
         loadSprites();
     }
 

@@ -14,6 +14,8 @@ import workexpIT.merlin.tiles.Tile;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Timer;
@@ -37,6 +39,7 @@ public class GameLoop implements Runnable{
     public static Entity enemy;
 
     public static boolean fightMenu = false;
+    public static boolean tileEditor = true;
 
     @Override
     public void run() {
@@ -58,7 +61,7 @@ public class GameLoop implements Runnable{
         else if (Merlin.mode.equals(Merlin.Mode.BATTLE) && !pause) {
             runTurn();
         }
-        else if (Merlin.mode.equals(Merlin.Mode.EDITOR) && !pause) {
+        else if (Merlin.mode.equals(Merlin.Mode.EDITOR) && !pause && tileEditor) {
             if (MouseListener.pressed) {
                 Point loc = MouseInfo.getPointerInfo().getLocation();
                 SwingUtilities.convertPointFromScreen(loc, JavaDrawer.frame);
@@ -268,6 +271,28 @@ public class GameLoop implements Runnable{
             }
             WorldData.menuTiles.add(tile);
         }
+        for (int i = 0; i < Reference.entities.length; i++) {
+            Entity entity = null;
+            try {
+                Class<?> clazz = Class.forName("workexpIT.merlin.entities."+ Reference.entities[i]);
+                Constructor<?> ctor = null;
+                try {
+                    ctor = clazz.getConstructor(int.class,int.class,int.class,int.class);
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+                entity = (Entity) ctor.newInstance(0,0,0,1);
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            WorldData.entityMenu.add(entity);
+        }
     }
 
     public static void entityInteract(Entity entity1, Entity entity2) {
@@ -305,5 +330,9 @@ public class GameLoop implements Runnable{
         Timestamp recordEndTime = new Timestamp(new Date().getTime());
         long time = recordEndTime.getTime() - recordStartTime.getTime();
         return time;
+    }
+
+    public static void switchToEntityEditor() {
+        tileEditor = false;
     }
 }

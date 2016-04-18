@@ -1,5 +1,6 @@
 package workexpIT.merlin.listeners;
 
+import workexpIT.merlin.GameLoop;
 import workexpIT.merlin.Merlin;
 import workexpIT.merlin.Output;
 import workexpIT.merlin.data.WorldData;
@@ -179,6 +180,9 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
                             break;
                     }
                 }
+                break;
+            case KeyEvent.VK_E:
+                GameLoop.switchToEntityEditor();
                 break;
         }
 

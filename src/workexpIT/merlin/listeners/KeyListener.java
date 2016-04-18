@@ -12,8 +12,6 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
 public class KeyListener extends GLFWKeyCallback {
 
 
-    private boolean ctrlDown;
-
     public boolean upPressed;
     public boolean rightPressed;
     public boolean downPressed;
@@ -27,7 +25,6 @@ public class KeyListener extends GLFWKeyCallback {
     //KeyListener
         @Override
         public void invoke(long window, int key, int scancode, int action, int mods) {
-            ctrlDown = (mods & GLFW_MOD_CONTROL) != 0;
             if (action == GLFW_RELEASE) {
                 switch (key) {
                     case GLFW_KEY_UP:
