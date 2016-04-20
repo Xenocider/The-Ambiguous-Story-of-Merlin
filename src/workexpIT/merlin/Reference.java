@@ -23,6 +23,7 @@ public class Reference {
             "George",
             "Rock",
             "TreeLeft",
-            "TreeRight"
+            "TreeRight",
+            "Sign"
     };
 }

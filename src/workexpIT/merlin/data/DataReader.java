@@ -4,6 +4,7 @@ import workexpIT.merlin.GameLoop;
 import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
 import workexpIT.merlin.entities.Entity;
+import workexpIT.merlin.entities.Sign;
 import workexpIT.merlin.graphics.Drawer;
 import workexpIT.merlin.graphics.JavaDrawer;
 import workexpIT.merlin.tiles.*;
@@ -185,8 +186,8 @@ public class DataReader {
         }
         WorldData.scaledMap = JavaDrawer.loadMapIntoOneImage();
         WorldData.mapName = mapid;
-        loadMiscData(mapid);
         loadEntityData(mapid);
+        loadMiscData(mapid);
         WorldData.battleBackground = ImageReader.loadImage("resources/graphics/backgrounds/" + mapid + ".png");
         //Center camera
         try {
@@ -281,12 +282,22 @@ public class DataReader {
 
             String line = null;
 
+            boolean doors = false;
+            boolean signtext = false;
+
             while ((line = BReader.readLine()) != null) {
                 Output.write(line);
-                if (line.contains("doors")) {
-                    Output.write("Found door code indicator");
 
-                        int part = 0;
+                if (line.contains("doors")) {
+                    doors = true;
+                    signtext = false;
+                }
+                if (line.contains("signtext")) {
+                    doors = false;
+                    signtext = true;
+                }
+
+                if (doors) {
 
                     String doorX1 = null;
                     String doorY1 = null;
@@ -296,13 +307,13 @@ public class DataReader {
 
 
                     line = BReader.readLine();
-                            Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(line);
-                            m.find();
-                            doorX1 = m.group(1);
-                            m.find();
-                            doorY1 = m.group(1);
-                            m.find();
-                            doorMap = m.group(1);
+                    Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(line);
+                    m.find();
+                    doorX1 = m.group(1);
+                    m.find();
+                    doorY1 = m.group(1);
+                    m.find();
+                    doorMap = m.group(1);
                     m.find();
                     doorX2 = m.group(1);
                     m.find();
@@ -310,8 +321,40 @@ public class DataReader {
 
                         Output.write("[Door data] x1: " + doorX1 + " y1: " + doorY1 + " map: " + doorMap + " x2: " + doorX2 + " y2: " + doorY2);
                         WorldData.tiles[Integer.parseInt(doorX1)][Integer.parseInt(doorY1)].setDoor(true, doorMap, Integer.parseInt(doorX2), Integer.parseInt(doorY2));
+                }
+                if (signtext) {
+                    String signX = null;
+                    String signY = null;
+                    String text = null;
+
+                    line = BReader.readLine();
+                    Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(line);
+                    m.find();
+                    signX = m.group(1);
+                    m.find();
+                    signY = m.group(1);
+                    m.find();
+                    text = m.group(1);
+
+                    Output.write("[Sign Text Data] x: " + signX + " y: " + signY + " text: " + text);
+                    boolean located = false;
+                    for (int i = 0; i < WorldData.entities.size(); i++) {
+                        if (WorldData.entities.get(i).getX() == Integer.parseInt(signX) && WorldData.entities.get(i).getY() == Integer.parseInt(signY)) {
+                            located = true;
+                            if (WorldData.entities.get(i).getName() == "sign") {
+                                Sign sign = (Sign) (WorldData.entities.get(i));
+                                sign.setText(text);
+                            }
+                            else {
+                                Output.error("Entity found was not a sign");
+                            }
+                        }
+                    }
+                    if (!located) {
+                        Output.error("No entity was found at that location");
                     }
                 }
+            }
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -519,8 +562,9 @@ public class DataReader {
         }
         WorldData.scaledMap = JavaDrawer.loadMapIntoOneImage();
         WorldData.mapName = mapid;
-        loadMiscData(mapid);
         loadEntityData(mapid);
+        loadMiscData(mapid);
+
     }
 
     public static void saveMap(String mapid) {

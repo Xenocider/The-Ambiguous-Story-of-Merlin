@@ -41,6 +41,7 @@ public class GameLoop implements Runnable{
 
     public static boolean fightMenu = false;
     public static boolean tileEditor = true;
+    public static String dialogText;
 
     @Override
     public void run() {
@@ -345,5 +346,11 @@ public class GameLoop implements Runnable{
         else {
             tileEditor = true;
         }
+    }
+
+    public static void displayDialog(String text) {
+        pause = true;
+        dialogText = text;
+        JavaDrawer.drawDialog(text);
     }
 }

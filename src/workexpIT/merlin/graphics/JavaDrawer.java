@@ -39,16 +39,21 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int count = 0;
     public static boolean runAnimation = false;
 
+    public static boolean drawDialog = false;
+
     public static int editorMenuSize = 200;
     public static int walkingStage = 1;
     private static int maxCount = 7;
     public static int maxWalkingStage = maxCount*2+1;
     private float offsetSpeed = 0.5f;
+    public boolean pause = false;
 
     public static int minOffsetX;
     public static int maxOffsetX;
     public static int minOffsetY;
     public static int maxOffsetY;
+
+    public static Font f = new Font("Helvetica", Font.PLAIN, 10);
 
     public static void init() {
         createWindow();
@@ -107,62 +112,75 @@ public class JavaDrawer extends JPanel implements Runnable {
 
 
     public void paintComponent(Graphics g) {
-        recordStart();
-        long startTime = System.currentTimeMillis();
-        super.paintComponent(g);
-        zoomIn();
-        //Run animation code before drawing anything
-        for (int i = 0; i < Animator.currentAnimators.size(); i++) {
-            Animator.currentAnimators.get(i).run();
-        }
-        Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to run current animators");
-        //Draw stuff
-        if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
             recordStart();
+            long startTime = System.currentTimeMillis();
+            super.paintComponent(g);
+            zoomIn();
+            //Run animation code before drawing anything
+            for (int i = 0; i < Animator.currentAnimators.size(); i++) {
+                Animator.currentAnimators.get(i).run();
+            }
+            Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to run current animators");
+            //Draw stuff
+            if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+                recordStart();
 
-            moveScreen();
-            drawGrid(g);
-            Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to repaint the editor grid");
+                moveScreen();
+                drawGrid(g);
+                Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to repaint the editor grid");
 
-        }
-        if (Merlin.mode.equals(Merlin.Mode.GAME)) {
-            recordStart();
+            }
+            if (Merlin.mode.equals(Merlin.Mode.GAME)) {
+                recordStart();
 
-            //smoothOffset();
-            centerCameraOnPlayer();
-            Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to repaint the screen's smooth offsetting");
+                //smoothOffset();
+                centerCameraOnPlayer();
+                Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to repaint the screen's smooth offsetting");
 
-        }
-        if (Merlin.mode.equals(Merlin.Mode.GAME) || Merlin.mode.equals(Merlin.Mode.EDITOR)) {
-            recordStart();
-            //drawTiles(g); //Need to load the whole map as one image and not do so many loops
-            drawMap(g);
-            Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the Tiles");
-            recordStart();
-            drawEntities(g);
-            Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the Entities");
-            //drawMapAndEntities(g);
-        }
-        if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
-            recordStart();
-            drawEditorMenu(g);
-            Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the editor menu");
-            updateMap();
+            }
+            if (Merlin.mode.equals(Merlin.Mode.GAME) || Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+                recordStart();
+                //drawTiles(g); //Need to load the whole map as one image and not do so many loops
+                drawMap(g);
+                Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the Tiles");
+                recordStart();
+                drawEntities(g);
+                Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the Entities");
+                if (drawDialog) {
+                    drawDialogScreen(g);
+                }
+                //drawMapAndEntities(g);
+            }
+            if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+                recordStart();
+                drawEditorMenu(g);
+                Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the editor menu");
+                updateMap();
 
-        }
-        if (Merlin.mode.equals(Merlin.Mode.BATTLE)) {
-            recordStart();
-            drawBackground(g);
-            drawBattleEnemy(g);
-            drawAttack(g);
-            drawBattlePlayer(g);
-            drawStatusBars(g);
-            drawBattleMenu(g);
-            Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the Battle Scene");
-        }
-        long endTime = System.currentTimeMillis();
-        //Output.write("Took " + (endTime-startTime) + "ms to render this frame");
-        //Output.write("FPS: " + Math.pow((endTime-startTime),-1)*1000);
+            }
+            if (Merlin.mode.equals(Merlin.Mode.BATTLE)) {
+                recordStart();
+                drawBackground(g);
+                drawBattleEnemy(g);
+                drawAttack(g);
+                drawBattlePlayer(g);
+                drawStatusBars(g);
+                drawBattleMenu(g);
+                Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the Battle Scene");
+            }
+            long endTime = System.currentTimeMillis();
+            //Output.write("Took " + (endTime-startTime) + "ms to render this frame");
+            //Output.write("FPS: " + Math.pow((endTime-startTime),-1)*1000);
+    }
+
+    private void drawDialogScreen(Graphics g) {
+        Output.write("DRAWING DIALOG");
+        g.setColor(Color.white);
+        g.fillRect(0,frame.getHeight()-45,frame.getWidth(),45);
+        g.setColor(Color.black);
+        g.setFont(f);
+        g.drawString(GameLoop.dialogText,5,frame.getHeight()-40);
+        pause = true;
     }
 
     private void drawMapAndEntities(Graphics g) {
@@ -313,7 +331,7 @@ public class JavaDrawer extends JPanel implements Runnable {
     }
 
     private void drawEntities(Graphics g) {
-        if (runAnimation) {
+        if (runAnimation && !pause) {
             walkingStage = walkingStage + 1;
             Output.write(walkingStage + " < " + maxWalkingStage);
             count = count + 1;
@@ -867,5 +885,9 @@ public class JavaDrawer extends JPanel implements Runnable {
         Timestamp recordEndTime = new Timestamp(new Date().getTime());
         long time = recordEndTime.getTime() - recordStartTime.getTime();
         return time;
+    }
+
+    public static void drawDialog(String text) {
+        drawDialog = true;
     }
 }
