@@ -16,11 +16,12 @@ import workexpIT.merlin.tiles.Tile;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.List;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.util.*;
 
 
 /**
@@ -179,10 +180,14 @@ public class JavaDrawer extends JPanel implements Runnable {
             //Output.write("FPS: " + Math.pow((endTime-startTime),-1)*1000);
     }
 
-    public int textCount = 0;
-    public int charPerLine = 50;
-    public int typeSpeed = 4;
-    public int scroll = 0;
+    public static String dialog;
+    public static int textCount = 0;
+    public static int charPerLine = 50;
+    public static int typeSpeed = 4;
+    public static int scroll = 0;
+    public static java.util.List<String> lines = new ArrayList<>();
+    public static int line = 0;
+
 
     private void drawDialogScreen(Graphics g) {
 
@@ -190,28 +195,36 @@ public class JavaDrawer extends JPanel implements Runnable {
         g.drawImage(image,0,frame.getHeight()-image.getHeight()-25,null);
         g.setColor(Color.black);
         g.setFont(f);
-        int line = (int)(textCount/typeSpeed/charPerLine);
         scroll = -4+line;
         if (scroll < 0) {
             scroll = 0;
         }
-        for (int i = scroll; i <= line;i++) {
-            String text = "error";
-            if (textCount/typeSpeed/charPerLine > i) {
-                text = GameLoop.dialogText.substring(charPerLine * (i), (charPerLine*typeSpeed*(i+1)) / typeSpeed);
+        for (int i = scroll; i<=line; i++) {
+            Output.write(line + "  " + i);
+            String text = lines.get(i);
+            try {
+                if (i == line) {text = lines.get(i).substring(0, ((textCount) / typeSpeed));}
+            } catch (Exception e) {
+                line = line + 1;
+                if (line == lines.size()) {
+                    line = lines.size()-1;
+                    animateText = false;
+                    pause = true;
+                }
+                else {
+                    textCount = 0;
+                }
             }
-            else {
-                text = GameLoop.dialogText.substring(charPerLine * (i), (textCount) / typeSpeed);
-            }
-            g.drawString(text, 22, frame.getHeight() - image.getHeight() + 30 - 15+35*(i-scroll));
+
+            g.drawString(text, 22, frame.getHeight() - image.getHeight() + 30 - 15 + 35 *(i-scroll));
         }
-        if (animateText) {
+        if (animateText && !pause) {
             textCount = textCount + 1;
         }
-        if (textCount/typeSpeed == GameLoop.dialogText.length()) {
-            animateText = false;
-            pause = true;
-        }
+        //if (textCount/typeSpeed == GameLoop.dialogText.length()) {
+            //animateText = false;
+            //pause = true;
+        //}
     }
 
     private void drawMapAndEntities(Graphics g) {
@@ -918,7 +931,31 @@ public class JavaDrawer extends JPanel implements Runnable {
         return time;
     }
 
-    public static void drawDialog(String text) {
+    public static void drawDialog(String t) {
+        lines.clear();
+        dialog = t;
+        while(dialog.length() > charPerLine) {
+            String text;
+            text = dialog.substring(0, charPerLine);
+            boolean continueLoop = true;
+            int i = charPerLine;
+            while (continueLoop){
+                i = i - 1;
+                Output.write("checking char at " + i + " it is a " + text.charAt(i));
+                if (text.charAt(i) == " ".charAt(0)) {
+                    text = text.substring(0, i);
+                    dialog = dialog.substring(i);
+                    continueLoop = false;
+                    lines.add(text);
+                    Output.write("Adding the line " + text);
+                }
+            }
+            Output.write("Dialog = " + dialog + " length = " + dialog.length());
+            if (dialog.length() < charPerLine) {
+                lines.add(text);
+            }
+        }
+        Output.write("Done loading text");
         drawDialog = true;
         animateText = true;
     }
