@@ -180,8 +180,9 @@ public class JavaDrawer extends JPanel implements Runnable {
     }
 
     public int textCount = 0;
-    public int charPerLine = 45;
+    public int charPerLine = 50;
     public int typeSpeed = 4;
+    public int scroll = 0;
 
     private void drawDialogScreen(Graphics g) {
 
@@ -190,16 +191,19 @@ public class JavaDrawer extends JPanel implements Runnable {
         g.setColor(Color.black);
         g.setFont(f);
         int line = (int)(textCount/typeSpeed/charPerLine);
-        Output.write(line+"");
-        for (int i = 0; i <= line;i++) {
+        scroll = -4+line;
+        if (scroll < 0) {
+            scroll = 0;
+        }
+        for (int i = scroll; i <= line;i++) {
             String text = "error";
             if (textCount/typeSpeed/charPerLine > i) {
-                text = GameLoop.dialogText.substring(charPerLine * i, (charPerLine*typeSpeed*(i+1)) / typeSpeed);
+                text = GameLoop.dialogText.substring(charPerLine * (i), (charPerLine*typeSpeed*(i+1)) / typeSpeed);
             }
             else {
-                text = GameLoop.dialogText.substring(charPerLine * i, (textCount) / typeSpeed);
+                text = GameLoop.dialogText.substring(charPerLine * (i), (textCount) / typeSpeed);
             }
-            g.drawString(text, 18, frame.getHeight() - image.getHeight() + 30 - 10+35*i);
+            g.drawString(text, 22, frame.getHeight() - image.getHeight() + 30 - 15+35*(i-scroll));
         }
         if (animateText) {
             textCount = textCount + 1;
