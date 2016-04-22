@@ -32,7 +32,7 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static float offsetX = 0;
     public static float offsetY = 0;
     public static int imageSize = 16;
-    public static int ww = 1200;
+    public static int ww = 800;
     public static int wh = 800;
     public static float scale = 2;
 
@@ -53,7 +53,10 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int minOffsetY;
     public static int maxOffsetY;
 
-    public static Font f = new Font("Helvetica", Font.PLAIN, 10);
+    public static boolean animateText = false;
+
+
+    public static Font f = new Font("Helvetica", Font.PLAIN, 30);
 
     public static void init() {
         createWindow();
@@ -61,6 +64,8 @@ public class JavaDrawer extends JPanel implements Runnable {
         maxOffsetY = (int) (-frame.getHeight()/2/scale+imageSize);
         minOffsetX = (int) (-(imageSize*WorldData.mapSizeX-frame.getWidth()/2/scale)-imageSize*2/scale);
         minOffsetY = (int) (-(imageSize*WorldData.mapSizeY-frame.getHeight()/2/scale)-imageSize*(5.5f-scale)/scale);
+        frame.getGraphics().drawImage(ImageReader.loadImage("resources/graphics/loadscreen.png"),0,0,null);
+        frame.getGraphics().drawString("LOREM IPSUM",0,0);
     }
 
     @Override
@@ -116,6 +121,7 @@ public class JavaDrawer extends JPanel implements Runnable {
             long startTime = System.currentTimeMillis();
             super.paintComponent(g);
             zoomIn();
+
             //Run animation code before drawing anything
             for (int i = 0; i < Animator.currentAnimators.size(); i++) {
                 Animator.currentAnimators.get(i).run();
@@ -173,14 +179,35 @@ public class JavaDrawer extends JPanel implements Runnable {
             //Output.write("FPS: " + Math.pow((endTime-startTime),-1)*1000);
     }
 
+    public int textCount = 0;
+    public int charPerLine = 45;
+    public int typeSpeed = 4;
+
     private void drawDialogScreen(Graphics g) {
-        Output.write("DRAWING DIALOG");
-        g.setColor(Color.white);
-        g.fillRect(0,frame.getHeight()-45,frame.getWidth(),45);
+
+        BufferedImage image = ImageReader.loadImage("resources/graphics/dialogbox.png");
+        g.drawImage(image,0,frame.getHeight()-image.getHeight()-25,null);
         g.setColor(Color.black);
         g.setFont(f);
-        g.drawString(GameLoop.dialogText,5,frame.getHeight()-40);
-        pause = true;
+        int line = (int)(textCount/typeSpeed/charPerLine);
+        Output.write(line+"");
+        for (int i = 0; i <= line;i++) {
+            String text = "error";
+            if (textCount/typeSpeed/charPerLine > i) {
+                text = GameLoop.dialogText.substring(charPerLine * i, (charPerLine*typeSpeed*(i+1)) / typeSpeed);
+            }
+            else {
+                text = GameLoop.dialogText.substring(charPerLine * i, (textCount) / typeSpeed);
+            }
+            g.drawString(text, 18, frame.getHeight() - image.getHeight() + 30 - 10+35*i);
+        }
+        if (animateText) {
+            textCount = textCount + 1;
+        }
+        if (textCount/typeSpeed == GameLoop.dialogText.length()) {
+            animateText = false;
+            pause = true;
+        }
     }
 
     private void drawMapAndEntities(Graphics g) {
@@ -889,5 +916,6 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     public static void drawDialog(String text) {
         drawDialog = true;
+        animateText = true;
     }
 }
