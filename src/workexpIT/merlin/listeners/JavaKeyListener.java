@@ -186,6 +186,17 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
                 break;
         }
 
+        if (JavaDrawer.drawDialog && JavaDrawer.pause) {
+            Output.write("End display");
+            JavaDrawer.line = 0;
+            JavaDrawer.lines.clear();
+            JavaDrawer.textCount = 0;
+            GameLoop.dialogText = null;
+            JavaDrawer.drawDialog = false;
+            GameLoop.pause = false;
+            JavaDrawer.pause = false;
+        }
+
     }
 
     @Override

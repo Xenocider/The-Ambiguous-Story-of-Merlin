@@ -23,6 +23,7 @@ public class Tile {
         maxInstances = numOfInstances;
         texture = loadTextures(ImageReader.loadImage("resources/graphics/materials/"+ this.getClass().getSimpleName() +"" + instance + ".png"));
         if (needsToBeUpdated) {
+            Output.write("Adding the " + this.getClass().getSimpleName() + " tile to the animated tiles list");
             WorldData.animatedTiles.add(new int[]{x,y});
         }
     }

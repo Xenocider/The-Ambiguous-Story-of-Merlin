@@ -277,6 +277,7 @@ public class GameLoop implements Runnable{
                 e.printStackTrace();
             }
             WorldData.menuTiles.add(tile);
+            WorldData.animatedTiles.remove(tile);
         }
         for (int i = 0; i < Reference.entities.length; i++) {
             Entity entity = null;
@@ -285,10 +286,17 @@ public class GameLoop implements Runnable{
                 Constructor<?> ctor = null;
                 try {
                     ctor = clazz.getConstructor(int.class,int.class,int.class,int.class);
+                    entity = (Entity) ctor.newInstance(0,0,0,1);
                 } catch (NoSuchMethodException e) {
                     e.printStackTrace();
+                    try {
+                        ctor = clazz.getConstructor(int.class,int.class,int.class,int.class,String.class);
+                        entity = (Entity) ctor.newInstance(0,0,0,1,null);
+                    } catch (NoSuchMethodException e2) {
+                        e2.printStackTrace();
+                    }
                 }
-                entity = (Entity) ctor.newInstance(0,0,0,1);
+
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {

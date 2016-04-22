@@ -47,7 +47,7 @@ public class JavaDrawer extends JPanel implements Runnable {
     private static int maxCount = 7;
     public static int maxWalkingStage = maxCount*2+1;
     private float offsetSpeed = 0.5f;
-    public boolean pause = false;
+    public static boolean pause = false;
 
     public static int minOffsetX;
     public static int maxOffsetX;
@@ -200,7 +200,7 @@ public class JavaDrawer extends JPanel implements Runnable {
             scroll = 0;
         }
         for (int i = scroll; i<=line; i++) {
-            Output.write(line + "  " + i);
+            //Output.write(line + "  " + i);
             String text = lines.get(i);
             try {
                 if (i == line) {text = lines.get(i).substring(0, ((textCount) / typeSpeed));}
@@ -375,7 +375,7 @@ public class JavaDrawer extends JPanel implements Runnable {
     }
 
     private void drawEntities(Graphics g) {
-        if (runAnimation && !pause) {
+        if (runAnimation && !pause && !drawDialog) {
             walkingStage = walkingStage + 1;
             Output.write(walkingStage + " < " + maxWalkingStage);
             count = count + 1;
@@ -932,9 +932,10 @@ public class JavaDrawer extends JPanel implements Runnable {
     }
 
     public static void drawDialog(String t) {
+        GameLoop.pause = true;
         lines.clear();
         dialog = t;
-        while(dialog.length() > charPerLine) {
+        while(dialog.length() >= charPerLine) {
             String text;
             text = dialog.substring(0, charPerLine);
             boolean continueLoop = true;
@@ -951,9 +952,11 @@ public class JavaDrawer extends JPanel implements Runnable {
                 }
             }
             Output.write("Dialog = " + dialog + " length = " + dialog.length());
-            if (dialog.length() < charPerLine) {
-                lines.add(text);
-            }
+
+        }
+        if (dialog.length() < charPerLine) {
+            lines.add(dialog);
+            Output.write("Adding the line " + dialog);
         }
         Output.write("Done loading text");
         drawDialog = true;

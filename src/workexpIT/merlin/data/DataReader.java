@@ -383,6 +383,7 @@ public class DataReader {
                     String level = null;
                     String x = null;
                     String y = null;
+                    String dialog = null;
 
 
                     Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(line);
@@ -396,12 +397,24 @@ public class DataReader {
                     x = m.group(1);
                     m.find();
                     y = m.group(1);
+                    try {
+                        m.find();
+                        dialog = m.group(1);
+                    }
+                    catch (Exception e) {Output.write("No dialog data for this entity");}
 
-                    Output.write("[Entity data] ID: " + entityId + " state: " + state + " level: " + level + " x: " + x + " y: " + y);
+                    Output.write("[Entity data] ID: " + entityId + " state: " + state + " level: " + level + " x: " + x + " y: " + y + " dialog: " + dialog);
 
                     //Create new class from the string: entityId
-                    Constructor c = Class.forName("workexpIT.merlin.entities."+entityId).getConstructor(Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE);
-                    Entity entity = (Entity) c.newInstance(Integer.parseInt(x),Integer.parseInt(y),Integer.parseInt(state),Integer.parseInt(level));
+                Entity entity;
+                    if (dialog == null) {
+                    Constructor c = Class.forName("workexpIT.merlin.entities." + entityId).getConstructor(Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE);
+                        entity = (Entity) c.newInstance(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(state), Integer.parseInt(level));
+                }
+                else {
+                        Constructor c = Class.forName("workexpIT.merlin.entities." + entityId).getConstructor(Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE,String.class);
+                        entity = (Entity) c.newInstance(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(state), Integer.parseInt(level),dialog);
+                }
                     WorldData.entities.add(entity);
             }
 
@@ -606,6 +619,9 @@ public class DataReader {
             for (int i = 0; i < WorldData.entities.size(); i ++) {
                 Entity e = WorldData.entities.get(i);
                 writer.write("("+e.getClass().getSimpleName()+")("+e.getState()+")("+e.getLevel()+")("+e.getX()+")("+e.getY()+")");
+                if (e.dialog != null) {
+                    writer.write("("+e.dialog+")");
+                }
                 writer.write(System.lineSeparator());
             }
 

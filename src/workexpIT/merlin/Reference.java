@@ -15,7 +15,8 @@ public class Reference {
             "Path",
             "WoodFence",
             "Water",
-            "Hole"
+            "Hole",
+            "Sand"
 
     };
     public static String[] entities = {
@@ -24,6 +25,8 @@ public class Reference {
             "Rock",
             "TreeLeft",
             "TreeRight",
-            "Sign"
+            "Sign",
+            "Jeff",
+            "Cactus"
     };
 }

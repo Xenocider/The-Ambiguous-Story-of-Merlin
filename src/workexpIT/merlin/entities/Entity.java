@@ -1,5 +1,6 @@
 package workexpIT.merlin.entities;
 
+import workexpIT.merlin.GameLoop;
 import workexpIT.merlin.Output;
 import workexpIT.merlin.attacks.Attack;
 import workexpIT.merlin.data.ImageReader;
@@ -79,6 +80,8 @@ public class Entity {
     public BufferedImage downSprite;
     public BufferedImage rightSprite;
     public BufferedImage leftSprite;
+
+    public String dialog = null;
 
 
 
@@ -240,6 +243,15 @@ public class Entity {
     }
 
     public void playerInteraction() {
-
+        if (state == STATE_NEUTRAL) {
+            //Do Nothing it is not an NPC
+        }
+        if (state == STATE_FRIENDLY) {
+            Output.write(dialog);
+            GameLoop.displayDialog(dialog);
+        }
+        if (state == STATE_AGGRESSIVE) {
+            //Triger battle
+        }
     }
 }
