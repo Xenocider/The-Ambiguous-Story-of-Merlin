@@ -13,8 +13,9 @@ import java.nio.ByteBuffer;
  */
 public class Bob extends Entity {
 
-    public Bob(int x, int y, int state, int level) {
+    public Bob(int x, int y, int state, int level,String dialog) {
         super(x, y, "bob", state, level, ImageReader.loadImage("resources/graphics/charactersprites/bob.png"));
+        this.dialog = dialog;
         this.attacks[0] = new Punch();
         this.attacks[1] = new Fireball();
         this.health = 100;

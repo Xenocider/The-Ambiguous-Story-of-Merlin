@@ -143,11 +143,11 @@ public class MouseListener implements java.awt.event.MouseListener {
             Class<?> clazz = Class.forName("workexpIT.merlin.entities."+ Reference.entities[selectedEntity]);
             Constructor<?> ctor = null;
             try {
-                ctor = clazz.getConstructor(int.class,int.class,int.class,int.class);
+                ctor = clazz.getConstructor(int.class,int.class,int.class,int.class,String.class);
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             }
-            entity = (Entity) ctor.newInstance(mapX,mapY,0,1);
+            entity = (Entity) ctor.newInstance(mapX,mapY,0,1,null);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

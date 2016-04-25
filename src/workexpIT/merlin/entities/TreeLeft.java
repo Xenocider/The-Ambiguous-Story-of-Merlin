@@ -8,9 +8,11 @@ import workexpIT.merlin.data.WorldData;
  */
 public class TreeLeft extends Entity {
 
-    public TreeLeft(int x, int y, int state, int level) {
+    public TreeLeft(int x, int y, int state, int level, String dialog) {
 
         super(x, y, "treeL", state, level, ImageReader.loadImage("resources/graphics/charactersprites/treeL.png"));
+        this.dialog = dialog;
+
         downWalkingSpritesId = new int[]{0};
         upWalkingSpritesId = new int[]{0};
         rightWalkingSpritesId = new int[]{0};

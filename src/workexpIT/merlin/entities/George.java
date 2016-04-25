@@ -14,8 +14,10 @@ import java.nio.ByteBuffer;
  */
 public class George extends Entity {
 
-    public George(int x, int y, int state, int level) {
+    public George(int x, int y, int state, int level, String dialog) {
         super(x, y, "george", state, level, ImageReader.loadImage("resources/graphics/charactersprites/george.png"));
+        this.dialog = dialog;
+
         downWalkingSpritesId = new int[]{3, 4, 3, 5};
         upWalkingSpritesId = new int[]{0, 1, 0, 2};
         rightWalkingSpritesId = new int[]{9, 10, 9, 11};

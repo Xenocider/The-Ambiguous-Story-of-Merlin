@@ -10,9 +10,11 @@ import workexpIT.merlin.data.WorldData;
  */
 public class Rock extends Entity {
 
-    public Rock(int x, int y, int state, int level) {
+    public Rock(int x, int y, int state, int level, String dialog) {
 
         super(x, y, "rock", state, level, ImageReader.loadImage("resources/graphics/charactersprites/rock.png"));
+        this.dialog = dialog;
+
         downWalkingSpritesId = new int[]{0};
         upWalkingSpritesId = new int[]{0};
         rightWalkingSpritesId = new int[]{0};

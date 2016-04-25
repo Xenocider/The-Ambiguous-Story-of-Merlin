@@ -7,9 +7,11 @@ import workexpIT.merlin.data.ImageReader;
  */
 public class TreeRight extends Entity {
 
-    public TreeRight(int x, int y, int state, int level) {
+    public TreeRight(int x, int y, int state, int level, String dialog) {
 
         super(x, y, "treeR", state, level, ImageReader.loadImage("resources/graphics/charactersprites/treeR.png"));
+        this.dialog = dialog;
+
         downWalkingSpritesId = new int[]{0};
         upWalkingSpritesId = new int[]{0};
         rightWalkingSpritesId = new int[]{0};

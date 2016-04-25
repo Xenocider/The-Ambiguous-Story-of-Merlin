@@ -483,47 +483,52 @@ public class JavaDrawer extends JPanel implements Runnable {
         //WorldData.scaledMap = JavaDrawer.scale(WorldData.map,JavaDrawer.scale,JavaDrawer.scale);
         //WorldData.scaledMap = JavaDrawer.loadMapIntoOneImage();
         BufferedImage map = WorldData.scaledMap;
-        try {
-            Graphics2D g2 = map.createGraphics();
-            for (int i = 0; i < WorldData.animatedTiles.size(); i++) {
-                int a = WorldData.animatedTiles.get(i)[0];
-                int b = WorldData.animatedTiles.get(i)[1];
-                BufferedImage tile = scale(WorldData.tiles[a][b].getTexture()[WorldData.tiles[a][b].animationStage], scale, scale);
-                double radians = 0.0;
-                switch (WorldData.tiles[a][b].rotation) {
-                    case UP:
-                        radians = Math.PI / 2.0 * 0.0;
-                        break;
-                    case RIGHT:
-                        radians = Math.PI / 2.0 * 1.0;
-                        break;
-                    case DOWN:
-                        radians = Math.PI / 2.0 * 2.0;
-                        break;
-                    case LEFT:
-                        radians = Math.PI / 2.0 * 3.0;
-                        break;
-                }
-                tile = rotateImage(tile, radians);
-                try {
-                    switch (WorldData.tiles[a][b].flip) {
-                        case HORIZONTAL:
-                            tile = flipImage(tile, true);
+        if (map == null || Merlin.mode == Merlin.Mode.EDITOR) {
+            Output.write("loading map");
+            map = loadMapIntoOneImage();
+        }
+        else if (Merlin.mode == Merlin.Mode.GAME){
+            try {
+                Graphics2D g2 = map.createGraphics();
+                for (int i = 0; i < WorldData.animatedTiles.size(); i++) {
+                    int a = WorldData.animatedTiles.get(i)[0];
+                    int b = WorldData.animatedTiles.get(i)[1];
+                    BufferedImage tile = scale(WorldData.tiles[a][b].getTexture()[WorldData.tiles[a][b].animationStage], scale, scale);
+                    double radians = 0.0;
+                    switch (WorldData.tiles[a][b].rotation) {
+                        case UP:
+                            radians = Math.PI / 2.0 * 0.0;
                             break;
-                        case VERTICAL:
-                            tile = flipImage(tile, false);
+                        case RIGHT:
+                            radians = Math.PI / 2.0 * 1.0;
+                            break;
+                        case DOWN:
+                            radians = Math.PI / 2.0 * 2.0;
+                            break;
+                        case LEFT:
+                            radians = Math.PI / 2.0 * 3.0;
                             break;
                     }
-                } catch (NullPointerException e) {
+                    tile = rotateImage(tile, radians);
+                    try {
+                        switch (WorldData.tiles[a][b].flip) {
+                            case HORIZONTAL:
+                                tile = flipImage(tile, true);
+                                break;
+                            case VERTICAL:
+                                tile = flipImage(tile, false);
+                                break;
+                        }
+                    } catch (NullPointerException e) {
+                    }
+                    g2.drawImage(tile, null, (int) (a * 16 * scale), (int) ((b * 16) * scale));
                 }
-                g2.drawImage(tile, null, (int) (a * 16 * scale), (int) ((b * 16) * scale));
+                g2.dispose();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            g2.dispose();
-            WorldData.scaledMap = map;
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        WorldData.scaledMap = map;
     }
     public static BufferedImage loadMapIntoOneImage() {
         BufferedImage map = new BufferedImage((int)(WorldData.mapSizeX*16*scale),(int)(WorldData.mapSizeY*16*scale), BufferedImage.TYPE_INT_ARGB);
@@ -592,6 +597,7 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     private void drawMap(Graphics g) {
         //BufferedImage scaledMap = scale(WorldData.map,scale,scale);
+        Output.write("drawing map");
         g.drawImage(WorldData.scaledMap,(int)(offsetX*scale+frame.getWidth()/2),(int)((offsetY-imageSize)*scale+frame.getHeight()/2),null);
     }
 

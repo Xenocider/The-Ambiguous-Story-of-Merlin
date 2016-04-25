@@ -7,9 +7,11 @@ import workexpIT.merlin.data.ImageReader;
  */
 public class Cactus extends Entity {
 
-    public Cactus(int x, int y, int state, int level) {
+    public Cactus(int x, int y, int state, int level, String dialog) {
 
         super(x, y, "cactus", state, level, ImageReader.loadImage("resources/graphics/charactersprites/cactus.png"));
+        this.dialog = dialog;
+
         downWalkingSpritesId = new int[]{0};
         upWalkingSpritesId = new int[]{0};
         rightWalkingSpritesId = new int[]{0};

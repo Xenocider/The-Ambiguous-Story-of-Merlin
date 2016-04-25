@@ -407,14 +407,14 @@ public class DataReader {
 
                     //Create new class from the string: entityId
                 Entity entity;
-                    if (dialog == null) {
+                   /* if (dialog == null) {
                     Constructor c = Class.forName("workexpIT.merlin.entities." + entityId).getConstructor(Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE);
                         entity = (Entity) c.newInstance(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(state), Integer.parseInt(level));
                 }
-                else {
+                else {*/
                         Constructor c = Class.forName("workexpIT.merlin.entities." + entityId).getConstructor(Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE,String.class);
                         entity = (Entity) c.newInstance(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(state), Integer.parseInt(level),dialog);
-                }
+                //}
                     WorldData.entities.add(entity);
             }
 

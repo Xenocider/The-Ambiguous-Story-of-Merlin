@@ -243,7 +243,9 @@ public class Entity {
     }
 
     public void playerInteraction() {
-        if (state == STATE_NEUTRAL) {
+        if (dialog != null){GameLoop.displayDialog(dialog);}
+
+        /*if (state == STATE_NEUTRAL) {
             //Do Nothing it is not an NPC
         }
         if (state == STATE_FRIENDLY) {
@@ -252,6 +254,6 @@ public class Entity {
         }
         if (state == STATE_AGGRESSIVE) {
             //Triger battle
-        }
+        }*/
     }
 }

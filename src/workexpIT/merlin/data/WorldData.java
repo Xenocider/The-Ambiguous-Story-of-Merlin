@@ -27,8 +27,8 @@ public class WorldData {
 
     public static String mapName;
 
-    public static int mapSizeX;
-    public static int mapSizeY;
+    public static int mapSizeX = 50;
+    public static int mapSizeY = 50;
 
     public static Tile[][] tiles = new Tile[WorldData.mapSizeX][WorldData.mapSizeY];
     public static List<Entity> entities = new ArrayList<Entity>();
