@@ -79,7 +79,7 @@ Output.recordStart();
             gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
             Output.log("Took " + Output.recordEnd() + " milliseconds to schedule a thread for the GameLoop");
             Output.recordStart();
-            DataReader.loadMap("maze");
+            DataReader.loadMap("test");
             Output.log("Took " + Output.recordEnd() + " milliseconds to load the map");
 
         }

@@ -188,6 +188,7 @@ public class DataReader {
         WorldData.mapName = mapid;
         loadEntityData(mapid);
         loadMiscData(mapid);
+        loadAnimatedTiles();
         WorldData.battleBackground = ImageReader.loadImage("resources/graphics/backgrounds/" + mapid + ".png");
         //Center camera
         try {
@@ -196,6 +197,18 @@ public class DataReader {
         }
     }
 
+    private static void loadAnimatedTiles() {
+        for (int y = 0; y < WorldData.mapSizeY; y++) {
+            for (int x = 0; x < WorldData.mapSizeX; x++) {
+                try {
+                    if (WorldData.tiles[x][y].animation) {
+                        WorldData.animatedTiles.add(new int[]{x, y});
+                    }
+                }
+                catch (Exception e){}
+            }
+        }
+    }
 
 
     private static int loadMapSizeX(String mapid) {
@@ -384,6 +397,7 @@ public class DataReader {
                     String x = null;
                     String y = null;
                     String dialog = null;
+                Boolean talk = false;
 
 
                     Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(line);
@@ -400,10 +414,14 @@ public class DataReader {
                     try {
                         m.find();
                         dialog = m.group(1);
+                        m.find();
+                        if (m.group(1) == "true") {
+                            talk = true;
+                        }
                     }
                     catch (Exception e) {Output.write("No dialog data for this entity");}
 
-                    Output.write("[Entity data] ID: " + entityId + " state: " + state + " level: " + level + " x: " + x + " y: " + y + " dialog: " + dialog);
+                    Output.write("[Entity data] ID: " + entityId + " state: " + state + " level: " + level + " x: " + x + " y: " + y + " dialog: " + dialog + " talkable: " + talk);
 
                     //Create new class from the string: entityId
                 Entity entity;
@@ -412,8 +430,8 @@ public class DataReader {
                         entity = (Entity) c.newInstance(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(state), Integer.parseInt(level));
                 }
                 else {*/
-                        Constructor c = Class.forName("workexpIT.merlin.entities." + entityId).getConstructor(Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE,String.class);
-                        entity = (Entity) c.newInstance(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(state), Integer.parseInt(level),dialog);
+                        Constructor c = Class.forName("workexpIT.merlin.entities." + entityId).getConstructor(Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE,String.class,boolean.class);
+                        entity = (Entity) c.newInstance(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(state), Integer.parseInt(level),dialog,talk);
                 //}
                     WorldData.entities.add(entity);
             }

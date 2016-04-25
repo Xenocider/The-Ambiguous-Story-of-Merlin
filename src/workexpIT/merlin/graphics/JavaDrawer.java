@@ -491,6 +491,7 @@ public class JavaDrawer extends JPanel implements Runnable {
             try {
                 Graphics2D g2 = map.createGraphics();
                 for (int i = 0; i < WorldData.animatedTiles.size(); i++) {
+                    Output.write("Animated Tiles At " + WorldData.animatedTiles.get(i)[0] + " " + WorldData.animatedTiles.get(i)[1]);
                     int a = WorldData.animatedTiles.get(i)[0];
                     int b = WorldData.animatedTiles.get(i)[1];
                     BufferedImage tile = scale(WorldData.tiles[a][b].getTexture()[WorldData.tiles[a][b].animationStage], scale, scale);

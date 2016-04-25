@@ -10,10 +10,14 @@ import workexpIT.merlin.data.WorldData;
  */
 public class Rock extends Entity {
 
-    public Rock(int x, int y, int state, int level, String dialog) {
+    private boolean fall;
+    public int fallDis;
+
+    public Rock(int x, int y, int state, int level, String dialog, boolean talk) {
 
         super(x, y, "rock", state, level, ImageReader.loadImage("resources/graphics/charactersprites/rock.png"));
         this.dialog = dialog;
+        talkable = talk;
 
         downWalkingSpritesId = new int[]{0};
         upWalkingSpritesId = new int[]{0};
@@ -42,6 +46,22 @@ public class Rock extends Entity {
         }
         else if (pY < y) {
             move(MOVE_DOWN);
+        }
+    }
+
+    public void fall(int distance) {
+        fall = true;
+        fallDis = 3;
+    }
+
+    @Override
+    public void runAI() {
+        if (fall) {
+            moveOverride(MOVE_DOWN);
+            fallDis = fallDis - 1;
+            if (fallDis == 0) {
+                fall = false;
+            }
         }
     }
 }

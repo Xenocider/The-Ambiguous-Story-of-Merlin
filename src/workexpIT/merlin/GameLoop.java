@@ -265,37 +265,39 @@ public class GameLoop implements Runnable{
         statusBar = ImageReader.loadImage("resources/graphics/battle/entityStatusBackground.png");
         menu = ImageReader.loadImage("resources/graphics/battle/menuBackground.png");
         button = ImageReader.loadImage("resources/graphics/battle/buttonBackground.png");
-        for (int i =0; i < Reference.tileIds.length; i++) {
-            Tile tile = null;
-            try {
-                tile = (Tile) Class.forName("workexpIT.merlin.tiles."+ Reference.tileIds[i]).newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+        if (Merlin.mode == Merlin.Mode.EDITOR) {
+            for (int i = 0; i < Reference.tileIds.length; i++) {
+                Tile tile = null;
+                try {
+                    tile = (Tile) Class.forName("workexpIT.merlin.tiles." + Reference.tileIds[i]).newInstance();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                WorldData.menuTiles.add(tile);
+                WorldData.animatedTiles.remove(tile);
             }
-            WorldData.menuTiles.add(tile);
-            WorldData.animatedTiles.remove(tile);
         }
         for (int i = 0; i < Reference.entities.length; i++) {
             Entity entity = null;
             try {
                 Class<?> clazz = Class.forName("workexpIT.merlin.entities."+ Reference.entities[i]);
                 Constructor<?> ctor = null;
-                try {
+                /*try {
                     ctor = clazz.getConstructor(int.class,int.class,int.class,int.class);
                     entity = (Entity) ctor.newInstance(0,0,0,1);
                 } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
+                    e.printStackTrace();*/
                     try {
-                        ctor = clazz.getConstructor(int.class,int.class,int.class,int.class,String.class);
-                        entity = (Entity) ctor.newInstance(0,0,0,1,null);
+                        ctor = clazz.getConstructor(int.class,int.class,int.class,int.class,String.class,boolean.class);
+                        entity = (Entity) ctor.newInstance(0,0,0,1,null,false);
                     } catch (NoSuchMethodException e2) {
                         e2.printStackTrace();
                     }
-                }
+                //}
 
             } catch (InstantiationException e) {
                 e.printStackTrace();
@@ -360,5 +362,9 @@ public class GameLoop implements Runnable{
         pause = true;
         dialogText = text;
         JavaDrawer.drawDialog(text);
+    }
+
+    public static void triggerLocationEvent(int[] location) {
+
     }
 }

@@ -9,9 +9,10 @@ import workexpIT.merlin.data.ImageReader;
  */
 public class Jeff extends Entity {
 
-    public Jeff(int x, int y, int state, int level, String text) {
+    public Jeff(int x, int y, int state, int level, String text,boolean talk) {
         super(x, y, "jeff", state, level, ImageReader.loadImage("resources/graphics/charactersprites/jeff.png"));
         dialog = text;
+        talkable = talk;
         this.attacks[0] = new Punch();
         this.attacks[1] = new Fireball();
         this.health = 100;

@@ -10,10 +10,11 @@ public class Sign extends Entity {
 
     public String text = "No Text Has Been Set Yet";
 
-    public Sign(int x, int y, int state, int level, String dialog) {
+    public Sign(int x, int y, int state, int level, String dialog, boolean talk) {
 
         super(x, y, "sign", state, level, ImageReader.loadImage("resources/graphics/charactersprites/sign.png"));
         this.dialog = dialog;
+        talkable = talk;
 
         downWalkingSpritesId = new int[]{0};
         upWalkingSpritesId = new int[]{0};

@@ -19,13 +19,13 @@ import java.nio.ByteBuffer;
  */
 public class Tile {
 
+    public boolean locationTrigger = false;
+    public boolean animation = false;
+
     public Tile(int numOfInstances,boolean needsToBeUpdated) {
         maxInstances = numOfInstances;
         texture = loadTextures(ImageReader.loadImage("resources/graphics/materials/"+ this.getClass().getSimpleName() +"" + instance + ".png"));
-        if (needsToBeUpdated) {
-            Output.write("Adding the " + this.getClass().getSimpleName() + " tile to the animated tiles list");
-            WorldData.animatedTiles.add(new int[]{x,y});
-        }
+        animation = needsToBeUpdated;
     }
 
     private BufferedImage[] loadTextures(BufferedImage image) {
@@ -87,6 +87,9 @@ public class Tile {
 
 
     public boolean movingOnToTile(Entity entity) {
+        if (WorldData.getPlayer() == entity && locationTrigger) {
+            GameLoop.triggerLocationEvent(getLocation());
+        }
         for (int i = 0; i < WorldData.entities.size(); i ++) {
             if (WorldData.entities.get(i).getX() == x && WorldData.entities.get(i).getY() == y) {
                 GameLoop.entityInteract(WorldData.entities.get(i),entity);
@@ -125,6 +128,17 @@ public class Tile {
     }
     public BufferedImage[] getTexture() {
         return texture;
+    }
+    public int[] getLocation() {
+        for (int y = 0; y < WorldData.mapSizeY; y++) {
+            for (int x = 0; x < WorldData.mapSizeX; x++) {
+                Output.write("Searching " + x + " " + y);
+                if (WorldData.tiles[x][y] == this) {
+                    return new int[]{x,y};
+                }
+            }
+        }
+        return null;
     }
 }
 

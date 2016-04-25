@@ -83,6 +83,8 @@ public class Entity {
 
     public String dialog = null;
 
+    public boolean talkable = false;
+
 
 
 
@@ -234,6 +236,68 @@ public class Entity {
         return false;
     }
 
+    public boolean moveOverride(int direction) {
+        facing = direction;
+        //0 = up, 1 = right, 2 = down, 3 = left
+        switch (direction) {
+            case MOVE_UP:
+                try {
+                    WorldData.tiles[getX()][getY() - 1].movingOnToTile(this);
+                        lastMove = MOVE_UP;
+                        setY(getY() - 1);
+                        moving = true;
+                        return true;
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    Output.write("Entity at edge of map!a");
+                } catch (NullPointerException e) {
+                    Output.write("Entity at edge of map!");
+                }
+                break;
+            case MOVE_RIGHT:
+                try {
+                    WorldData.tiles[getX() + 1][getY()].movingOnToTile(this);
+                        lastMove = MOVE_RIGHT;
+                        setX(getX() + 1);
+                        moving = true;
+                        return true;
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    Output.write("Entity at edge of map!a");
+                } catch (NullPointerException e) {
+                    Output.write("Entity at edge of map!");
+                }
+                break;
+            case MOVE_DOWN:
+                try {
+                    WorldData.tiles[getX()][getY() + 1].movingOnToTile(this);
+                        lastMove = MOVE_DOWN;
+                        setY(getY() + 1);
+                        moving = true;
+                        return true;
+
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    Output.write("Entity at edge of map!a");
+                } catch (NullPointerException e) {
+                    Output.write("Entity at edge of map!");
+                }
+                break;
+            case MOVE_LEFT:
+                try {
+                    WorldData.tiles[getX() - 1][getY()].movingOnToTile(this);
+                        lastMove = MOVE_LEFT;
+                        setX(getX() - 1);
+                        moving = true;
+                        return true;
+
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    Output.write("Entity at edge of map!a");
+                } catch (NullPointerException e) {
+                    Output.write("Entity at edge of map!");
+                }
+                break;
+        }
+        return false;
+    }
+
     public void changeAnimationStage() {
         //Output.write("Changing animation stage");
         animationStage = animationStage + 1;
@@ -243,7 +307,7 @@ public class Entity {
     }
 
     public void playerInteraction() {
-        if (dialog != null){GameLoop.displayDialog(dialog);}
+        if (dialog != null && talkable){GameLoop.displayDialog(dialog);}
 
         /*if (state == STATE_NEUTRAL) {
             //Do Nothing it is not an NPC
