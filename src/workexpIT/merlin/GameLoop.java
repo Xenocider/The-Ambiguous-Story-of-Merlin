@@ -267,6 +267,7 @@ public class GameLoop implements Runnable{
         button = ImageReader.loadImage("resources/graphics/battle/buttonBackground.png");
         if (Merlin.mode == Merlin.Mode.EDITOR) {
             for (int i = 0; i < Reference.tileIds.length; i++) {
+                //Output.write("Loading tile texture " + Reference.tileIds[i]);
                 Tile tile = null;
                 try {
                     tile = (Tile) Class.forName("workexpIT.merlin.tiles." + Reference.tileIds[i]).newInstance();

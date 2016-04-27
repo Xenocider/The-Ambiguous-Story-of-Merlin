@@ -43,15 +43,16 @@ public class Merlin implements Runnable{
     public static JavaDrawer jDrawer =new JavaDrawer();
 
     public static void main(String[] args) {
+        if (args.length == 2 && args[0].equals("mapeditor")) {
+            mode = Mode.EDITOR;
+        } else {
+            mode = Mode.GAME;
+        }
         Output.recordStart();
         GameLoop.loadAllTextures();
         Output.log("Took " + Output.recordEnd() + " milliseconds to load the game's textures");
 Output.recordStart();
-            if (args.length == 2 && args[0].equals("mapeditor")) {
-                mode = Mode.EDITOR;
-            } else {
-                mode = Mode.GAME;
-            }
+
 
         Output.log("Took " + Output.recordEnd() + " milliseconds to set the gamemode");
         Output.recordStart();

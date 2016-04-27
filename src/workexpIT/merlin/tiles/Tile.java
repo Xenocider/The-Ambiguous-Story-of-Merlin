@@ -24,17 +24,21 @@ public class Tile {
 
     public Tile(int numOfInstances,boolean needsToBeUpdated) {
         maxInstances = numOfInstances;
-        texture = loadTextures(ImageReader.loadImage("resources/graphics/materials/"+ this.getClass().getSimpleName() +"" + instance + ".png"));
+        BufferedImage image = ImageReader.loadImage("resources/graphics/materials/"+ this.getClass().getSimpleName() +"" + instance + ".png");
+        BufferedImage scaledImage = JavaDrawer.scale(image,JavaDrawer.scale,JavaDrawer.scale);
+        Output.write(scaledImage.getWidth()+"");
+        texture = loadTextures(scaledImage);
+        Output.write(this.getClass().getSimpleName() + " has " + texture.length + " number of animation textures and has a max of " + maxAnimationStage + " stages");
         animation = needsToBeUpdated;
     }
 
     private BufferedImage[] loadTextures(BufferedImage image) {
-        int frames = image.getWidth()/16;
+        int frames = (int) (image.getWidth()/16/JavaDrawer.scale);
         BufferedImage[] output = new BufferedImage[frames];
         for (int i = 0; i < frames; i++) {
-            output[i] = ImageReader.cropImage(image, i * 16, 0, 16, image.getHeight());
+            output[i] = ImageReader.cropImage(image, (int)(i * 16*JavaDrawer.scale), 0, (int)(16*JavaDrawer.scale), image.getHeight());
         }
-        maxAnimationStage = frames;
+        maxAnimationStage = frames - 1;
         return output;
     }
 
@@ -51,13 +55,20 @@ public class Tile {
 
     public void setInstance(int instance) {
         this.instance = instance;
-        texture = loadTextures(ImageReader.loadImage("resources/graphics/materials/"+ this.getClass().getSimpleName() +"" + instance + ".png"));
+        BufferedImage image = ImageReader.loadImage("resources/graphics/materials/"+ this.getClass().getSimpleName() +"" + instance + ".png");
+        BufferedImage scaledImage = JavaDrawer.scale(image,JavaDrawer.scale,JavaDrawer.scale);
+        Output.write(scaledImage.getWidth()+"");
+        texture = loadTextures(scaledImage);
     }
 
     public void changeAnimationStage() {
-        animationStage = animationStage + 1;
-        if (animationStage == maxAnimationStage) {
+        if (animationStage < maxAnimationStage) {
+            animationStage = animationStage + 1;
+            JavaDrawer.redrawMap(getLocation());
+        }
+        else if (animationStage > maxAnimationStage){
             animationStage = 0;
+            JavaDrawer.redrawMap(getLocation());
         }
     }
 
@@ -130,15 +141,11 @@ public class Tile {
         return texture;
     }
     public int[] getLocation() {
-        for (int y = 0; y < WorldData.mapSizeY; y++) {
-            for (int x = 0; x < WorldData.mapSizeX; x++) {
-                Output.write("Searching " + x + " " + y);
-                if (WorldData.tiles[x][y] == this) {
-                    return new int[]{x,y};
-                }
-            }
-        }
-        return null;
+        return new int[]{x,y};
+    }
+    public void setLocation(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 }
 

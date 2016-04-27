@@ -1,6 +1,8 @@
 package workexpIT.merlin.tiles;
 
+import workexpIT.merlin.Output;
 import workexpIT.merlin.entities.Entity;
+import workexpIT.merlin.graphics.JavaDrawer;
 
 /**
  * Created by ict11 on 2016-04-06.
@@ -19,10 +21,13 @@ public class Water extends Tile {
 
     @Override
     public void changeAnimationStage() {
-        if ((int) (Math.random() * 20) == 0 || animationStage > 0) {
-            animationStage = animationStage + 1;
-            if (animationStage == maxAnimationStage) {
-                animationStage = 0;
+        if (animationStage != maxAnimationStage) {
+            if ((int) (Math.random() * 800) == 0 || animationStage > 0) {
+                animationStage = animationStage + 1;
+                if (animationStage >= maxAnimationStage) {
+                    animationStage = 0;
+                }
+                JavaDrawer.redrawMap(getLocation());
             }
         }
     }

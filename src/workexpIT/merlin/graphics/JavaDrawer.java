@@ -317,7 +317,7 @@ public class JavaDrawer extends JPanel implements Runnable {
         if (GameLoop.tileEditor) {
             for (int i = 0; i < WorldData.menuTiles.size(); i++) {
 
-                BufferedImage image = scale(WorldData.menuTiles.get(i).getTexture()[WorldData.menuTiles.get(i).animationStage], 4, 4);
+                BufferedImage image = scale(WorldData.menuTiles.get(i).getTexture()[WorldData.menuTiles.get(i).animationStage], 2, 2);
 
                 g.drawImage(image, (int) (x * JavaDrawer.imageSize * 4 + frame.getWidth() - editorMenuSize + 10 * x + 10), (int) (y * JavaDrawer.imageSize * 4 + 10 * y + 10), null);
                 if (x == 0) {
@@ -383,7 +383,7 @@ public class JavaDrawer extends JPanel implements Runnable {
                 count = 0;
                 changeAnimationStage();
                 Output.write("Changed animation stage");
-                updateMap();
+                //updateMap();
             }
             if (walkingStage == maxWalkingStage) {
                 for (int i = 0; i < WorldData.entities.size(); i++) {
@@ -494,7 +494,7 @@ public class JavaDrawer extends JPanel implements Runnable {
                     Output.write("Animated Tiles At " + WorldData.animatedTiles.get(i)[0] + " " + WorldData.animatedTiles.get(i)[1]);
                     int a = WorldData.animatedTiles.get(i)[0];
                     int b = WorldData.animatedTiles.get(i)[1];
-                    BufferedImage tile = scale(WorldData.tiles[a][b].getTexture()[WorldData.tiles[a][b].animationStage], scale, scale);
+                    BufferedImage tile = WorldData.tiles[a][b].getTexture()[WorldData.tiles[a][b].animationStage];
                     double radians = 0.0;
                     switch (WorldData.tiles[a][b].rotation) {
                         case UP:
@@ -532,13 +532,16 @@ public class JavaDrawer extends JPanel implements Runnable {
         WorldData.scaledMap = map;
     }
     public static BufferedImage loadMapIntoOneImage() {
+        Output.write("Loading map into one image");
         BufferedImage map = new BufferedImage((int)(WorldData.mapSizeX*16*scale),(int)(WorldData.mapSizeY*16*scale), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = map.createGraphics();
         BufferedImage tile;
         for (int a = 0; a < WorldData.tiles.length; a++) {
             for (int b = 0; b < WorldData.tiles[a].length; b++) {
                 if (WorldData.tiles[a][b] != null) {
-                    tile = scale(WorldData.tiles[a][b].getTexture()[WorldData.tiles[a][b].animationStage],scale,scale);
+                    Output.write("Drawing the tile " + WorldData.tiles[a][b].getClass().getSimpleName() + " at " + a + ", " + b + " with an animation stage at " + WorldData.tiles[a][b].animationStage + " this tile has " + WorldData.tiles[a][b].getTexture().length + " textures");
+                    //tile = WorldData.tiles[a][b].getTexture()[WorldData.tiles[a][b].animationStage];
+                    tile = WorldData.tiles[a][b].getTexture()[0];
                     double radians = 0.0;
                     switch (WorldData.tiles[a][b].rotation) {
                         case UP:
@@ -606,7 +609,7 @@ public class JavaDrawer extends JPanel implements Runnable {
         for (int a = 0; a < WorldData.tiles.length; a++) {
             for (int b = 0; b < WorldData.tiles[a].length; b++) {
                 if (WorldData.tiles[a][b] != null) {
-                    BufferedImage image = scale(WorldData.tiles[a][b].getTexture()[0],scale,scale);
+                    BufferedImage image = WorldData.tiles[a][b].getTexture()[0];
                     double radians = 0.0;
                     switch (WorldData.tiles[a][b].rotation) {
                         case UP:
@@ -968,5 +971,44 @@ public class JavaDrawer extends JPanel implements Runnable {
         Output.write("Done loading text");
         drawDialog = true;
         animateText = true;
+    }
+
+    public static void redrawMap(int[] loc) {
+        BufferedImage map = WorldData.scaledMap;
+        if (map == null || Merlin.mode == Merlin.Mode.EDITOR) {
+            Output.write("loading map");
+            map = loadMapIntoOneImage();
+        }
+        Graphics2D g2 = map.createGraphics();
+        Output.write("Redrawing tile " + WorldData.tiles[loc[0]][loc[1]].getClass().getSimpleName() + " at " + loc[0] + " " + loc[1] + " with the animation stage of " + WorldData.tiles[loc[0]][loc[1]].animationStage);
+        BufferedImage tile = WorldData.tiles[loc[0]][loc[1]].getTexture()[WorldData.tiles[loc[0]][loc[1]].animationStage];
+        double radians = 0.0;
+        switch (WorldData.tiles[loc[0]][loc[1]].rotation) {
+            case UP:
+                radians = Math.PI / 2.0 * 0.0;
+                break;
+            case RIGHT:
+                radians = Math.PI / 2.0 * 1.0;
+                break;
+            case DOWN:
+                radians = Math.PI / 2.0 * 2.0;
+                break;
+            case LEFT:
+                radians = Math.PI / 2.0 * 3.0;
+                break;
+        }
+        tile = rotateImage(tile, radians);
+        try {
+            switch (WorldData.tiles[loc[0]][loc[1]].flip) {
+                case HORIZONTAL:
+                    tile = flipImage(tile, true);
+                    break;
+                case VERTICAL:
+                    tile = flipImage(tile, false);
+                    break;
+            }
+        } catch (NullPointerException e) {
+        }
+        g2.drawImage(tile, null, (int) (loc[0] * 16 * scale), (int) ((loc[1] * 16) * scale));
     }
 }

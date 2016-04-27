@@ -185,6 +185,7 @@ public class DataReader {
             e.printStackTrace();
         }
         WorldData.scaledMap = JavaDrawer.loadMapIntoOneImage();
+        Output.write(WorldData.scaledMap.getWidth()+"");
         WorldData.mapName = mapid;
         loadEntityData(mapid);
         loadMiscData(mapid);
