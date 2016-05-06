@@ -1,6 +1,7 @@
 package workexpIT.merlin;
 
 import workexpIT.merlin.data.DataReader;
+import workexpIT.merlin.data.SoundHandler;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Bob;
 import workexpIT.merlin.entities.Entity;
@@ -43,6 +44,9 @@ public class Merlin implements Runnable{
     public static JavaDrawer jDrawer =new JavaDrawer();
 
     public static void main(String[] args) {
+
+        SoundHandler.playBackgroundMusic();
+
         if (args.length == 2 && args[0].equals("mapeditor")) {
             mode = Mode.EDITOR;
         } else {
