@@ -4,6 +4,7 @@ import workexpIT.merlin.Output;
 import workexpIT.merlin.attacks.Fireball;
 import workexpIT.merlin.attacks.Punch;
 import workexpIT.merlin.data.ImageReader;
+import workexpIT.merlin.data.SoundHandler;
 import workexpIT.merlin.data.WorldData;
 
 /**
@@ -38,22 +39,26 @@ public class Rock extends Entity {
         int pY = WorldData.getPlayer().getY();
         if (pX > x) {
             move(MOVE_LEFT);
+            SoundHandler.playNewSound("resources/audio/slide.wav", 5);
         }
         else if (pX < x) {
             move(MOVE_RIGHT);
+            SoundHandler.playNewSound("resources/audio/slide.wav", 5);
         }
         if (pY > y) {
             move(MOVE_UP);
+            SoundHandler.playNewSound("resources/audio/slide.wav", 5);
         }
         else if (pY < y) {
             move(MOVE_DOWN);
+            SoundHandler.playNewSound("resources/audio/slide.wav", 5);
         }
     }
 
     public void fall(int distance) {
         Output.write("recieved");
         fall = true;
-        fallDis = 3;
+        fallDis = distance;
     }
 
     @Override

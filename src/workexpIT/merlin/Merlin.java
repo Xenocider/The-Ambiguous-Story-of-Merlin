@@ -1,6 +1,7 @@
 package workexpIT.merlin;
 
 import workexpIT.merlin.data.DataReader;
+import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.SoundHandler;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Bob;
@@ -39,7 +40,32 @@ public class Merlin implements Runnable{
 
     public static Mode mode;
 
-    public enum Mode {GAME, EDITOR, BATTLE}
+    public static void startGame() {
+        JavaDrawer.frame.getGraphics().drawImage(ImageReader.loadImage("resources/graphics/loadscreen.png"),0,0,null);
+        mode = Mode.GAME;
+        WorldData.entities.add(new Player(0, 0, 1));
+        Output.log("Took " + Output.recordEnd() + " milliseconds to add the Player");
+        Output.recordStart();
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
+        Output.log("Took " + Output.recordEnd() + " milliseconds to schedule a thread for the GameLoop");
+        Output.recordStart();
+        DataReader.loadMap("test");
+        Output.log("Took " + Output.recordEnd() + " milliseconds to load the map");
+    }
+
+    public static void startEditor() {
+        JavaDrawer.frame.getGraphics().drawImage(ImageReader.loadImage("resources/graphics/loadscreen.png"),0,0,null);
+        mode = Mode.EDITOR;
+        DataReader.editMap("test");
+        Output.log("Took " + Output.recordEnd() + " milliseconds to load the map");
+        Output.recordStart();
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
+        Output.log("Took " + Output.recordEnd() + " milliseconds to schedule a thread for the GameLoop");
+    }
+
+    public enum Mode {GAME, EDITOR, BATTLE, MENU}
 
     public static JavaDrawer jDrawer =new JavaDrawer();
 
@@ -52,6 +78,8 @@ public class Merlin implements Runnable{
         } else {
             mode = Mode.GAME;
         }
+
+        mode = Mode.MENU;
         Output.recordStart();
         GameLoop.loadAllTextures();
         Output.log("Took " + Output.recordEnd() + " milliseconds to load the game's textures");
@@ -76,7 +104,7 @@ Output.recordStart();
             gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
             Output.log("Took " + Output.recordEnd() + " milliseconds to schedule a thread for the GameLoop");
         }
-        else {
+        else if (mode == Mode.GAME){
             //WorldData.entities.add(new Player(14, 17, 10));
             WorldData.entities.add(new Player(0, 0, 1));
             Output.log("Took " + Output.recordEnd() + " milliseconds to add the Player");

@@ -35,7 +35,7 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int imageSize = 16;
     public static int ww = 800;
     public static int wh = 800;
-    public static float scale = 6;
+    public static float scale = 2;
 
     public static int count = 0;
     public static boolean runAnimation = false;
@@ -123,6 +123,9 @@ public class JavaDrawer extends JPanel implements Runnable {
             super.paintComponent(g);
             zoomIn();
 
+            if (Merlin.mode.equals(Merlin.Mode.MENU)) {
+                g.drawImage(ImageReader.loadImage("resources/graphics/menuscreen.png"),0,0,null);
+            }
             //Run animation code before drawing anything
             for (int i = 0; i < Animator.currentAnimators.size(); i++) {
                 Animator.currentAnimators.get(i).run();

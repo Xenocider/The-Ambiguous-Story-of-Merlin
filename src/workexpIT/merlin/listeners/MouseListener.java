@@ -35,6 +35,7 @@ public class MouseListener implements java.awt.event.MouseListener {
         int x = e.getX();
         int y = e.getY();
         Output.write("MOUSELOC CLICK = " + x +" " + y);
+
         if (Merlin.mode.equals(Merlin.Mode.EDITOR) && GameLoop.tileEditor) {
             if (x > JavaDrawer.frame.getWidth() - JavaDrawer.editorMenuSize && x < JavaDrawer.frame.getWidth() - 10 - 32) {
                 int editX = (x - JavaDrawer.frame.getWidth() + JavaDrawer.editorMenuSize - 10) / (JavaDrawer.imageSize * 4 + 10);
@@ -118,6 +119,13 @@ public class MouseListener implements java.awt.event.MouseListener {
                     GameLoop.currentAttack = WorldData.getPlayer().attacks[5];
 
                 }
+            }
+        }
+        if (Merlin.mode.equals(Merlin.Mode.MENU)) {
+            if (y > 300 && y < 380) {
+                Merlin.startGame();
+            }
+            else if (y > 490 && y < 580) {
             }
         }
     }

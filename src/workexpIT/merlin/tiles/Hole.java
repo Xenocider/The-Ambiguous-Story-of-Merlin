@@ -18,7 +18,7 @@ public class Hole extends Tile {
             if (e.getName() == "rock") {
                 WorldData.entities.remove(e);
                 setInstance(1);
-                JavaDrawer.updateMap();
+                JavaDrawer.redrawMap(getLocation());
                 return true;
             } else {
                 return false;
