@@ -1,0 +1,8 @@
+locationTrigger(4)(4)
+{
+addEntity(Rock)(0)(1)(0)(0)(fallingRock)(false)
+runFunctionOfEntity(Rock)(fallingRock)(fall)(int)
+{
+(3)
+}
+}

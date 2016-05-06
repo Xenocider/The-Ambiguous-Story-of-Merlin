@@ -190,6 +190,7 @@ public class DataReader {
         loadEntityData(mapid);
         loadMiscData(mapid);
         loadAnimatedTiles();
+        EventReader.loadEventData(mapid);
         WorldData.battleBackground = ImageReader.loadImage("resources/graphics/backgrounds/" + mapid + ".png");
         //Center camera
         try {

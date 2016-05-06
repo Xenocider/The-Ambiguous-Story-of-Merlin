@@ -99,7 +99,8 @@ public class Tile {
 
     public boolean movingOnToTile(Entity entity) {
         if (WorldData.getPlayer() == entity && locationTrigger) {
-            GameLoop.triggerLocationEvent(getLocation());
+            Output.write("Triggering event");
+            GameLoop.triggerLocationEvent(new int[] {x,y});
         }
         for (int i = 0; i < WorldData.entities.size(); i ++) {
             if (WorldData.entities.get(i).getX() == x && WorldData.entities.get(i).getY() == y) {

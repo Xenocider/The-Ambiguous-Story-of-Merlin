@@ -377,12 +377,12 @@ public class JavaDrawer extends JPanel implements Runnable {
     private void drawEntities(Graphics g) {
         if (runAnimation && !pause && !drawDialog) {
             walkingStage = walkingStage + 1;
-            Output.write(walkingStage + " < " + maxWalkingStage);
+            //Output.write(walkingStage + " < " + maxWalkingStage);
             count = count + 1;
             if (count == maxCount) {
                 count = 0;
                 changeAnimationStage();
-                Output.write("Changed animation stage");
+                //Output.write("Changed animation stage");
                 //updateMap();
             }
             if (walkingStage == maxWalkingStage) {
@@ -395,7 +395,7 @@ public class JavaDrawer extends JPanel implements Runnable {
                 walkingStage = 1;
                 //count = 0;
                 GameLoop.pause = false;
-                Output.write("Movement Animation Stage Finished");
+                //Output.write("Movement Animation Stage Finished");
             }
         }
         //Output.write("Drawing Entities");
@@ -601,7 +601,7 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     private void drawMap(Graphics g) {
         //BufferedImage scaledMap = scale(WorldData.map,scale,scale);
-        Output.write("drawing map");
+        //Output.write("drawing map");
         g.drawImage(WorldData.scaledMap,(int)(offsetX*scale+frame.getWidth()/2),(int)((offsetY-imageSize)*scale+frame.getHeight()/2),null);
     }
 
@@ -928,7 +928,7 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     public static void runAnimation() {
         runAnimation = true;
-        Output.write("Movement Animation Stage Started");
+        //Output.write("Movement Animation Stage Started");
     }
 
     private static Timestamp recordStartTime;
@@ -980,7 +980,7 @@ public class JavaDrawer extends JPanel implements Runnable {
             map = loadMapIntoOneImage();
         }
         Graphics2D g2 = map.createGraphics();
-        Output.write("Redrawing tile " + WorldData.tiles[loc[0]][loc[1]].getClass().getSimpleName() + " at " + loc[0] + " " + loc[1] + " with the animation stage of " + WorldData.tiles[loc[0]][loc[1]].animationStage);
+        //Output.write("Redrawing tile " + WorldData.tiles[loc[0]][loc[1]].getClass().getSimpleName() + " at " + loc[0] + " " + loc[1] + " with the animation stage of " + WorldData.tiles[loc[0]][loc[1]].animationStage);
         BufferedImage tile = WorldData.tiles[loc[0]][loc[1]].getTexture()[WorldData.tiles[loc[0]][loc[1]].animationStage];
         double radians = 0.0;
         switch (WorldData.tiles[loc[0]][loc[1]].rotation) {

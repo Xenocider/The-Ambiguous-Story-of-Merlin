@@ -1,5 +1,6 @@
 package workexpIT.merlin.entities;
 
+import workexpIT.merlin.Output;
 import workexpIT.merlin.attacks.Fireball;
 import workexpIT.merlin.attacks.Punch;
 import workexpIT.merlin.data.ImageReader;
@@ -50,6 +51,7 @@ public class Rock extends Entity {
     }
 
     public void fall(int distance) {
+        Output.write("recieved");
         fall = true;
         fallDis = 3;
     }

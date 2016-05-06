@@ -1,5 +1,6 @@
 package workexpIT.merlin.data;
 
+import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.entities.Player;
@@ -44,5 +45,20 @@ public class WorldData {
             }
         }
         return player;
+    }
+
+    public static Entity findEntity(String entityDialog) {
+        for (int i = 0; i < entities.size(); i++) {
+            Output.write(entities.get(i).dialog + " : " + entityDialog);
+            try {
+                if (entities.get(i).dialog.contains(entityDialog)) {
+                    Output.write("found the entity");
+                    return entities.get(i);
+                }
+            }
+            catch (NullPointerException e) {}
+        }
+        Output.write("could not find the entity");
+        return null;
     }
 }

@@ -2,6 +2,7 @@ package workexpIT.merlin;
 
 import workexpIT.merlin.attacks.Attack;
 import workexpIT.merlin.data.DataReader;
+import workexpIT.merlin.data.EventReader;
 import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
@@ -366,6 +367,6 @@ public class GameLoop implements Runnable{
     }
 
     public static void triggerLocationEvent(int[] location) {
-
+        EventReader.readEventData(EventReader.EventTriggerType.LocationTrigger,location);
     }
 }

@@ -185,9 +185,9 @@ public class Entity {
                             return true;
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        Output.write("Entity at edge of map!a");
+                        Output.write("Entity " + this.getName() + "at edge of map!a");
                     } catch (NullPointerException e) {
-                        Output.write("Entity at edge of map!");
+                        Output.write("Entity " + this.getName() + "at edge of map!b");
                     }
                     break;
                 case MOVE_RIGHT:
@@ -199,9 +199,10 @@ public class Entity {
                             return true;
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        Output.write("Entity at edge of map!a");
+                        Output.write("Entity " + this.getName() + "at edge of map!c");
                     } catch (NullPointerException e) {
-                        Output.write("Entity at edge of map!");
+                        e.printStackTrace();
+                        Output.write("Entity " + this.getName() + "at edge of map!d");
                     }
                     break;
                 case MOVE_DOWN:
@@ -213,9 +214,9 @@ public class Entity {
                             return true;
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        Output.write("Entity at edge of map!a");
+                        Output.write("Entity " + this.getName() + "at edge of map!e");
                     } catch (NullPointerException e) {
-                        Output.write("Entity at edge of map!");
+                        Output.write("Entity " + this.getName() + "at edge of map!f");
                     }
                     break;
                 case MOVE_LEFT:
@@ -227,9 +228,9 @@ public class Entity {
                             return true;
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        Output.write("Entity at edge of map!a");
+                        Output.write("Entity " + this.getName() + "at edge of map!g");
                     } catch (NullPointerException e) {
-                        Output.write("Entity at edge of map!");
+                        Output.write("Entity " + this.getName() + "at edge of map!h");
                     }
                     break;
              }
@@ -248,9 +249,9 @@ public class Entity {
                         moving = true;
                         return true;
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    Output.write("Entity at edge of map!a");
+                    Output.write("Entity " + this.getName() + "at edge of map!i");
                 } catch (NullPointerException e) {
-                    Output.write("Entity at edge of map!");
+                    Output.write("Entity " + this.getName() + "at edge of map!j");
                 }
                 break;
             case MOVE_RIGHT:
@@ -261,9 +262,9 @@ public class Entity {
                         moving = true;
                         return true;
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    Output.write("Entity at edge of map!a");
+                    Output.write("Entity " + this.getName() + "at edge of map!k");
                 } catch (NullPointerException e) {
-                    Output.write("Entity at edge of map!");
+                    Output.write("Entity " + this.getName() + "at edge of map!l");
                 }
                 break;
             case MOVE_DOWN:
@@ -275,9 +276,9 @@ public class Entity {
                         return true;
 
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    Output.write("Entity at edge of map!a");
+                    Output.write("Entity " + this.getName() + "at edge of map!m");
                 } catch (NullPointerException e) {
-                    Output.write("Entity at edge of map!");
+                    Output.write("Entity " + this.getName() + "at edge of map!n");
                 }
                 break;
             case MOVE_LEFT:
@@ -289,9 +290,9 @@ public class Entity {
                         return true;
 
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    Output.write("Entity at edge of map!a");
+                    Output.write("Entity " + this.getName() + "at edge of map!o");
                 } catch (NullPointerException e) {
-                    Output.write("Entity at edge of map!");
+                    Output.write("Entity " + this.getName() + "at edge of map!p");
                 }
                 break;
         }
