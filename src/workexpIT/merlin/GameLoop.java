@@ -279,6 +279,7 @@ public class GameLoop implements Runnable{
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
+                Output.write("adding tile: " + tile.getClass().getSimpleName() + " to the menu");
                 WorldData.menuTiles.add(tile);
                 WorldData.animatedTiles.remove(tile);
             }

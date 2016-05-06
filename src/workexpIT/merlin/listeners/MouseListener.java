@@ -124,8 +124,11 @@ public class MouseListener implements java.awt.event.MouseListener {
         if (Merlin.mode.equals(Merlin.Mode.MENU)) {
             if (y > 300 && y < 380) {
                 Merlin.startGame();
+                pressed = false;
             }
             else if (y > 490 && y < 580) {
+                Merlin.startEditor();
+                pressed = false;
             }
         }
     }
@@ -182,5 +185,6 @@ public class MouseListener implements java.awt.event.MouseListener {
         tile.setInstance(WorldData.selectedInstance);
         WorldData.tiles[x][y] = tile;
         Output.write("Placing tile " + id + " at " + x + ", " + y);
+        JavaDrawer.redrawMap(new int[]{x,y});
     }
 }

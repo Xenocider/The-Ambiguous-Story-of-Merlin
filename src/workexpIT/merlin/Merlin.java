@@ -41,8 +41,9 @@ public class Merlin implements Runnable{
     public static Mode mode;
 
     public static void startGame() {
-        JavaDrawer.frame.getGraphics().drawImage(ImageReader.loadImage("resources/graphics/loadscreen.png"),0,0,null);
         mode = Mode.GAME;
+        GameLoop.loadAllTextures();
+        JavaDrawer.frame.getGraphics().drawImage(ImageReader.loadImage("resources/graphics/loadscreen.png"),0,0,null);
         WorldData.entities.add(new Player(0, 0, 1));
         Output.log("Took " + Output.recordEnd() + " milliseconds to add the Player");
         Output.recordStart();
@@ -55,9 +56,11 @@ public class Merlin implements Runnable{
     }
 
     public static void startEditor() {
-        JavaDrawer.frame.getGraphics().drawImage(ImageReader.loadImage("resources/graphics/loadscreen.png"),0,0,null);
         mode = Mode.EDITOR;
-        DataReader.editMap("test");
+        GameLoop.loadAllTextures();
+        String map = JavaDrawer.textField.getText();
+        JavaDrawer.frame.getGraphics().drawImage(ImageReader.loadImage("resources/graphics/loadscreen.png"),0,0,null);
+        DataReader.editMap(map);
         Output.log("Took " + Output.recordEnd() + " milliseconds to load the map");
         Output.recordStart();
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
@@ -81,7 +84,6 @@ public class Merlin implements Runnable{
 
         mode = Mode.MENU;
         Output.recordStart();
-        GameLoop.loadAllTextures();
         Output.log("Took " + Output.recordEnd() + " milliseconds to load the game's textures");
 Output.recordStart();
 

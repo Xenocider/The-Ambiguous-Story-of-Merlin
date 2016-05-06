@@ -56,6 +56,8 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     public static boolean animateText = false;
 
+    public static JTextField textField = new JTextField(20);
+
 
     public static Font f = new Font("Helvetica", Font.PLAIN, 30);
 
@@ -67,6 +69,10 @@ public class JavaDrawer extends JPanel implements Runnable {
         minOffsetY = (int) (-(imageSize*WorldData.mapSizeY-frame.getHeight()/2/scale)-imageSize*(5.5f-scale)/scale);
         frame.getGraphics().drawImage(ImageReader.loadImage("resources/graphics/loadscreen.png"),0,0,null);
         frame.getGraphics().drawString("LOREM IPSUM",0,0);
+        frame.setLayout(null);
+        textField.setBounds(225,450,300,30);
+        frame.add(textField);
+
     }
 
     @Override
@@ -125,6 +131,11 @@ public class JavaDrawer extends JPanel implements Runnable {
 
             if (Merlin.mode.equals(Merlin.Mode.MENU)) {
                 g.drawImage(ImageReader.loadImage("resources/graphics/menuscreen.png"),0,0,null);
+                textField.setVisible(true);
+                //Output.write(textField.getText());
+            }
+        else {
+                textField.setVisible(false);
             }
             //Run animation code before drawing anything
             for (int i = 0; i < Animator.currentAnimators.size(); i++) {
@@ -165,7 +176,7 @@ public class JavaDrawer extends JPanel implements Runnable {
                 recordStart();
                 drawEditorMenu(g);
                 Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the editor menu");
-                updateMap();
+                //updateMap();
 
             }
             if (Merlin.mode.equals(Merlin.Mode.BATTLE)) {
@@ -577,6 +588,7 @@ public class JavaDrawer extends JPanel implements Runnable {
             }
         }
         g2.dispose();
+        Output.write("done");
         return map;
     }
     public static BufferedImage rotateImage(BufferedImage input, double radians) {
@@ -978,9 +990,15 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     public static void redrawMap(int[] loc) {
         BufferedImage map = WorldData.scaledMap;
-        if (map == null || Merlin.mode == Merlin.Mode.EDITOR) {
+        if (map == null) {
             Output.write("loading map");
             map = loadMapIntoOneImage();
+            try {
+                Output.write("map height = " + map.getHeight());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         Graphics2D g2 = map.createGraphics();
         //Output.write("Redrawing tile " + WorldData.tiles[loc[0]][loc[1]].getClass().getSimpleName() + " at " + loc[0] + " " + loc[1] + " with the animation stage of " + WorldData.tiles[loc[0]][loc[1]].animationStage);
