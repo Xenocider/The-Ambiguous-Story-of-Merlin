@@ -242,6 +242,8 @@ public class GameLoop implements Runnable{
     }
 
     public static void startBattle(Entity player, Entity e) {
+        pause = true;
+        enemy = e;
 
         /*Thread zoom = new Thread("Zoom") {
             public void run() {
@@ -253,10 +255,10 @@ public class GameLoop implements Runnable{
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
                 Merlin.mode = Merlin.Mode.BATTLE;
                 pause = false;
-            }
+        /*    }
         };
         zoom.start();*/
     }

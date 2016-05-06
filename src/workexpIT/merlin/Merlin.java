@@ -44,7 +44,7 @@ public class Merlin implements Runnable{
         mode = Mode.GAME;
         GameLoop.loadAllTextures();
         JavaDrawer.frame.getGraphics().drawImage(ImageReader.loadImage("resources/graphics/loadscreen.png"),0,0,null);
-        WorldData.entities.add(new Player(0, 0, 1));
+        WorldData.entities.add(new Player(14, 17, 1));
         Output.log("Took " + Output.recordEnd() + " milliseconds to add the Player");
         Output.recordStart();
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);

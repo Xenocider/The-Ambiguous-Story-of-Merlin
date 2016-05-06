@@ -417,7 +417,7 @@ public class DataReader {
                         m.find();
                         dialog = m.group(1);
                         m.find();
-                        if (m.group(1) == "true") {
+                        if (m.group(1).contains("true")) {
                             talk = true;
                         }
                     }

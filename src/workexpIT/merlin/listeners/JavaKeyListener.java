@@ -86,20 +86,25 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
                 break;
             case KeyEvent.VK_CLOSE_BRACKET:
                 //Flip Horizontally
-                System.out.println("Flipping the " + WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].getClass().getName() + " tile at " + getTileCoordsAtCursor()[0] + " " + getTileCoordsAtCursor()[1]);
-                switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip) {
-                    case DEFAULT:
-                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.HORIZONTAL);
-                        break;
-                    case HORIZONTAL:
-                        WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.DEFAULT);
-                        break;
+                if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+                    System.out.println("Flipping the " + WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].getClass().getName() + " tile at " + getTileCoordsAtCursor()[0] + " " + getTileCoordsAtCursor()[1]);
+                    switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip) {
+                        case DEFAULT:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.HORIZONTAL);
+                            break;
+                        case HORIZONTAL:
+                            WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.DEFAULT);
+                            break;
+                    }
+                    JavaDrawer.redrawMap(getTileCoordsAtCursor());
                 }
 
                 break;
             case KeyEvent.VK_OPEN_BRACKET:
                 //Flip Vertically
-                Output.write("FLIP " + WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip);
+                if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+
+                    Output.write("FLIP " + WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip);
                 switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip) {
                     case DEFAULT:
                         WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.VERTICAL);
@@ -108,10 +113,14 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
                         WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setFlip(Tile.Flip.DEFAULT);
                         break;
                 }
+                JavaDrawer.redrawMap(getTileCoordsAtCursor());
+        }
                 break;
             case KeyEvent.VK_COMMA:
                 //Rotate Left
-                if (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip == Tile.Flip.DEFAULT) {
+                if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+
+                    if (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip == Tile.Flip.DEFAULT) {
                     switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].rotation) {
                         case UP:
                             WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].setRotation(Tile.Rotation.LEFT);
@@ -143,10 +152,14 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
                             break;
                     }
                 }
+        JavaDrawer.redrawMap(getTileCoordsAtCursor());
+    }
                 break;
             case KeyEvent.VK_PERIOD:
                 //Rotate Right
-                Output.write("Rotating tile at " + getTileCoordsAtCursor()[0] + ", " + getTileCoordsAtCursor()[1]);
+                if (Merlin.mode.equals(Merlin.Mode.EDITOR)) {
+
+                    Output.write("Rotating tile at " + getTileCoordsAtCursor()[0] + ", " + getTileCoordsAtCursor()[1]);
                 Output.write("Title " + WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]]);
                 if (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].flip == Tile.Flip.DEFAULT) {
                     switch (WorldData.tiles[getTileCoordsAtCursor()[0]][getTileCoordsAtCursor()[1]].rotation) {
@@ -180,6 +193,8 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
                             break;
                     }
                 }
+    JavaDrawer.redrawMap(getTileCoordsAtCursor());
+}
                 break;
             case KeyEvent.VK_E:
                 GameLoop.switchToEntityEditor();

@@ -2,6 +2,8 @@ package workexpIT.merlin.entities;
 
 import workexpIT.merlin.GameLoop;
 import workexpIT.merlin.Output;
+import workexpIT.merlin.attacks.Flood;
+import workexpIT.merlin.attacks.Punch;
 import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.graphics.Drawer;
@@ -18,6 +20,8 @@ public class George extends Entity {
         super(x, y, "george", state, level, ImageReader.loadImage("resources/graphics/charactersprites/george.png"));
         this.dialog = dialog;
         talkable = talk;
+        this.attacks[0] = new Punch();
+        this.attacks[0] = new Flood();
 
         downWalkingSpritesId = new int[]{3, 4, 3, 5};
         upWalkingSpritesId = new int[]{0, 1, 0, 2};

@@ -16,7 +16,8 @@ public class Reference {
             "WoodFence",
             "Water",
             "Hole",
-            "Sand"
+            "Sand",
+            "Wall"
 
     };
     public static String[] entities = {

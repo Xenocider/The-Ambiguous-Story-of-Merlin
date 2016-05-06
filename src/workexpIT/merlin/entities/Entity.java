@@ -308,6 +308,7 @@ public class Entity {
     }
 
     public void playerInteraction() {
+        Output.write(dialog + " " + talkable);
         if (dialog != null && talkable){GameLoop.displayDialog(dialog);}
 
         /*if (state == STATE_NEUTRAL) {
@@ -316,9 +317,9 @@ public class Entity {
         if (state == STATE_FRIENDLY) {
             Output.write(dialog);
             GameLoop.displayDialog(dialog);
-        }
-        if (state == STATE_AGGRESSIVE) {
-            //Triger battle
         }*/
+        if (state == STATE_AGGRESSIVE) {
+            GameLoop.startBattle(WorldData.getPlayer(),this);
+        }
     }
 }
