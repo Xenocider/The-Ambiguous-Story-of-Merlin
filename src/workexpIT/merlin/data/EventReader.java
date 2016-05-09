@@ -8,10 +8,7 @@ import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.entities.Player;
 import workexpIT.merlin.entities.Rock;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

@@ -60,6 +60,9 @@ public class JavaDrawer extends JPanel implements Runnable {
 
 
     public static Font f = new Font("Helvetica", Font.PLAIN, 30);
+    public static boolean fadeAway = false;
+    public int fadeLevel = 0;
+    public int fadeStep = 10;
 
     public static void init() {
         createWindow();
@@ -192,6 +195,24 @@ public class JavaDrawer extends JPanel implements Runnable {
             long endTime = System.currentTimeMillis();
             //Output.write("Took " + (endTime-startTime) + "ms to render this frame");
             //Output.write("FPS: " + Math.pow((endTime-startTime),-1)*1000);
+        if (fadeAway) {
+            Color myColour = new Color(0, 0, 0, fadeLevel);
+            fadeLevel = fadeLevel + fadeStep;
+            if (fadeLevel > 255) fadeLevel = 255;
+            g.setColor(myColour);
+            g.fillRect(0,0,900,900);
+            Output.write("Fading");
+            g.setColor(Color.black);
+        }
+        else if (fadeLevel > 0) {
+            Color myColour = new Color(0, 0, 0, fadeLevel);
+            fadeLevel = fadeLevel - fadeStep;
+            if (fadeLevel < 0) fadeLevel = 0;
+            g.setColor(myColour);
+            g.fillRect(0,0,900,900);
+            Output.write("Fading");
+            g.setColor(Color.black);
+        }
     }
 
     public static String dialog;

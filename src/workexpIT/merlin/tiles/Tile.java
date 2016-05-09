@@ -112,7 +112,7 @@ public class Tile {
             return false;
         }
         if (checkForDoor(entity)) {
-            return false;
+            return true;
         }
         return true;
     }
@@ -125,14 +125,25 @@ public class Tile {
     public boolean checkForDoor(Entity entity) {
         if (entity.getClass().equals(Player.class)) {
             if (door) {
-                Output.write("DOOOOOOOOR");
+                Thread door = new Thread() {
+                    public void run() {
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        DataReader.loadMap(doorMap);
+                        Output.write("DOOOOOOOOR");
                         WorldData.getPlayer().setX(doorX);
                         WorldData.getPlayer().setY(doorY);
                         WorldData.getPlayer().lastLoc[0] = doorX;
                         WorldData.getPlayer().lastLoc[1] = doorY;
-                        JavaDrawer.offsetX = (-WorldData.getPlayer().getX()*JavaDrawer.imageSize-WorldData.getPlayer().downSprite.getWidth()/JavaDrawer.scale);
-                        JavaDrawer.offsetY = (-WorldData.getPlayer().getY()*JavaDrawer.imageSize+WorldData.getPlayer().downSprite.getHeight()/JavaDrawer.scale);
-                DataReader.loadMap(doorMap);
+                        JavaDrawer.offsetX = (-WorldData.getPlayer().getX() * JavaDrawer.imageSize - WorldData.getPlayer().downSprite.getWidth() / JavaDrawer.scale);
+                        JavaDrawer.offsetY = (-WorldData.getPlayer().getY() * JavaDrawer.imageSize + WorldData.getPlayer().downSprite.getHeight() / JavaDrawer.scale);
+                    }
+                };
+                JavaDrawer.fadeAway = true;
+                door.start();
                 return true;
             }
         }

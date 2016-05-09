@@ -234,6 +234,7 @@ public class DataReader {
             Drawer.setCamera((-WorldData.getPlayer().getX() + Drawer.ww / 2 / Drawer.w) * Drawer.w, (-WorldData.getPlayer().getY() + Drawer.wh / 2 / Drawer.h) * Drawer.h);
         } catch (Exception e) {
         }
+        JavaDrawer.fadeAway = false;
     }
 
     private static void loadAnimatedTiles() {
