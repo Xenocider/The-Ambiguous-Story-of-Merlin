@@ -36,6 +36,7 @@ public class Player extends Entity{
         loadSprites();
     }
 
+
     public void addXP(int xpGained) {
         xp = xp + xpGained;
         if (xp >= xpMax) {

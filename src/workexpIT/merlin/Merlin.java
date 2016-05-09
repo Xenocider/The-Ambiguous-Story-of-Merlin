@@ -1,9 +1,6 @@
 package workexpIT.merlin;
 
-import workexpIT.merlin.data.DataReader;
-import workexpIT.merlin.data.ImageReader;
-import workexpIT.merlin.data.SoundHandler;
-import workexpIT.merlin.data.WorldData;
+import workexpIT.merlin.data.*;
 import workexpIT.merlin.entities.Bob;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.entities.Player;
@@ -38,20 +35,25 @@ public class Merlin implements Runnable{
     public static ScheduledFuture drawer;
     public static ScheduledFuture gameLoop;
 
+    private static final String startingMap = "house";
+    private static final int[] startingLoc = new int[]{5,2};
+
+    public static EventReader eventHandler = new EventReader();
+
     public static Mode mode;
 
     public static void startGame() {
         mode = Mode.GAME;
         GameLoop.loadAllTextures();
         JavaDrawer.frame.getGraphics().drawImage(ImageReader.loadImage("resources/graphics/loadscreen.png"),0,0,null);
-        WorldData.entities.add(new Player(14, 17, 1));
+        WorldData.entities.add(new Player(startingLoc[0], startingLoc[1], 1));
         Output.log("Took " + Output.recordEnd() + " milliseconds to add the Player");
         Output.recordStart();
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
         Output.log("Took " + Output.recordEnd() + " milliseconds to schedule a thread for the GameLoop");
         Output.recordStart();
-        DataReader.loadMap("test");
+        DataReader.loadMap(startingMap);
         Output.log("Took " + Output.recordEnd() + " milliseconds to load the map");
     }
 

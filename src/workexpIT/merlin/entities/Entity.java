@@ -1,8 +1,10 @@
 package workexpIT.merlin.entities;
 
 import workexpIT.merlin.GameLoop;
+import workexpIT.merlin.Merlin;
 import workexpIT.merlin.Output;
 import workexpIT.merlin.attacks.Attack;
+import workexpIT.merlin.data.EventReader;
 import workexpIT.merlin.data.ImageReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.graphics.Drawer;
@@ -84,8 +86,7 @@ public class Entity {
     public String dialog = null;
 
     public boolean talkable = false;
-
-
+    public boolean freeze = false;
 
 
     public Entity(int x, int y, String name, int state, int level, BufferedImage sprites) {
@@ -173,8 +174,9 @@ public class Entity {
     }
 
     public boolean move(int direction) {
-        facing = direction;
-        //0 = up, 1 = right, 2 = down, 3 = left
+        if (!freeze) {
+            facing = direction;
+            //0 = up, 1 = right, 2 = down, 3 = left
             switch (direction) {
                 case MOVE_UP:
                     try {
@@ -233,7 +235,8 @@ public class Entity {
                         Output.write("Entity " + this.getName() + "at edge of map!h");
                     }
                     break;
-             }
+            }
+        }
         return false;
     }
 
@@ -304,6 +307,16 @@ public class Entity {
         animationStage = animationStage + 1;
         if (animationStage > maxAnimationStage) {
             animationStage = 0;
+        }
+    }
+
+
+    public void freeze(boolean f) {
+        Output.write("FREEZE");
+        freeze = f;
+        synchronized(Merlin.eventHandler.syncObject) {
+            Merlin.eventHandler.condition = true;
+            Merlin.eventHandler.syncObject.notify();
         }
     }
 

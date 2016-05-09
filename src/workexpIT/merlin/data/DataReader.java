@@ -1,6 +1,7 @@
 package workexpIT.merlin.data;
 
 import workexpIT.merlin.GameLoop;
+import workexpIT.merlin.Merlin;
 import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
 import workexpIT.merlin.entities.Entity;
@@ -138,7 +139,15 @@ public class DataReader {
                             instance = Integer.parseInt(id.substring(id.length()-1));
                             flip = id.substring(id.length() - 4, id.length() - 3);
                             rotation = id.substring(id.length() - 7, id.length() - 6);
-                            i = Integer.parseInt(id.substring(0, id.length() - 9));
+                            String idData = id.substring(0, id.length() - 9);
+                            String idString = "";
+                            Output.write("The id data is " + idData);
+                            for (int t = 0; t < idData.length()/2; t++) {
+                                idString = idString + (idData.substring(t*3,t*3+1));
+                                Output.write("The string is " + idString);
+                            }
+                            if (idString == "") idString = idData;
+                            i = Integer.parseInt(idString);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -190,7 +199,7 @@ public class DataReader {
         loadEntityData(mapid);
         loadMiscData(mapid);
         loadAnimatedTiles();
-        EventReader.loadEventData(mapid);
+        Merlin.eventHandler.loadEventData(mapid);
         WorldData.battleBackground = ImageReader.loadImage("resources/graphics/backgrounds/" + mapid + ".png");
         //Center camera
         try {
@@ -541,12 +550,20 @@ public class DataReader {
                         String rotation = null;
                         String flip = null;
                         int instance = 0;
-
+Output.write("Trying to load this data : " + id);
                         try {
                             instance = Integer.parseInt(id.substring(id.length()-1));
                             flip = id.substring(id.length() - 4, id.length() - 3);
                             rotation = id.substring(id.length() - 7, id.length() - 6);
-                            i = Integer.parseInt(id.substring(0, id.length() - 9));
+                            String idData = id.substring(0, id.length() - 9);
+                            String idString = "";
+                            Output.write("The id data is " + idData);
+                            for (int t = 0; t < idData.length()/2; t++) {
+                                idString = idString + (idData.substring(t*3,t*3+1));
+                                Output.write("The string is " + idString);
+                            }
+                            if (idString == "") idString = idData;
+                            i = Integer.parseInt(idString);
 
                         } catch (Exception e) {
                             e.printStackTrace();

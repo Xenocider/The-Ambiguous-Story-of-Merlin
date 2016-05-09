@@ -1,0 +1,100 @@
+start
+{
+runFunctionOfPlayer(freeze)(boolean)
+{
+(true)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(0)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(0)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(0)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(3)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(3)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(3)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(3)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(3)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(3)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(3)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(3)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(3)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(3)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(3)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(3)
+}
+displayDialog(Good morning Merlin! Breakfast is on the table waiting for you. Also I heard that there are some strange things happening outside the borders of the town recently, maybe you should take a look.)
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(1)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(2)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(2)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(2)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(2)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(2)
+}
+runFunctionOfEntity(Gwen)("Hi Merlin! What's new in your adventures?")(overrideMove)(int)
+{
+(2)
+}
+runFunctionOfPlayer(freeze)(boolean)
+{
+(false)
+}
+}

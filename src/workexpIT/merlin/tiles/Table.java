@@ -2,10 +2,10 @@ package workexpIT.merlin.tiles;
 
         import workexpIT.merlin.entities.Entity;
 
-public class Wall extends Tile {
+public class Table extends Tile {
 
-    public Wall() {
-        super(8,false);
+    public Table() {
+        super(9,false);
     }
 
     @Override

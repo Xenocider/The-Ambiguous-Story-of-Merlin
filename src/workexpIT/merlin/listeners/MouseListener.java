@@ -6,6 +6,7 @@ import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
 import workexpIT.merlin.data.DataReader;
 import workexpIT.merlin.data.WorldData;
+import workexpIT.merlin.entities.Bob;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.graphics.JavaDrawer;
 import workexpIT.merlin.tiles.Tile;
@@ -154,11 +155,11 @@ public class MouseListener implements java.awt.event.MouseListener {
             Class<?> clazz = Class.forName("workexpIT.merlin.entities."+ Reference.entities[selectedEntity]);
             Constructor<?> ctor = null;
             try {
-                ctor = clazz.getConstructor(int.class,int.class,int.class,int.class,String.class);
+                ctor = clazz.getConstructor(int.class,int.class,int.class,int.class,String.class,boolean.class);
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             }
-            entity = (Entity) ctor.newInstance(mapX,mapY,0,1,null);
+            entity = (Entity) ctor.newInstance(mapX,mapY,0,1,null,false);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

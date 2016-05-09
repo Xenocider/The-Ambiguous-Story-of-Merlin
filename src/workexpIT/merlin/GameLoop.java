@@ -43,13 +43,29 @@ public class GameLoop implements Runnable{
     public static boolean fightMenu = false;
     public static boolean tileEditor = true;
     public static String dialogText;
+    public static boolean startTigger;
 
     @Override
     public void run() {
 
+        Output.write("loopdeloop");
+
+
         recordStart();
 
         if (Merlin.mode.equals(Merlin.Mode.GAME) && !pause) {
+
+            if (startTigger) {
+                Thread t = new Thread() {
+                    public void run() {
+                        Merlin.eventHandler.readEventData(EventReader.EventTriggerType.StartTrigger);
+                    }
+                };
+                t.start();
+                startTigger = false;
+            }
+
+
             setLastLocs();
             movePlayer();
 
@@ -370,6 +386,6 @@ public class GameLoop implements Runnable{
     }
 
     public static void triggerLocationEvent(int[] location) {
-        EventReader.readEventData(EventReader.EventTriggerType.LocationTrigger,location);
+        Merlin.eventHandler.readEventData(EventReader.EventTriggerType.LocationTrigger,location);
     }
 }

@@ -210,6 +210,10 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
             JavaDrawer.drawDialog = false;
             GameLoop.pause = false;
             JavaDrawer.pause = false;
+            synchronized(Merlin.eventHandler.syncObject) {
+                Merlin.eventHandler.condition = true;
+                Merlin.eventHandler.syncObject.notify();
+            }
         }
 
     }

@@ -17,7 +17,11 @@ public class Reference {
             "Water",
             "Hole",
             "Sand",
-            "Wall"
+            "Wall",
+            "Floor",
+            "Table",
+            "Bed",
+            "Chair"
 
     };
     public static String[] entities = {
@@ -28,6 +32,7 @@ public class Reference {
             "TreeRight",
             "Sign",
             "Jeff",
-            "Cactus"
+            "Cactus",
+            "Gwen"
     };
 }
