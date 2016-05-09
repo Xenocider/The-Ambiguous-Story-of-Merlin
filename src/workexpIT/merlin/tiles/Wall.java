@@ -5,12 +5,15 @@ package workexpIT.merlin.tiles;
 public class Wall extends Tile {
 
     public Wall() {
-        super(8,false);
+        super(12,false);
     }
 
     @Override
     public boolean movingOnToTileExtra(Entity e) {
         //Cannot move past ever (Wall)
+        if (instance == 11) {
+            return  true;
+        }
         return false;
     }
 }

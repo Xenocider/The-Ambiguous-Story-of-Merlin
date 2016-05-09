@@ -136,8 +136,36 @@ public class DataReader {
                         int instance = 0;
 
                         try {
-                            instance = Integer.parseInt(id.substring(id.length()-1));
-                            flip = id.substring(id.length() - 4, id.length() - 3);
+                            boolean idMode = true;
+                            boolean flipMode = false;
+                            String idString = "";
+                            String instanceString = "";
+                            for (int p = 0; p <= id.length()/3; p++) {
+                                Output.write("reading: " + id.substring(p*3,p*3+1));
+                                try {
+                                    Integer.parseInt(id.substring(p*3,p*3+1));
+                                    if (idMode) {
+                                        idString = idString + id.substring(p * 3, p * 3 + 1);
+                                    }
+                                    else {
+                                        Output.write("TEST");
+                                        instanceString = instanceString + id.substring(p * 3, p * 3 + 1);
+                                    }
+                                }
+                                catch (Exception e) {
+                                    idMode = false;
+                                    if (flipMode) {
+                                        flip = id.substring(p * 3, p * 3 + 1);
+                                    }
+                                    else {
+                                        Output.write("Setting rottation to " + id.substring(p * 3, p * 3 + 1));
+                                        rotation = id.substring(p * 3, p * 3 + 1);
+                                        flipMode = true;
+                                    }
+                                }
+                            }
+                            instance = Integer.parseInt(instanceString);
+                            /*flip = id.substring(id.length() - 4, id.length() - 3);
                             rotation = id.substring(id.length() - 7, id.length() - 6);
                             String idData = id.substring(0, id.length() - 9);
                             String idString = "";
@@ -146,7 +174,7 @@ public class DataReader {
                                 idString = idString + (idData.substring(t*3,t*3+1));
                                 Output.write("The string is " + idString);
                             }
-                            if (idString == "") idString = idData;
+                            if (idString == "") idString = idData;*/
                             i = Integer.parseInt(idString);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -552,8 +580,36 @@ public class DataReader {
                         int instance = 0;
 Output.write("Trying to load this data : " + id);
                         try {
-                            instance = Integer.parseInt(id.substring(id.length()-1));
-                            flip = id.substring(id.length() - 4, id.length() - 3);
+                            boolean idMode = true;
+                            boolean flipMode = false;
+                            String idString = "";
+                            String instanceString = "";
+                            for (int p = 0; p <= id.length()/3; p++) {
+                                Output.write("reading: " + id.substring(p*3,p*3+1));
+                                try {
+                                    Integer.parseInt(id.substring(p*3,p*3+1));
+                                    if (idMode) {
+                                        idString = idString + id.substring(p * 3, p * 3 + 1);
+                                    }
+                                    else {
+                                        Output.write("TEST");
+                                        instanceString = instanceString + id.substring(p * 3, p * 3 + 1);
+                                    }
+                                }
+                                catch (Exception e) {
+                                    idMode = false;
+                                    if (flipMode) {
+                                        flip = id.substring(p * 3, p * 3 + 1);
+                                    }
+                                    else {
+                                        Output.write("Setting rottation to " + id.substring(p * 3, p * 3 + 1));
+                                        rotation = id.substring(p * 3, p * 3 + 1);
+                                        flipMode = true;
+                                    }
+                                }
+                            }
+                            instance = Integer.parseInt(instanceString);
+                            /*flip = id.substring(id.length() - 4, id.length() - 3);
                             rotation = id.substring(id.length() - 7, id.length() - 6);
                             String idData = id.substring(0, id.length() - 9);
                             String idString = "";
@@ -562,7 +618,7 @@ Output.write("Trying to load this data : " + id);
                                 idString = idString + (idData.substring(t*3,t*3+1));
                                 Output.write("The string is " + idString);
                             }
-                            if (idString == "") idString = idData;
+                            if (idString == "") idString = idData;*/
                             i = Integer.parseInt(idString);
 
                         } catch (Exception e) {
