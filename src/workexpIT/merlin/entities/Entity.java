@@ -112,21 +112,21 @@ public class Entity {
         upWalkingSprites = new BufferedImage[upWalkingSpritesId.length];
         rightWalkingSprites = new BufferedImage[rightWalkingSpritesId.length];
         leftWalkingSprites = new BufferedImage[leftWalkingSpritesId.length];
-        upSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,upSpriteId*16,0,16,32),JavaDrawer.scale,JavaDrawer.scale);
-        downSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,downSpriteId*16,0,16,32),JavaDrawer.scale,JavaDrawer.scale);
-        rightSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,rightSpriteId*16,0,16,32),JavaDrawer.scale,JavaDrawer.scale);
-        leftSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,leftSpriteId*16,0,16,32),JavaDrawer.scale,JavaDrawer.scale);
+        upSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,upSpriteId*16,0,16,sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
+        downSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,downSpriteId*16,0,16,sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
+        rightSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,rightSpriteId*16,0,16,sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
+        leftSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,leftSpriteId*16,0,16,sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
         for (int i = 0; i < upWalkingSpritesId.length; i++) {
-            upWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (upWalkingSpritesId[i]) * 16, 0, 16, 32),JavaDrawer.scale,JavaDrawer.scale);
+            upWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (upWalkingSpritesId[i]) * 16, 0, 16, sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
         }
         for (int i = 0; i < downWalkingSpritesId.length; i++) {
-            downWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (downWalkingSpritesId[i]) * 16, 0, 16, 32),JavaDrawer.scale,JavaDrawer.scale);
+            downWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (downWalkingSpritesId[i]) * 16, 0, 16, sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
         }
         for (int i = 0; i < rightWalkingSpritesId.length; i++) {
-            rightWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (rightWalkingSpritesId[i]) * 16, 0, 16, 32),JavaDrawer.scale,JavaDrawer.scale);
+            rightWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (rightWalkingSpritesId[i]) * 16, 0, 16, sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
         }
         for (int i = 0; i < leftWalkingSpritesId.length; i++) {
-            leftWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (leftWalkingSpritesId[i]) * 16, 0, 16, 32),JavaDrawer.scale,JavaDrawer.scale);
+            leftWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (leftWalkingSpritesId[i]) * 16, 0, 16, sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
         }
     }
 
