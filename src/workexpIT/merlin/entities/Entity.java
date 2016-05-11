@@ -88,6 +88,9 @@ public class Entity {
     public boolean talkable = false;
     public boolean freeze = false;
 
+    public int entityWidth = 16;
+    public int entityHeight = 16;
+
 
     public Entity(int x, int y, String name, int state, int level, BufferedImage sprites) {
         this.x = x;
@@ -112,21 +115,21 @@ public class Entity {
         upWalkingSprites = new BufferedImage[upWalkingSpritesId.length];
         rightWalkingSprites = new BufferedImage[rightWalkingSpritesId.length];
         leftWalkingSprites = new BufferedImage[leftWalkingSpritesId.length];
-        upSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,upSpriteId*16,0,16,sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
-        downSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,downSpriteId*16,0,16,sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
-        rightSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,rightSpriteId*16,0,16,sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
-        leftSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,leftSpriteId*16,0,16,sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
+        upSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,upSpriteId*entityWidth,0,entityWidth,sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
+        downSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,downSpriteId*entityWidth,0,entityWidth,sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
+        rightSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,rightSpriteId*entityWidth,0,entityWidth,sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
+        leftSprite = JavaDrawer.scale(ImageReader.cropImage(sprites,leftSpriteId*entityWidth,0,entityWidth,sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
         for (int i = 0; i < upWalkingSpritesId.length; i++) {
-            upWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (upWalkingSpritesId[i]) * 16, 0, 16, sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
+            upWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (upWalkingSpritesId[i]) * entityWidth, 0, entityWidth, sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
         }
         for (int i = 0; i < downWalkingSpritesId.length; i++) {
-            downWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (downWalkingSpritesId[i]) * 16, 0, 16, sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
+            downWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (downWalkingSpritesId[i]) * entityWidth, 0, entityWidth, sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
         }
         for (int i = 0; i < rightWalkingSpritesId.length; i++) {
-            rightWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (rightWalkingSpritesId[i]) * 16, 0, 16, sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
+            rightWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (rightWalkingSpritesId[i]) * entityWidth, 0, entityWidth, sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
         }
         for (int i = 0; i < leftWalkingSpritesId.length; i++) {
-            leftWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (leftWalkingSpritesId[i]) * 16, 0, 16, sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
+            leftWalkingSprites[i] = JavaDrawer.scale(ImageReader.cropImage(sprites, (leftWalkingSpritesId[i]) * entityWidth, 0, entityWidth, sprites.getHeight()),JavaDrawer.scale,JavaDrawer.scale);
         }
     }
 
@@ -180,7 +183,18 @@ public class Entity {
             switch (direction) {
                 case MOVE_UP:
                     try {
-                        if (WorldData.tiles[getX()][getY() - 1].movingOnToTile(this)) {
+                        boolean go = true;
+                        for (int checkX = 0; checkX < entityWidth/16; checkX++) {
+                            for (int checkY = 0; checkY < entityHeight/16; checkY++) {
+                                if (WorldData.tiles[getX()+checkX][getY()+checkY - 1].movingOnToTile(this)) {
+                                }
+                                else {
+                                    Output.write("Cannot move");
+                                    go = false;
+                                }
+                            }
+                        }
+                        if (go) {
                             lastMove = MOVE_UP;
                             setY(getY() - 1);
                             moving = true;
@@ -194,8 +208,17 @@ public class Entity {
                     break;
                 case MOVE_RIGHT:
                     try {
-                        if (WorldData.tiles[getX() + 1][getY()].movingOnToTile(this)) {
-                            lastMove = MOVE_RIGHT;
+                        boolean go = true;
+                        for (int checkX = 0; checkX < entityWidth/16; checkX++) {
+                            for (int checkY = 0; checkY < entityHeight/16; checkY++) {
+                                if (WorldData.tiles[getX()+checkX + 1][getY()+checkY].movingOnToTile(this)) {
+                                }
+                                else {
+                                    go = false;
+                                }
+                            }
+                        }
+                        if (go) {                            lastMove = MOVE_RIGHT;
                             setX(getX() + 1);
                             moving = true;
                             return true;
@@ -209,8 +232,17 @@ public class Entity {
                     break;
                 case MOVE_DOWN:
                     try {
-                        if (WorldData.tiles[getX()][getY() + 1].movingOnToTile(this)) {
-                            lastMove = MOVE_DOWN;
+                        boolean go = true;
+                        for (int checkX = 0; checkX < entityWidth/16; checkX++) {
+                            for (int checkY = 0; checkY < entityHeight/16; checkY++) {
+                                if (WorldData.tiles[getX()+checkX][getY()+checkY + 1].movingOnToTile(this)) {
+                                }
+                                else {
+                                    go = false;
+                                }
+                            }
+                        }
+                        if (go) {                            lastMove = MOVE_DOWN;
                             setY(getY() + 1);
                             moving = true;
                             return true;
@@ -223,8 +255,17 @@ public class Entity {
                     break;
                 case MOVE_LEFT:
                     try {
-                        if (WorldData.tiles[getX() - 1][getY()].movingOnToTile(this)) {
-                            lastMove = MOVE_LEFT;
+                        boolean go = true;
+                        for (int checkX = 0; checkX < entityWidth/16; checkX++) {
+                            for (int checkY = 0; checkY < entityHeight/16; checkY++) {
+                                if (WorldData.tiles[getX()+checkX - 1][getY()+checkY].movingOnToTile(this)) {
+                                }
+                                else {
+                                    go = false;
+                                }
+                            }
+                        }
+                        if (go) {                             lastMove = MOVE_LEFT;
                             setX(getX() - 1);
                             moving = true;
                             return true;

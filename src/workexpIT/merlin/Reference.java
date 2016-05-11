@@ -41,6 +41,7 @@ public class Reference {
             "SpruceL",
             "House0",
             "House1",
-            "House2"
+            "House2",
+            "Spruce"
     };
 }

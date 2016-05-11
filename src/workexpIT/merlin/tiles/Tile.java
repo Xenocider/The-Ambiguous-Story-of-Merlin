@@ -83,6 +83,7 @@ public class Tile {
     protected int doorY;
 
     public void setDoor(boolean b, String map, int x, int y) {
+        Output.write("Door has been set");
         door = b;
         doorMap = map;
         doorX = x;
@@ -103,9 +104,14 @@ public class Tile {
             GameLoop.triggerLocationEvent(new int[] {x,y});
         }
         for (int i = 0; i < WorldData.entities.size(); i ++) {
-            if (WorldData.entities.get(i).getX() == x && WorldData.entities.get(i).getY() == y) {
-                GameLoop.entityInteract(WorldData.entities.get(i),entity);
-                return false;
+            for (int checkX = 0; checkX < WorldData.entities.get(i).entityWidth/16; checkX++) {
+                for (int checkY = 0; checkY < WorldData.entities.get(i).entityHeight/16; checkY++) {
+                    if ((WorldData.entities.get(i).getX()+checkX) == x && (WorldData.entities.get(i).getY()+checkY) == y && WorldData.entities.get(i)!=entity) {
+                        GameLoop.entityInteract(WorldData.entities.get(i), entity);
+                        Output.write("Theres an entity in the way");
+                        return false;
+                    }
+                }
             }
         }
         if (!movingOnToTileExtra(entity)) {

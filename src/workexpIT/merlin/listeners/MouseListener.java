@@ -150,6 +150,17 @@ public class MouseListener implements java.awt.event.MouseListener {
     }
 
     private void placeEntity(int selectedEntity, int mapX, int mapY) {
+        boolean go = true;
+        for (int i = 0; i < WorldData.entities.size(); i ++) {
+            for (int checkX = 0; checkX < WorldData.entities.get(i).entityWidth/16 && go; checkX++) {
+                for (int checkY = 0; checkY < WorldData.entities.get(i).entityHeight/16 && go; checkY++) {
+                    if ((WorldData.entities.get(i).getX()+checkX) == mapX && (WorldData.entities.get(i).getY()+checkY) == mapY) {
+                        go = false;
+                        WorldData.entities.remove(i);
+                    }
+                }
+            }
+        }
         Entity entity = null;
         try {
             Class<?> clazz = Class.forName("workexpIT.merlin.entities."+ Reference.entities[selectedEntity]);

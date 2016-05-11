@@ -101,25 +101,6 @@ Output.recordStart();
         Output.log("Took " + Output.recordEnd() + " milliseconds to schedule a thread for the JavaDrawer");
         Output.recordStart();
         //drawer = executor.scheduleWithFixedDelay(new JavaDrawer(), 0, 3, TimeUnit.MILLISECONDS);
-        if (mode == Mode.EDITOR) {
-            DataReader.editMap(args[1]);
-            Output.log("Took " + Output.recordEnd() + " milliseconds to load the map");
-            Output.recordStart();
-            gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
-            Output.log("Took " + Output.recordEnd() + " milliseconds to schedule a thread for the GameLoop");
-        }
-        else if (mode == Mode.GAME){
-            //WorldData.entities.add(new Player(14, 17, 10));
-            WorldData.entities.add(new Player(0, 0, 1));
-            Output.log("Took " + Output.recordEnd() + " milliseconds to add the Player");
-            Output.recordStart();
-            gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
-            Output.log("Took " + Output.recordEnd() + " milliseconds to schedule a thread for the GameLoop");
-            Output.recordStart();
-            DataReader.loadMap("test");
-            Output.log("Took " + Output.recordEnd() + " milliseconds to load the map");
-
-        }
 
 
     }
