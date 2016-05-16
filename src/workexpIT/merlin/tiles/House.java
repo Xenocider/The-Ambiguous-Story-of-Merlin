@@ -5,7 +5,7 @@ package workexpIT.merlin.tiles;
 public class House extends Tile {
 
     public House() {
-        super(3,false);
+        super(4,false);
     }
 
     @Override
