@@ -42,6 +42,10 @@ public class Reference {
             "House0",
             "House1",
             "House2",
-            "Spruce"
+            "Spruce",
+            "EmoKid",
+            "Gal",
+            "OldMan",
+            "Scientist"
     };
 }

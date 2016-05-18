@@ -28,7 +28,7 @@ public class Scientist extends Entity {
 
     @Override
     public void runAI() {
-        int action = (int) (Math.random()*4);
+        int action = (int) (Math.random()*20);
         switch (action) {
             case Entity.MOVE_UP:
                 move(Entity.MOVE_UP);

@@ -10,6 +10,9 @@ public class House extends Tile {
 
     @Override
     public boolean movingOnToTileExtra(Entity e) {
+        if (instance == 0 || instance == 2) {
+            return true;
+        }
         //Cannot move past ever (Wall)
         return false;
     }

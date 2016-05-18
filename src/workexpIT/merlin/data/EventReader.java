@@ -88,6 +88,7 @@ public class EventReader {
     }
 
     public void readEventData(EventTriggerType trigger,int[] loc) {
+        String repeat = "false";
         if (trigger == EventTriggerType.LocationTrigger) {
             Output.write("Loading Event Data...");
             FileReader FReader = null;
@@ -113,6 +114,8 @@ public class EventReader {
                         y = Integer.parseInt(m.group(1));
                         if (x == loc[0] && y == loc[1]) {
                             shouldContinue = true;
+                            m.find();
+                            repeat = m.group(1);
                         }
                     }
                     if (line.contains("{")) {
@@ -290,7 +293,7 @@ public class EventReader {
         else {
             Output.error("Cannot load this kind of event trigger with the data provided");
         }
-        WorldData.tiles[loc[0]][loc[1]].locationTrigger = false;
+        if (repeat == "false") {WorldData.tiles[loc[0]][loc[1]].locationTrigger = false;}
     }
 
     public void readEventData(EventTriggerType trigger) {

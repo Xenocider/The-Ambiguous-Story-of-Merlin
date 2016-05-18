@@ -1,8 +1,4 @@
-locationTrigger(4)(4)
+locationTrigger(28)(10)(true)
 {
-addEntity(Rock)(0)(1)(0)(0)(fallingRock)(false)
-runFunctionOfEntity(Rock)(fallingRock)(fall)(int)
-{
-(3)
-}
+displayDialog(The door is locked)
 }

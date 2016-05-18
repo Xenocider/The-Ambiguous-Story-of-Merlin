@@ -340,16 +340,6 @@ public class DataReader {
 
             while ((line = BReader.readLine()) != null) {
                 Output.write(line);
-
-                if (line.contains("doors")) {
-                    doors = true;
-                    signtext = false;
-                }
-                if (line.contains("signtext")) {
-                    doors = false;
-                    signtext = true;
-                }
-
                 if (doors) {
 
                     String doorX1 = null;
@@ -359,7 +349,7 @@ public class DataReader {
                     String doorY2 = null;
 
 
-                    line = BReader.readLine();
+                    //line = BReader.readLine();
                     Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(line);
                     m.find();
                     doorX1 = m.group(1);
@@ -372,9 +362,19 @@ public class DataReader {
                     m.find();
                     doorY2 = m.group(1);
 
-                        Output.write("[Door data] x1: " + doorX1 + " y1: " + doorY1 + " map: " + doorMap + " x2: " + doorX2 + " y2: " + doorY2);
-                        WorldData.tiles[Integer.parseInt(doorX1)][Integer.parseInt(doorY1)].setDoor(true, doorMap, Integer.parseInt(doorX2), Integer.parseInt(doorY2));
+                    Output.write("[Door data] x1: " + doorX1 + " y1: " + doorY1 + " map: " + doorMap + " x2: " + doorX2 + " y2: " + doorY2);
+                    WorldData.tiles[Integer.parseInt(doorX1)][Integer.parseInt(doorY1)].setDoor(true, doorMap, Integer.parseInt(doorX2), Integer.parseInt(doorY2));
                 }
+                if (line.contains("doors")) {
+                    doors = true;
+                    signtext = false;
+                }
+                if (line.contains("signtext")) {
+                    doors = false;
+                    signtext = true;
+                }
+
+
                 if (signtext) {
                     String signX = null;
                     String signY = null;
