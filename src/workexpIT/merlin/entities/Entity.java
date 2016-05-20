@@ -226,7 +226,7 @@ public class Entity {
                     } catch (ArrayIndexOutOfBoundsException e) {
                         Output.write("Entity " + this.getName() + "at edge of map!c");
                     } catch (NullPointerException e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                         Output.write("Entity " + this.getName() + "at edge of map!d");
                     }
                     break;
@@ -372,8 +372,10 @@ public class Entity {
             Output.write(dialog);
             GameLoop.displayDialog(dialog);
         }*/
-        if (state == STATE_AGGRESSIVE) {
-            GameLoop.startBattle(WorldData.getPlayer(),this);
+        if (state == Entity.STATE_AGGRESSIVE) {
+            GameLoop.enemy = this;
+            GameLoop.pause = true;
+            JavaDrawer.startBattle();
         }
     }
 }

@@ -3,6 +3,7 @@ package workexpIT.merlin.listeners;
 import workexpIT.merlin.GameLoop;
 import workexpIT.merlin.Merlin;
 import workexpIT.merlin.Output;
+import workexpIT.merlin.data.DataReader;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.graphics.JavaDrawer;
 import workexpIT.merlin.tiles.Tile;
@@ -198,6 +199,28 @@ public class JavaKeyListener implements java.awt.event.KeyListener {
                 break;
             case KeyEvent.VK_E:
                 GameLoop.switchToEntityEditor();
+                break;
+            case KeyEvent.VK_R:
+
+                Thread door = new Thread() {
+                    public void run() {
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        DataReader.loadMap(WorldData.mapName);
+                        Output.write("DOOOOOOOOR");
+                        WorldData.getPlayer().setX(WorldData.enterX);
+                        WorldData.getPlayer().setY(WorldData.enterY);
+                        WorldData.getPlayer().lastLoc[0] = WorldData.enterX;
+                        WorldData.getPlayer().lastLoc[1] = WorldData.enterY;
+                        JavaDrawer.offsetX = (-WorldData.getPlayer().getX() * JavaDrawer.imageSize - WorldData.getPlayer().downSprite.getWidth() / JavaDrawer.scale);
+                        JavaDrawer.offsetY = (-WorldData.getPlayer().getY() * JavaDrawer.imageSize + WorldData.getPlayer().downSprite.getHeight() / JavaDrawer.scale);
+                    }
+                };
+                JavaDrawer.fadeAway = true;
+                door.start();
                 break;
         }
 

@@ -1,10 +1,7 @@
 package workexpIT.merlin;
 
 import workexpIT.merlin.attacks.Attack;
-import workexpIT.merlin.data.DataReader;
-import workexpIT.merlin.data.EventReader;
-import workexpIT.merlin.data.ImageReader;
-import workexpIT.merlin.data.WorldData;
+import workexpIT.merlin.data.*;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.entities.Player;
 import workexpIT.merlin.graphics.AttackAnimator;
@@ -31,8 +28,17 @@ public class GameLoop implements Runnable{
     //Game images
     public static BufferedImage save;
     public static BufferedImage menu;
-    public static BufferedImage button;
-    public static BufferedImage statusBar;
+    public static BufferedImage pedestalPlayer;
+    public static BufferedImage pedestalEnemy;
+    public static BufferedImage attack1;
+    public static BufferedImage attack2;
+    public static BufferedImage attack3;
+    public static BufferedImage buttonAttack;
+    public static BufferedImage buttonBag;
+    public static BufferedImage buttonDefend;
+    public static BufferedImage buttonCharacter;
+
+
 
     public static Attack currentAttack = null;
     public static boolean playerTurn=true;
@@ -45,6 +51,8 @@ public class GameLoop implements Runnable{
     public static String dialogText;
     public static boolean startTigger;
 
+
+    public static int startDelay = 0;
     @Override
     public void run() {
 
@@ -52,7 +60,7 @@ public class GameLoop implements Runnable{
 
         recordStart();
 
-        if (Merlin.mode.equals(Merlin.Mode.GAME) && !pause) {
+        if (Merlin.mode.equals(Merlin.Mode.GAME) && !pause && startDelay == 0) {
 
             if (startTigger) {
                 Thread t = new Thread() {
@@ -99,6 +107,10 @@ public class GameLoop implements Runnable{
                     }
                 }
             }
+        }
+
+        if (startDelay > 0) {
+            startDelay = startDelay - 1;
         }
     }
 
@@ -280,9 +292,20 @@ public class GameLoop implements Runnable{
 
     public static void loadAllTextures() {
         save = ImageReader.loadImage("resources/graphics/save.png");
-        statusBar = ImageReader.loadImage("resources/graphics/battle/entityStatusBackground.png");
-        menu = ImageReader.loadImage("resources/graphics/battle/menuBackground.png");
-        button = ImageReader.loadImage("resources/graphics/battle/buttonBackground.png");
+        //statusBar = ImageReader.loadImage("resources/graphics/battle/entityStatusBackground.png");
+        menu = JavaDrawer.scale(ImageReader.loadImage("resources/graphics/battle/Menu.png"),10,10);
+        pedestalPlayer = JavaDrawer.scale(ImageReader.loadImage("resources/graphics/battle/Player Pedastle.png"),10,10);
+        pedestalEnemy = JavaDrawer.scale(ImageReader.loadImage("resources/graphics/battle/Enemy Pedastle.png"),10,10);
+        buttonAttack = JavaDrawer.scale(ImageReader.loadImage("resources/graphics/battle/Attack.png"),10,10);
+        buttonBag = JavaDrawer.scale(ImageReader.loadImage("resources/graphics/battle/Bag.png"),10,10);
+        buttonCharacter = JavaDrawer.scale(ImageReader.loadImage("resources/graphics/battle/Character.png"),10,10);
+        buttonDefend = JavaDrawer.scale(ImageReader.loadImage("resources/graphics/battle/Defend.png"),10,10);
+        attack1 = JavaDrawer.scale(ImageReader.loadImage("resources/graphics/battle/Fireball.png"),10,10);
+        attack2 = JavaDrawer.scale(ImageReader.loadImage("resources/graphics/battle/Tornado.png"),10,10);
+        attack3 = JavaDrawer.scale(ImageReader.loadImage("resources/graphics/battle/Wave.png"),10,10);
+
+        //button = ImageReader.loadImage("resources/graphics/battle/buttonBackground.png");
+
         if (Merlin.mode == Merlin.Mode.EDITOR) {
             for (int i = 0; i < Reference.tileIds.length; i++) {
                 //Output.write("Loading tile texture " + Reference.tileIds[i]);
@@ -379,6 +402,7 @@ public class GameLoop implements Runnable{
     }
 
     public static void displayDialog(String text) {
+        SoundHandler.playNewSound("resources/audio/dialog.wav",1);
         pause = true;
         dialogText = text;
         JavaDrawer.drawDialog(text);

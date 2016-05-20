@@ -6,6 +6,7 @@ import workexpIT.merlin.Output;
 import workexpIT.merlin.Reference;
 import workexpIT.merlin.data.DataReader;
 import workexpIT.merlin.data.ImageReader;
+import workexpIT.merlin.data.SoundHandler;
 import workexpIT.merlin.data.WorldData;
 import workexpIT.merlin.entities.Entity;
 import workexpIT.merlin.entities.Player;
@@ -131,6 +132,7 @@ public class Tile {
     public boolean checkForDoor(Entity entity) {
         if (entity.getClass().equals(Player.class)) {
             if (door) {
+                SoundHandler.playNewSound("resources/audio/exit.wav",1);
                 Thread door = new Thread() {
                     public void run() {
                         try {
@@ -140,6 +142,8 @@ public class Tile {
                         }
                         DataReader.loadMap(doorMap);
                         Output.write("DOOOOOOOOR");
+                        WorldData.enterX = doorX;
+                        WorldData.enterY = doorY;
                         WorldData.getPlayer().setX(doorX);
                         WorldData.getPlayer().setY(doorY);
                         WorldData.getPlayer().lastLoc[0] = doorX;

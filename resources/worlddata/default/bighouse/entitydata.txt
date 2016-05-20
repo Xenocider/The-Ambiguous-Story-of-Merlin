@@ -1,2 +1,2 @@
-(OldMan)(0)(1)(5)(7)
-(EmoKid)(0)(1)(14)(6)
+(OldMan)(0)(1)(5)(7)(Hey there kiddo how are you doing this fine day? Better stay out of trouble!)(true)
+(EmoKid)(0)(1)(14)(6)(I wish I was allowed to adventure outside into the wilderness like you Merlin!)(true)

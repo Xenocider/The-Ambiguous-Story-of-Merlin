@@ -17,6 +17,9 @@ public class WorldData {
 
     public static List<int[]>animatedTiles = new ArrayList<>();
 
+    public static int enterX = 12;
+    public static int enterY = 2;
+
     public static int selectedTile;
     public static List<Tile> menuTiles = new ArrayList<>();
 

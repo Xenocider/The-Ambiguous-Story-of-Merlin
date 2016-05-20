@@ -31,6 +31,7 @@ public class DataReader {
     public static String OS = System.getProperty("os.name").toLowerCase();
 
     public static void loadMap(String mapid) {
+        GameLoop.pause = true;
         int xSize = loadMapSizeX(mapid);
         int ySize = loadMapSizeY(mapid);
         WorldData.mapSizeX = xSize;
@@ -227,14 +228,16 @@ public class DataReader {
         loadEntityData(mapid);
         loadMiscData(mapid);
         loadAnimatedTiles();
+        Output.write("Loading event data");
         Merlin.eventHandler.loadEventData(mapid);
-        WorldData.battleBackground = ImageReader.loadImage("resources/graphics/backgrounds/" + mapid + ".png");
+        WorldData.battleBackground = JavaDrawer.scale(ImageReader.loadImage("resources/graphics/backgrounds/" + mapid + ".png"),10,10);
         //Center camera
         try {
             Drawer.setCamera((-WorldData.getPlayer().getX() + Drawer.ww / 2 / Drawer.w) * Drawer.w, (-WorldData.getPlayer().getY() + Drawer.wh / 2 / Drawer.h) * Drawer.h);
         } catch (Exception e) {
         }
         JavaDrawer.fadeAway = false;
+        GameLoop.pause = false;
     }
 
     private static void loadAnimatedTiles() {

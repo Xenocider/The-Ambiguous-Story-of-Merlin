@@ -87,17 +87,18 @@ public class MouseListener implements java.awt.event.MouseListener {
                 }
         }
         else if (Merlin.mode.equals(Merlin.Mode.BATTLE)) {
-            if (!GameLoop.fightMenu) {
-                if (x > JavaDrawer.fightX && x < JavaDrawer.fightX + JavaDrawer.fightButtonWidth && y > JavaDrawer.fightY && y < JavaDrawer.fightY + JavaDrawer.fightButtonHeight) {
+                if (x > JavaDrawer.fightX && x < JavaDrawer.fightX + GameLoop.buttonAttack.getWidth() && y > JavaDrawer.fightY && y < JavaDrawer.fightY + GameLoop.buttonAttack.getHeight()) {
                     Output.write("FIGHT!");
                     GameLoop.fightMenu = true;
-                } else if (x > JavaDrawer.bagX && x < JavaDrawer.bagX + JavaDrawer.otherButtonWidth && y > JavaDrawer.bagY && y < JavaDrawer.bagY + JavaDrawer.otherButtonHeight) {
+                } else if (x > JavaDrawer.bagX && x < JavaDrawer.bagX + GameLoop.buttonBag.getWidth() && y > JavaDrawer.bagY && y < JavaDrawer.bagY + GameLoop.buttonBag.getHeight()) {
                     Output.write("BAG!");
-                } else if (x > JavaDrawer.restX && x < JavaDrawer.restX + JavaDrawer.otherButtonWidth && y > JavaDrawer.restY && y < JavaDrawer.restY + JavaDrawer.otherButtonHeight) {
+                } else if (x > JavaDrawer.restX && x < JavaDrawer.restX + GameLoop.buttonDefend.getWidth() && y > JavaDrawer.restY && y < JavaDrawer.restY + GameLoop.buttonDefend.getHeight()) {
                     Output.write("REST!");
+                } else if (x > JavaDrawer.characterX && x < JavaDrawer.characterX + GameLoop.buttonCharacter.getWidth() && y > JavaDrawer.characterY && y < JavaDrawer.characterY + GameLoop.buttonCharacter.getHeight()) {
+                    Output.write("CHARACTER!");
                 }
-            }
-            else {
+
+            if (GameLoop.fightMenu) {
                 if (x > JavaDrawer.attack1X && x < JavaDrawer.attack1X + JavaDrawer.attackButtonWidth && y > JavaDrawer.attack1Y && y < JavaDrawer.attack1Y + JavaDrawer.attackButtonHeight) {
                     GameLoop.currentAttack = WorldData.getPlayer().attacks[0];
                 }

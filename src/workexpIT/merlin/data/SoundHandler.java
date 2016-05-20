@@ -2,6 +2,7 @@ package workexpIT.merlin.data;
 
 import javax.sound.sampled.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -48,7 +49,12 @@ public class SoundHandler {
         Thread bgMusic = new Thread () {
             public void run() {
                 while (true) {
-                    playSound("resources/audio/backgroundmusic/0.wav");
+                    boolean failed = false;
+                    try {playSound("resources/audio/backgroundmusic/"+WorldData.mapName+".wav");}
+                    catch (Exception e) {
+                        playSound("resources/audio/backgroundmusic/0.wav");
+                    }
+
                 }
             }
         };

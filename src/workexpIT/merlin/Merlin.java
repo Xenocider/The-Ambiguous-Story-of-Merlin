@@ -35,7 +35,7 @@ public class Merlin implements Runnable{
     public static ScheduledFuture drawer;
     public static ScheduledFuture gameLoop;
 
-    private static final String startingMap = "house";
+    private static final String startingMap = "start";
     private static final int[] startingLoc = new int[]{5,2};
 
     public static EventReader eventHandler = new EventReader();
@@ -50,10 +50,10 @@ public class Merlin implements Runnable{
         Output.log("Took " + Output.recordEnd() + " milliseconds to add the Player");
         Output.recordStart();
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
         Output.log("Took " + Output.recordEnd() + " milliseconds to schedule a thread for the GameLoop");
         Output.recordStart();
         DataReader.loadMap(startingMap);
+        gameLoop = executor.scheduleWithFixedDelay(new GameLoop(), 0, 250, TimeUnit.MILLISECONDS);
         Output.log("Took " + Output.recordEnd() + " milliseconds to load the map");
     }
 

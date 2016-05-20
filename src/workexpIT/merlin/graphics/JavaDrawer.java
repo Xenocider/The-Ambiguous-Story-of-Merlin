@@ -18,8 +18,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.List;
 import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -188,7 +187,7 @@ public class JavaDrawer extends JPanel implements Runnable {
                 drawBattleEnemy(g);
                 drawAttack(g);
                 drawBattlePlayer(g);
-                drawStatusBars(g);
+                //drawStatusBars(g);
                 drawBattleMenu(g);
                 Output.log("[JavaDrawer] Took " + recordEnd() + " milliseconds to draw the Battle Scene");
             }
@@ -756,6 +755,8 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int enemyBarY;
     public static int menuX;
     public static int menuY;
+    public static int characterX;
+    public static int characterY;
     public static int fightX;
     public static int fightY;
     public static int bagX;
@@ -776,11 +777,11 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int attack6Y;
 
     //Offsets
-    public static int playerOffsetFromBottom = -300;
+    public static int playerOffsetFromBottom = 300;
     public static int playerOffsetFromSide = 20;
     public static int playerAdditionOffsetX = 0;
     public static int enemyOffsetFromTop = 100;
-    public static int enemyOffsetFromSide = 20;
+    public static int enemyOffsetFromSide = 0;
     public static int enemyAdditionOffsetX = 0;
     public static int playerBarOffsetFromBottom = 325;
     public static int playerBarOffsetFromSide = 20;
@@ -818,7 +819,7 @@ public class JavaDrawer extends JPanel implements Runnable {
     public static int otherButtonWidth;
     public static int otherButtonHeight = 90;
     public static int attackButtonWidth;
-    public static int attackButtonHeight = 90;
+    public static int attackButtonHeight;
 
     public static boolean pFlinch = false;
     public static boolean eFlinch = false;
@@ -849,7 +850,7 @@ public class JavaDrawer extends JPanel implements Runnable {
         }
     }
 
-    private void drawStatusBars(Graphics g) {
+    /*private void drawStatusBars(Graphics g) {
         BufferedImage statusBar = GameLoop.statusBar;
 
         playerBarX = playerBarOffsetFromSide;
@@ -867,43 +868,46 @@ public class JavaDrawer extends JPanel implements Runnable {
         g.setColor(Color.BLUE);
         g.fillRect(playerBarX + manaBarXOffset,playerBarY + manaBarYOffset,WorldData.getPlayer().mana*WorldData.getPlayer().manaMax/manaBarLength,5);
         g.fillRect(enemyBarX + manaBarXOffset,enemyBarY + manaBarYOffset,GameLoop.enemy.mana*GameLoop.enemy.manaMax/manaBarLength,5);
-    }
+    }*/
 
     private void drawBattleMenu(Graphics g) {
         BufferedImage menuBackground = GameLoop.menu;
-        menuBackground = scaleToSize(menuBackground, JavaDrawer.frame.getWidth(),menuBackgroundHeight);
+        //menuBackground = scaleToSize(menuBackground, JavaDrawer.frame.getWidth(),menuBackgroundHeight);
         menuX = 0;
         menuY = JavaDrawer.frame.getHeight() - menuBackground.getHeight()-20;
+        menuY = 0;
         g.drawImage(menuBackground,menuX,menuY,null);
 
-        if (!GameLoop.fightMenu) {
-            fightButtonWidth = (int) (JavaDrawer.frame.getWidth()*0.60);
-            BufferedImage fightBackground = scaleToSize(GameLoop.button,fightButtonWidth,fightButtonHeight);
-            fightX = menuX + fightButtonXOffset;
-            fightY = menuY + fightButtonYOffset;
-            g.drawImage(fightBackground,fightX ,fightY , null);
+        fightX = menuBackground.getWidth()-270;
+        restX = fightX;
+        fightY = frame.getHeight()-260;
+        bagY = fightY;
+        bagX = menuBackground.getWidth()-150;
+        characterX = bagX;
+        characterY = frame.getHeight()-140;
+        restY = characterY;
 
-            otherButtonWidth = (int) (JavaDrawer.frame.getWidth()*0.20);
-            BufferedImage buttonBackground = scaleToSize(GameLoop.button,otherButtonWidth,otherButtonHeight);
 
-            bagX = menuX+menuBackground.getWidth()-buttonBackground.getWidth()-bagButtonXOffset;
-            bagY =  menuY+bagButtonYOffset;
-            g.drawImage(buttonBackground,bagX ,bagY, null);
 
-            restX = menuX+menuBackground.getWidth()-buttonBackground.getWidth()-restButtonXOffset;
-            restY =  menuY+restButtonYOffset;
-            g.drawImage(buttonBackground, restX, restY, null);
-        }
-        else {
-            attackButtonWidth = (int)(JavaDrawer.frame.getWidth() * 0.25);
-            BufferedImage attackBackground = scaleToSize(GameLoop.button, attackButtonWidth, attackButtonHeight);
+        //if (!GameLoop.fightMenu) {
+        g.drawImage(GameLoop.buttonAttack,fightX,fightY,null);
+        g.drawImage(GameLoop.buttonBag,bagX,bagY,null);
+        g.drawImage(GameLoop.buttonCharacter,characterX,characterY,null);
+        g.drawImage(GameLoop.buttonDefend,restX,restY,null);
 
-            attack1X = menuX + attackButtonXOffset + (attackButtonWidth + 20)*0;
-            attack1Y =  menuY + attackButtonYOffset;
-            attack2X = menuX + attackButtonXOffset + (attackButtonWidth + 20)*1;
-            attack2Y =  menuY + attackButtonYOffset;
-            attack3X = menuX + attackButtonXOffset + (attackButtonWidth + 20)*2;
-            attack3Y =  menuY + attackButtonYOffset;
+        //}
+        if (GameLoop.fightMenu) {
+
+            attackButtonHeight = GameLoop.attack1.getHeight();
+            attackButtonWidth = GameLoop.attack1.getWidth();
+            //BufferedImage attackBackground = scaleToSize(GameLoop.button, attackButtonWidth, attackButtonHeight);
+
+            attack1X = 40;
+            attack1Y =  frame.getHeight()-260;
+            attack2X = attack1X + 100;
+            attack2Y =  attack1Y;
+            attack3X = attack2X + 100;
+            attack3Y =  attack1Y;
             attack4X = menuX + attackButtonXOffset + (attackButtonWidth + 20)*0;
             attack4Y = menuY + attackButtonYOffset + attackButtonHeight+10;
             attack5X = menuX + attackButtonXOffset + (attackButtonWidth + 20)*1;
@@ -911,12 +915,17 @@ public class JavaDrawer extends JPanel implements Runnable {
             attack6X = menuX + attackButtonXOffset + (attackButtonWidth + 20)*2;
             attack6Y = menuY + attackButtonYOffset + attackButtonHeight+10;
 
-            g.drawImage(attackBackground, attack1X, attack1Y, null);
-            g.drawImage(attackBackground, attack2X, attack2Y, null);
-            g.drawImage(attackBackground, attack3X, attack3Y, null);
-            g.drawImage(attackBackground, attack4X, attack4Y, null);
-            g.drawImage(attackBackground, attack5X, attack5Y, null);
-            g.drawImage(attackBackground, attack6X, attack6Y, null);
+            g.drawImage(GameLoop.attack1,attack1X,attack1Y,null);
+            g.drawImage(GameLoop.attack2,attack2X,attack2Y,null);
+            g.drawImage(GameLoop.attack3,attack3X,attack3Y,null);
+
+
+            //g.drawImage(attackBackground, attack1X, attack1Y, null);
+            //g.drawImage(attackBackground, attack2X, attack2Y, null);
+            //g.drawImage(attackBackground, attack3X, attack3Y, null);
+            //g.drawImage(attackBackground, attack4X, attack4Y, null);
+            //g.drawImage(attackBackground, attack5X, attack5Y, null);
+            //g.drawImage(attackBackground, attack6X, attack6Y, null);
 
         }
     }
@@ -944,6 +953,7 @@ public class JavaDrawer extends JPanel implements Runnable {
 
     public static boolean startBattleZoom = false;
     public static void startBattle() {
+        WorldData.map = WorldData.scaledMap;
         startBattleZoom = true;
     }
     public static int zoomCount = 0;
@@ -951,15 +961,55 @@ public class JavaDrawer extends JPanel implements Runnable {
         if (startBattleZoom) {
             zoomCount = zoomCount + 1;
             //scale = scale + 0.25f;
-            if (zoomCount > 30) {
-                scale = 2;
+            //WorldData.scaledMap = blur(WorldData.map);
+            if (zoomCount > 10) {
+                //scale = 2;
                 Merlin.mode = Merlin.Mode.BATTLE;
                 GameLoop.pause = false;
                 startBattleZoom = false;
                 zoomCount = 0;
             }
-            WorldData.scaledMap = JavaDrawer.scale(WorldData.map,scale,scale);
+            //WorldData.scaledMap = JavaDrawer.scale(WorldData.map,scale,scale);
         }
+    }
+
+    public static BufferedImage blur(BufferedImage sourceImage) {
+        // Create a buffered image from the source image with a format that's compatible with the screen
+        GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+        GraphicsDevice graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
+
+        GraphicsConfiguration graphicsConfiguration = graphicsDevice.getDefaultConfiguration();
+
+        // If the source image has no alpha info use Transparency.OPAQUE instead
+
+        BufferedImage image = graphicsConfiguration.createCompatibleImage(sourceImage.getWidth(null), sourceImage.getHeight(null), Transparency.BITMASK);
+
+        // Copy image to buffered image
+
+        Graphics graphics = image.createGraphics();
+
+        // Paint the image onto the buffered image
+
+        graphics.drawImage(sourceImage, 0, 0, null);
+
+        graphics.dispose();
+
+        Kernel kernel = new Kernel(3, 3,
+
+        new float[] {
+
+                1f/9f, 1f/9f, 1f/9f,
+
+                1f/9f, 1f/9f, 1f/9f,
+
+                1f/9f, 1f/9f, 1f/9f});
+
+        BufferedImageOp op = new ConvolveOp(kernel);
+
+        image = op.filter(image, null);
+        return image;
+
     }
 
     public static void runAnimation() {
